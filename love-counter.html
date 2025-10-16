@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <title>Hành Trình Của Chúng Ta</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-button">↩ Quay lại</a>
+        <h2>Chúng ta đã ở bên nhau</h2>
+        <div id="love-days" class="big-number">...</div>
+        <h2>ngày hạnh phúc!</h2>
+    </div>
+
+    <script>
+        // --- PHẦN JAVASCRIPT ---
+        // 1. Đặt ngày bắt đầu yêu nhau
+        const startDate = new Date('2025-07-01'); // Thay bằng ngày của bạn (Năm-Tháng-Ngày)
+
+        // 2. Lấy ngày hiện tại
+        const today = new Date();
+
+        // 3. Tính toán sự khác biệt
+        const timeDiff = today.getTime() - startDate.getTime();
+        const daysDiff = Math.floor(timeDiff / (1000 * 3600 * 24));
+
+        // 4. Hiển thị kết quả
+        document.getElementById('love-days').innerText = daysDiff;
+    </script>
+</body>
+</html>

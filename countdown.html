@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <title>Đếm Ngược Ngày Đặc Biệt</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-button">↩ Quay lại</a>
+        <h2>Chỉ còn...</h2>
+        <div id="countdown-timer" class="countdown">
+            <span id="days">00</span> ngày
+            <span id="hours">00</span> giờ
+            <span id="minutes">00</span> phút
+            <span id="seconds">00</span> giây
+        </div>
+        <h2>...là đến ngày đặc biệt của chúng ta!</h2>
+    </div>
+
+    <script>
+        // --- PHẦN JAVASCRIPT ---
+        // 1. Đặt ngày mục tiêu
+        const targetDate = new Date('2025-12-24T00:00:00'); // Thay bằng ngày của bạn
+
+        // 2. Cập nhật bộ đếm mỗi giây
+        const interval = setInterval(() => {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            // 3. Tính toán ngày, giờ, phút, giây
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // 4. Hiển thị kết quả
+            document.getElementById('days').innerText = days;
+            document.getElementById('hours').innerText = hours;
+            document.getElementById('minutes').innerText = minutes;
+            document.getElementById('seconds').innerText = seconds;
+
+            // Nếu đã đến thời điểm
+            if (distance < 0) {
+                clearInterval(interval);
+                document.getElementById('countdown-timer').innerText = "Chúc mừng ngày đặc biệt!";
+            }
+        }, 1000);
+    </script>
+</body>
+</html> 

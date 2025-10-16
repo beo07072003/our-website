@@ -1,0 +1,77 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #fde2e4;
+    background-image: url('../images/background.jpg'); /* Đặt ảnh nền ở đây */
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    color: #333;
+}
+
+.container {
+    background-color: rgba(255, 255, 255, 0.85); /* Nền mờ để đọc chữ */
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 600px;
+}
+
+h1, h2 {
+    color: #d90429;
+}
+
+.nav-button {
+    display: block;
+    background-color: #ef476f;
+    color: white;
+    padding: 15px 30px;
+    margin: 15px 0;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.nav-button:hover {
+    background-color: #d90429;
+}
+
+.back-button {
+    display: inline-block;
+    margin-bottom: 20px;
+    text-decoration: none;
+    color: #ef476f;
+    font-weight: bold;
+}
+
+.big-number {
+    font-size: 6rem;
+    font-weight: bold;
+    color: #ef476f;
+}
+
+.countdown span {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #ef476f;
+    padding: 0 10px;
+}
+
+/* CSS cho Lịch tuần */
+.schedule-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+}
+
+.day {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    border: 2px solid #ef476f;
+}
