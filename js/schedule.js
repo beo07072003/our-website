@@ -137,11 +137,14 @@ function renderEvents(events, gridElement) {
     });
 }
 
+// === HÀM XỬ LÝ CLICK ĐÃ GẮN "CAMERA GIÁM SÁT" CHI TIẾT ===
 function setupRobustGridClickListener(gridElement) {
     if (!gridElement) return;
 
     let startX, startY;
     const dragThreshold = 10;
+
+    console.log("Hệ thống lắng nghe click trên lịch đã sẵn sàng (phiên bản giám định).");
 
     gridElement.addEventListener('mousedown', (e) => {
         startX = e.clientX;
@@ -159,22 +162,49 @@ function setupRobustGridClickListener(gridElement) {
             return;
         }
 
+        console.log("--- BẮT ĐẦU GIÁM ĐỊNH CÚ CLICK ---");
+
+        const gridRect = gridElement.getBoundingClientRect();
+        const x = e.clientX - gridRect.left;
+        const y = e.clientY - gridRect.top;
+
+        console.log(`Tọa độ click (so với lưới): X=${x.toFixed(2)}, Y=${y.toFixed(2)}`);
+        
         const headerHeight = 50;
         const timeColumnWidth = 80;
         const rowHeight = 80;
 
-        if (e.offsetY > headerHeight && e.offsetX > timeColumnWidth) {
+        console.log(`Đang kiểm tra với điều kiện: Y > ${headerHeight} và X > ${timeColumnWidth}`);
+
+        if (y > headerHeight && x > timeColumnWidth) {
+            console.log("=> Điều kiện HỢP LỆ. Bắt đầu tính toán ô...");
+
             const dayColumnWidth = (gridElement.offsetWidth - timeColumnWidth) / 7;
-            const dayIndex = Math.floor((e.offsetX - timeColumnWidth) / dayColumnWidth);
-            const timeIndex = Math.floor((e.offsetY - headerHeight) / rowHeight);
+            const dayIndex = Math.floor((x - timeColumnWidth) / dayColumnWidth);
+            const timeIndex = Math.floor((y - headerHeight) / rowHeight);
+
+            console.log(`Chiều rộng cột ngày (tính toán): ${dayColumnWidth.toFixed(2)}px`);
+            console.log(`Chỉ số cột (dayIndex): ${dayIndex}`);
+            console.log(`Chỉ số hàng (timeIndex): ${timeIndex}`);
+            
+            if (dayIndex < 0 || dayIndex > 6 || timeIndex < 0 || timeIndex > 7) {
+                console.error("LỖI TÍNH TOÁN: Chỉ số hàng hoặc cột nằm ngoài phạm vi. Click bị hủy.");
+                return;
+            }
+
             const day = dayIndex + 2;
             const startHour = 7 + (timeIndex * 2);
             const time = `${String(startHour).padStart(2, '0')}:00`;
+            
+            console.log(`=> Kết quả: Ngày=${day}, Giờ=${time}. Đang mở cửa sổ...`);
 
             openEventModal();
             document.getElementById('event-day-select').value = day;
             document.getElementById('event-start-time-input').value = time;
+        } else {
+            console.error("LỖI: Điều kiện KHÔNG HỢP LỆ. Click được coi là nằm ngoài lưới chính.");
         }
+        console.log("--- KẾT THÚC GIÁM ĐỊNH ---");
     });
 }
 

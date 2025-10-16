@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ngân Hàng Ý Tưởng</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/ideas.css"> <link rel="icon" type="image/png" href="./images/logo.svg">
+</head>
+<body>
+    <div class="ideas-container">
+        <a href="him-dashboard.html" class="back-to-dashboard-btn">↩ Quay lại Dashboard</a>
+        <h1>Ngân Hàng Ý Tưởng</h1>
+        
+        <div class="add-idea-form">
+            <input type="text" id="idea-input-full" placeholder="Viết ý tưởng mới của bạn ở đây...">
+            <button id="add-idea-btn-full">Thêm Ý Tưởng</button>
+        </div>
+
+        <div id="full-idea-list" class="full-idea-list">
+            </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-init.js"></script>
+    <script src="js/ideas.js"></script> </body>
+</html>

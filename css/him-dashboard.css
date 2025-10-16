@@ -1,0 +1,236 @@
+/* --- CSS CHO HIM-DASHBOARD (ĐÃ NÂNG CẤP DỰA TRÊN HER-DASHBOARD) --- */
+
+/* === CÁC STYLE NỀN TẢNG (TÁI SỬ DỤNG TỪ DASHBOARD.CSS) === */
+.dashboard-container {
+    padding: 30px;
+    max-width: 1200px;
+    width: 95%;
+    background-color: rgba(255, 255, 255, 0.98);
+    border-radius: 30px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.back-to-home-btn {
+    position: absolute;
+    top: 25px;
+    right: 30px;
+    background-color: #ef476f;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+.back-to-home-btn:hover {
+    background-color: #d90429;
+    transform: translateY(-2px);
+}
+
+.dashboard-greeting {
+    font-size: 3.8em;
+    color: #d90429;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+}
+
+.dashboard-slogan {
+    font-size: 1.3em;
+    color: #666;
+    margin-bottom: 40px;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 25px;
+}
+
+.dashboard-card {
+    background: linear-gradient(135deg, #ffffff, #f0f0f0);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #eee;
+}
+.dashboard-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.card-icon {
+    font-size: 2.5em;
+    margin-bottom: 15px;
+    display: block;
+    text-align: center;
+}
+
+.dashboard-card h3 {
+    font-size: 1.8em;
+    color: #ef476f;
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+
+/* === CÁC STYLE RIÊNG CHO CÁC WIDGET CỦA HIM-DASHBOARD === */
+
+/* --- Widget 1: Hộp Thư Gửi Em --- */
+#note-input {
+    width: 100%;
+    min-height: 120px;
+    border: 2px solid #f0f0f0;
+    border-radius: 10px;
+    padding: 15px;
+    font-size: 1em;
+    margin-bottom: 20px;
+    resize: vertical;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+#note-input:focus {
+    outline: none;
+    border-color: #ef476f;
+}
+
+/* --- Widget 2: Ngân Hàng Ý Tưởng --- */
+#idea-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+    flex-grow: 1; /* Để danh sách chiếm hết không gian trống */
+    min-height: 100px; /* Chiều cao tối thiểu */
+}
+#idea-list li {
+    background: rgba(0,0,0,0.04);
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    color: #555;
+    font-size: 0.95em;
+}
+.add-idea-form {
+    display: flex;
+    gap: 10px;
+    margin-top: auto; /* Đẩy form xuống dưới cùng */
+}
+#idea-input {
+    flex-grow: 1;
+    border: 2px solid #f0f0f0;
+    border-radius: 25px;
+    padding: 10px 15px;
+    font-size: 1em;
+    transition: border-color 0.3s ease;
+}
+#idea-input:focus {
+    outline: none;
+    border-color: #ef476f;
+}
+#add-idea-btn {
+    width: 45px;
+    height: 45px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    border: none;
+    background: #ef476f;
+    color: white;
+    font-size: 1.5em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+#add-idea-btn:hover {
+    background-color: #d90429;
+}
+
+/* --- Widget 3 & 4: Lịch & Kế Hoạch Hẹn Hò --- */
+#next-event-preview, #date-plan-display {
+    background: rgba(0,0,0,0.04);
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #666;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+#next-event-preview .event-title, #date-plan-display .plan-title {
+    font-weight: bold;
+    color: #d90429;
+    font-size: 1.3em;
+    margin-bottom: 5px;
+}
+#next-event-preview .event-time, #date-plan-display .plan-time {
+    font-size: 1.1em;
+}
+
+/* --- Style chung cho các nút trong Card --- */
+.card-button {
+    background-color: #ef476f;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 25px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    text-decoration: none;
+    display: block; /* Để nó chiếm toàn bộ chiều rộng */
+    margin-top: auto; /* Đẩy nút xuống dưới cùng */
+}
+.card-button:hover {
+    background-color: #d90429;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* --- TÙY CHỈNH MÀU SẮC CHO TỪNG CARD --- */
+.card-note {
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb); /* Xanh dương */
+}
+.card-ideas {
+    background: linear-gradient(135deg, #fffde7, #fff59d); /* Vàng chanh */
+}
+.card-schedule-manager {
+    background: linear-gradient(135deg, #e8f5e9, #c8e6c9); /* Xanh lá */
+}
+.card-date-planner {
+    background: linear-gradient(135deg, #f3e5f5, #e1bee7); /* Tím Lavender */
+}
+
+/* --- MEDIA QUERIES (TÁI SỬ DỤNG) --- */
+@media (max-width: 768px) {
+    .dashboard-container {
+        padding: 20px;
+    }
+    .dashboard-greeting {
+        font-size: 2.5em;
+    }
+    .dashboard-slogan {
+        font-size: 1em;
+        margin-bottom: 30px;
+    }
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    .dashboard-card {
+        padding: 25px;
+    }
+    .dashboard-card h3 {
+        font-size: 1.5em;
+    }
+}

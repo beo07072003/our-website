@@ -132,3 +132,22 @@ function runPeriodCalendar(data, containerId, titleId, gridId, prevBtnId, nextBt
 
     generateCalendar(currentDate);
 }
+
+// === Logic cho Lời Mời Hẹn Hò (HÀM BỊ THIẾU) ===
+function displayDateInvitation(plan) {
+    const card = document.getElementById('date-invitation-card');
+    // Chỉ chạy nếu tìm thấy card trên trang
+    if (!card) return;
+
+    // Kiểm tra xem có kế hoạch và nó đang hoạt động không
+    if (plan && plan.isActive) {
+        const date = plan.dateTime.toDate();
+        document.getElementById('invitation-title').innerText = plan.title;
+        document.getElementById('invitation-time').innerText = `${date.toLocaleDateString('vi-VN')} lúc ${date.toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'})}`;
+        document.getElementById('invitation-location').innerText = plan.location;
+        document.getElementById('invitation-note').innerText = `"${plan.note}"`;
+        
+        // Hiện tấm thiệp mời lên
+        card.style.display = 'flex'; 
+    }
+}
