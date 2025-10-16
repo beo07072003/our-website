@@ -1,50 +1,44 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <title>Đếm Ngược Ngày Đặc Biệt</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lịch "Dâu" Của Em 🍓</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div class="container">
-        <a href="index.html" class="back-button">↩ Quay lại</a>
-        <h2>Chỉ còn...</h2>
-        <div id="countdown-timer" class="countdown">
-            <span id="days">00</span> ngày
-            <span id="hours">00</span> giờ
-            <span id="minutes">00</span> phút
-            <span id="seconds">00</span> giây
+        <a href="index.html" class="back-button">↩ Quay lại trang chủ</a>
+        
+        <div id="period-calendar" class="calendar-container">
+            <div class="calendar-header">
+                <button id="prev-month-btn">&lt;</button>
+                <h2 id="month-year-title">Tháng 10 2025</h2>
+                <button id="next-month-btn">&gt;</button>
+            </div>
+            <div class="calendar-weekdays">
+                <div>T2</div>
+                <div>T3</div>
+                <div>T4</div>
+                <div>T5</div>
+                <div>T6</div>
+                <div>T7</div>
+                <div>CN</div>
+            </div>
+            <div class="calendar-days" id="calendar-days-grid">
+                </div>
+            <div class="calendar-legend">
+                <div class="legend-item">
+                    <span class="legend-color period-day"></span> Ngày "dâu rụng" 🍓
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color today"></span> Hôm nay 💖
+                </div>
+            </div>
         </div>
-        <h2>...là đến ngày đặc biệt của chúng ta!</h2>
+        
     </div>
 
-    <script>
-        // --- PHẦN JAVASCRIPT ---
-        // 1. Đặt ngày mục tiêu
-        const targetDate = new Date('2025-12-24T00:00:00'); // Thay bằng ngày của bạn
-
-        // 2. Cập nhật bộ đếm mỗi giây
-        const interval = setInterval(() => {
-            const now = new Date().getTime();
-            const distance = targetDate - now;
-
-            // 3. Tính toán ngày, giờ, phút, giây
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            // 4. Hiển thị kết quả
-            document.getElementById('days').innerText = days;
-            document.getElementById('hours').innerText = hours;
-            document.getElementById('minutes').innerText = minutes;
-            document.getElementById('seconds').innerText = seconds;
-
-            // Nếu đã đến thời điểm
-            if (distance < 0) {
-                clearInterval(interval);
-                document.getElementById('countdown-timer').innerText = "Chúc mừng ngày đặc biệt!";
-            }
-        }, 1000);
-    </script>
+    <script src="js/main.js"></script>
 </body>
-</html> 
+</html>

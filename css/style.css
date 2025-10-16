@@ -1,77 +1,333 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #fde2e4;
-    background-image: url('../images/background.jpg'); /* Đặt ảnh nền ở đây */
+    background-color: #fde2e4; /* Màu nền nhẹ nhàng */
+    /* background-image: url('../images/background.jpg'); */ /* Uncomment nếu bạn muốn dùng ảnh nền */
     background-size: cover;
     background-position: center;
+    background-attachment: fixed; /* Giữ ảnh nền cố định khi cuộn */
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh; /* Đảm bảo chiều cao tối thiểu để căn giữa */
     margin: 0;
     color: #333;
+    padding: 20px; /* Thêm padding tổng thể để tránh nội dung dính sát mép */
+    box-sizing: border-box; /* Bao gồm padding và border vào tổng kích thước */
 }
 
 .container {
-    background-color: rgba(255, 255, 255, 0.85); /* Nền mờ để đọc chữ */
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, 0.95); /* Nền mờ hơn một chút để nổi bật */
+    padding: 50px 30px; /* Tăng padding để nội dung có không gian */
+    border-radius: 25px; /* Bo tròn góc hơn */
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15); /* Shadow rõ hơn */
     text-align: center;
-    max-width: 600px;
+    max-width: 700px; /* Tăng chiều rộng tối đa */
+    width: 90%; /* Chiếm 90% chiều rộng của parent (body) */
+    box-sizing: border-box; /* Bao gồm padding và border vào tổng kích thước */
 }
 
-h1, h2 {
+.welcome-container h1 {
+    font-size: 3.2em; /* Tăng kích thước tiêu đề chính */
     color: #d90429;
+    margin-bottom: 20px;
+    letter-spacing: 1px; /* Thêm khoảng cách chữ để đẹp hơn */
+}
+
+.welcome-container p {
+    font-size: 1.2em; /* Tăng kích thước chữ của đoạn văn */
+    color: #555;
+    margin-bottom: 35px;
+}
+
+h2 {
+    font-size: 2.5em; /* Kích thước tiêu đề H2 */
+    color: #d90429;
+    margin-bottom: 25px;
+}
+
+nav {
+    display: flex;
+    flex-direction: column; /* Xếp các nút theo chiều dọc */
+    gap: 18px; /* Khoảng cách giữa các nút */
+    margin-top: 20px;
 }
 
 .nav-button {
     display: block;
     background-color: #ef476f;
     color: white;
-    padding: 15px 30px;
-    margin: 15px 0;
+    padding: 18px 35px; /* Tăng padding của nút */
     border-radius: 50px;
     text-decoration: none;
     font-weight: bold;
-    transition: background-color 0.3s ease;
+    font-size: 1.3em; /* Tăng kích thước chữ trong nút */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Thêm hiệu ứng transform */
+    box-shadow: 0 5px 15px rgba(239, 71, 111, 0.3); /* Thêm shadow cho nút */
 }
 
 .nav-button:hover {
     background-color: #d90429;
+    transform: translateY(-3px); /* Nút nhích lên một chút khi di chuột qua */
+    box-shadow: 0 8px 20px rgba(217, 4, 41, 0.4);
 }
 
 .back-button {
     display: inline-block;
-    margin-bottom: 20px;
+    margin-bottom: 30px; /* Tăng khoảng cách so với nội dung */
     text-decoration: none;
     color: #ef476f;
     font-weight: bold;
+    font-size: 1.1em;
+    transition: color 0.3s ease;
+}
+
+.back-button:hover {
+    color: #d90429;
 }
 
 .big-number {
-    font-size: 6rem;
+    font-size: 7.5rem; /* Rất lớn cho số ngày yêu */
     font-weight: bold;
     color: #ef476f;
+    margin: 20px 0;
+    line-height: 1; /* Đảm bảo không bị quá cao */
+}
+
+.countdown {
+    display: flex; /* Dùng flexbox để căn chỉnh các phần tử đếm ngược */
+    justify-content: center;
+    gap: 15px; /* Khoảng cách giữa các phần tử */
+    margin: 30px 0;
 }
 
 .countdown span {
-    font-size: 3rem;
+    font-size: 4.5rem; /* Kích thước chữ cho các số đếm ngược */
     font-weight: bold;
     color: #ef476f;
-    padding: 0 10px;
+    padding: 0 5px;
+    display: inline-block; /* Để padding hoạt động */
+    min-width: 70px; /* Đảm bảo chiều rộng tối thiểu để không bị nhảy số */
+}
+
+.countdown-label { /* Label cho ngày, giờ, phút, giây */
+    font-size: 1.2em;
+    color: #555;
+    display: block; /* Để nó nằm dưới số */
+    margin-top: 5px;
 }
 
 /* CSS cho Lịch tuần */
 .schedule-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Tăng kích thước tối thiểu */
+    gap: 15px; /* Khoảng cách giữa các ô lịch */
+    margin-top: 30px;
 }
 
 .day {
     background-color: #fff;
-    padding: 15px;
-    border-radius: 10px;
+    padding: 20px; /* Tăng padding của ô ngày */
+    border-radius: 12px;
     border: 2px solid #ef476f;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.day b {
+    color: #d90429;
+    font-size: 1.3em;
+    margin-bottom: 10px;
+    display: block; /* Đảm bảo tiêu đề ngày nằm trên một dòng riêng */
+}
+
+.day p {
+    font-size: 1em;
+    line-height: 1.6;
+    color: #444;
+}
+
+/* --- MEDIA QUERIES cho thiết bị di động --- */
+@media (max-width: 768px) {
+    .container {
+        padding: 30px 20px; /* Giảm padding trên điện thoại */
+        width: 95%; /* Chiếm nhiều hơn trên màn hình nhỏ */
+    }
+
+    .welcome-container h1 {
+        font-size: 2.5em;
+        margin-bottom: 15px;
+    }
+
+    .welcome-container p {
+        font-size: 1em;
+        margin-bottom: 25px;
+    }
+
+    h2 {
+        font-size: 2em;
+        margin-bottom: 20px;
+    }
+
+    .nav-button {
+        padding: 15px 25px;
+        font-size: 1.1em;
+    }
+
+    .big-number {
+        font-size: 5rem; /* Giảm kích thước số ngày yêu trên di động */
+    }
+
+    .countdown span {
+        font-size: 3rem; /* Giảm kích thước số đếm ngược */
+        min-width: 50px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 25px 15px;
+        border-radius: 15px;
+    }
+
+    .welcome-container h1 {
+        font-size: 2em;
+    }
+    .welcome-container p {
+        font-size: 0.9em;
+    }
+
+    .nav-button {
+        padding: 12px 20px;
+        font-size: 1em;
+    }
+
+    .big-number {
+        font-size: 4rem;
+    }
+
+    .countdown span {
+        font-size: 2.2rem;
+        min-width: 40px;
+        padding: 0 2px;
+    }
+    .countdown-label {
+        font-size: 0.8em;
+    }
+
+    .schedule-grid {
+        grid-template-columns: 1fr; /* 1 cột trên điện thoại rất nhỏ */
+    }
+    .day b {
+        font-size: 1.2em;
+    }
+}
+
+/* --- CSS CHO LỊCH THEO DÕI CHU KỲ --- */
+.calendar-container {
+    margin-top: 20px;
+    width: 100%;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.calendar-header h2 {
+    margin: 0;
+    font-size: 1.8em;
+    color: #d90429;
+}
+
+.calendar-header button {
+    background-color: #ef476f;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.5em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.calendar-header button:hover {
+    background-color: #d90429;
+}
+
+.calendar-weekdays, .calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.calendar-weekdays div {
+    font-weight: bold;
+    color: #555;
+    padding-bottom: 10px;
+}
+
+.day-cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 45px;
+    border-radius: 50%;
+    transition: background-color 0.3s;
+}
+
+.day-cell.empty-day {
+    background-color: transparent;
+}
+
+.day-cell.today {
+    border: 2px solid #ef476f;
+    font-weight: bold;
+}
+
+.day-cell.period-day {
+    background-color: #ff8fa3;
+    color: white;
+    font-weight: bold;
+}
+
+.calendar-legend {
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    font-size: 0.9em;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.legend-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.legend-color.period-day {
+    background-color: #ff8fa3;
+}
+
+.legend-color.today {
+    border: 2px solid #ef476f;
+}
+
+/* Responsive cho lịch */
+@media (max-width: 480px) {
+    .calendar-header h2 {
+        font-size: 1.2em;
+    }
+    .day-cell {
+        height: 35px;
+        font-size: 0.9em;
+    }
 }

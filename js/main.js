@@ -3,8 +3,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // --- LOGIC CHO TRANG ĐẾM NGÀY YÊU ---
     const loveDaysElement = document.getElementById('love-days');
-
-    // Chỉ chạy code này nếu tìm thấy phần tử có id='love-days' (tức là đang ở trang love-counter.html)
     if (loveDaysElement) {
         // !! THAY ĐỔI NGÀY BẮT ĐẦU CỦA BẠN Ở ĐÂY !!
         const startDate = new Date('2023-01-20'); // Format: 'Năm-Tháng-Ngày'
@@ -12,46 +10,103 @@ window.addEventListener('DOMContentLoaded', () => {
         const today = new Date();
         const timeDiff = today.getTime() - startDate.getTime();
         const daysDiff = Math.floor(timeDiff / (1000 * 3600 * 24));
-
         loveDaysElement.innerText = daysDiff;
     }
 
 
-    // --- LOGIC CHO TRANG ĐẾM NGƯỢC SỰ KIỆN ---
-    const countdownContainer = document.getElementById('countdown-timer');
+    // --- LOGIC CHO TRANG LỊCH THEO DÕI CHU KỲ ---
+    const calendarElement = document.getElementById('period-calendar');
+    if (calendarElement) {
+        // ===============================================================
+        // !! CHỈNH SỬA THÔNG TIN CHU KỲ CỦA BẠN GÁI BẠN Ở ĐÂY !!
+        // ===============================================================
+        const lastPeriodStartDate = new Date('2025-10-01'); // 1. Ngày bắt đầu của kỳ kinh gần nhất
+        const cycleLength = 29;                             // 2. Độ dài trung bình của chu kỳ (ví dụ: 28 ngày)
+        const periodDuration = 7;                           // 3. Kỳ kinh kéo dài trong bao nhiêu ngày (ví dụ: 5 ngày)
+        // ===============================================================
 
-    // Chỉ chạy code này nếu tìm thấy phần tử có id='countdown-timer' (tức là đang ở trang countdown.html)
-    if (countdownContainer) {
-        // !! THAY ĐỔI NGÀY SỰ KIỆN CỦA BẠN Ở ĐÂY !!
-        const targetDate = new Date('2025-12-24T00:00:00'); // Format: 'Năm-Tháng-NgàyTGiờ:Phút:Giây'
+        const monthYearTitle = document.getElementById('month-year-title');
+        const calendarGrid = document.getElementById('calendar-days-grid');
+        const prevMonthBtn = document.getElementById('prev-month-btn');
+        const nextMonthBtn = document.getElementById('next-month-btn');
 
-        const daysSpan = document.getElementById('days');
-        const hoursSpan = document.getElementById('hours');
-        const minutesSpan = document.getElementById('minutes');
-        const secondsSpan = document.getElementById('seconds');
+        let currentDate = new Date();
 
-        // Cập nhật bộ đếm mỗi giây
-        const interval = setInterval(() => {
-            const now = new Date().getTime();
-            const distance = targetDate - now;
+        function generateCalendar(date) {
+            calendarGrid.innerHTML = ''; // Xóa lịch cũ
+            const year = date.getFullYear();
+            const month = date.getMonth(); // 0-11
 
-            if (distance < 0) {
-                clearInterval(interval);
-                countdownContainer.innerText = "Chúc Mừng Ngày Đặc Biệt!";
-                return;
+            monthYearTitle.innerText = `Tháng ${month + 1} ${year}`;
+
+            const firstDayOfMonth = new Date(year, month, 1);
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            
+            // Lấy ngày trong tuần của ngày đầu tiên (0=CN, 1=T2, ..., 6=T7)
+            let startingDay = firstDayOfMonth.getDay();
+            if (startingDay === 0) startingDay = 7; // Chuyển Chủ Nhật về cuối tuần
+
+            // Tạo các ô trống cho đầu tháng
+            for (let i = 1; i < startingDay; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.classList.add('day-cell', 'empty-day');
+                calendarGrid.appendChild(emptyCell);
             }
 
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            // Tính toán tất cả các ngày "dâu"
+            const periodDays = new Set();
+            let currentPeriodStart = new Date(lastPeriodStartDate);
+            
+            // Lùi về các kỳ trước để bao phủ cả tháng trước đó
+            while(currentPeriodStart > new Date(year, month - 1, 1)) {
+                currentPeriodStart.setDate(currentPeriodStart.getDate() - cycleLength);
+            }
+            
+            // Tiến tới các kỳ sau để bao phủ tháng hiện tại và tháng sau
+            while(currentPeriodStart < new Date(year, month + 2, 1)) {
+                 for (let i = 0; i < periodDuration; i++) {
+                    const periodDate = new Date(currentPeriodStart);
+                    periodDate.setDate(periodDate.getDate() + i);
+                    periodDays.add(periodDate.toDateString());
+                }
+                currentPeriodStart.setDate(currentPeriodStart.getDate() + cycleLength);
+            }
 
-            daysSpan.innerText = String(days).padStart(2, '0');
-            hoursSpan.innerText = String(hours).padStart(2, '0');
-            minutesSpan.innerText = String(minutes).padStart(2, '0');
-            secondsSpan.innerText = String(seconds).padStart(2, '0');
+            // Tạo các ô ngày trong tháng
+            const today = new Date();
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayCell = document.createElement('div');
+                dayCell.classList.add('day-cell');
+                dayCell.innerText = day;
 
-        }, 1000);
+                const thisDate = new Date(year, month, day);
+
+                // Đánh dấu ngày hôm nay
+                if (thisDate.toDateString() === today.toDateString()) {
+                    dayCell.classList.add('today');
+                }
+                
+                // Đánh dấu ngày "dâu"
+                if (periodDays.has(thisDate.toDateString())) {
+                    dayCell.classList.add('period-day');
+                }
+
+                calendarGrid.appendChild(dayCell);
+            }
+        }
+        
+        // Nút chuyển tháng
+        prevMonthBtn.addEventListener('click', () => {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            generateCalendar(currentDate);
+        });
+
+        nextMonthBtn.addEventListener('click', () => {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            generateCalendar(currentDate);
+        });
+
+        // Hiển thị lịch lần đầu tiên
+        generateCalendar(currentDate);
     }
-
 });
