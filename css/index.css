@@ -105,20 +105,60 @@ body {
 }
 
 /* --- MEDIA QUERIES cho trang Index --- */
+/* --- MEDIA QUERIES cho trang Index (Đã tối ưu cho iPhone) --- */
 @media (max-width: 768px) {
-    .main-selection-container { padding: 30px 15px; }
-    .welcome-heading { font-size: 2.5em; margin-bottom: 30px; }
-    .profile-selection { flex-direction: column; gap: 30px; }
-    .profile-card img { width: 120px; height: 120px; border-width: 3px; }
-    .profile-name { font-size: 1.4em; }
-    .animated-heart-wrapper { width: 80px; height: 80px; }
-    .heart, .heart::before, .heart::after { width: 45px; height: 45px; }
-    .heart::before { top: -22.5px; }
-    .heart::after { left: 22.5px; }
+    .main-selection-container {
+        padding: 30px 20px;
+    }
+    .welcome-heading {
+        font-size: 2.4em; /* Giảm một chút cho gọn */
+        margin-bottom: 30px;
+    }
+    .profile-selection {
+        flex-direction: column; /* Vẫn giữ chiều dọc */
+        gap: 20px; /* Giảm khoảng cách để các mục gần nhau hơn */
+    }
+    .profile-card {
+        padding: 10px; /* Giảm padding của card */
+    }
+    .profile-card img {
+        width: 130px; /* Kích thước hợp lý hơn */
+        height: 130px;
+        border-width: 4px;
+    }
+    .profile-name {
+        font-size: 1.5em;
+    }
+    .animated-heart-wrapper {
+        width: 70px;
+        height: 70px;
+        margin: 0; /* Bỏ margin thừa nếu có */
+    }
+    .heart, .heart::before, .heart::after {
+        width: 40px; /* Làm trái tim nhỏ lại một chút */
+        height: 40px;
+    }
+    .heart::before {
+        top: -20px;
+    }
+    .heart::after {
+        left: 20px;
+    }
 }
 
 @media (max-width: 480px) {
-    .welcome-heading { font-size: 2em; margin-bottom: 25px; }
-    .profile-card img { width: 100px; height: 100px; }
-    .profile-name { font-size: 1.2em; }
+    .welcome-heading {
+        font-size: 2em;
+        margin-bottom: 25px;
+    }
+    .profile-selection {
+        gap: 15px; /* Giảm khoảng cách hơn nữa */
+    }
+    .profile-card img {
+        width: 110px; /* Nhỏ hơn nữa trên màn hình hẹp */
+        height: 110px;
+    }
+    .profile-name {
+        font-size: 1.3em;
+    }
 }
