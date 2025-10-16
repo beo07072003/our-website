@@ -4,41 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lịch "Dâu" Của Em 🍓</title>
-    <script src="js/shared.js"></script>
+
     <link rel="stylesheet" href="css/global.css">
-    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/calendar.css">
+    
+    <script src="js/shared.js"></script>
+    <link rel="icon" type="image/png" href="./images/logo.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <a href="index.html" class="back-button">↩ Quay lại trang chủ</a>
+    <div class="calendar-page-container" id="full-period-calendar"> <a href="her-dashboard.html" class="back-to-dashboard-btn">↩ Quay lại Dashboard</a>
         
-        <div id="period-calendar" class="calendar-container">
-            <div class="calendar-header">
-                <button id="prev-month-btn">&lt;</button>
-                <h2 id="month-year-title">Tháng 10 2025</h2>
-                <button id="next-month-btn">&gt;</button>
-            </div>
-            <div class="calendar-weekdays">
-                <div>T2</div>
-                <div>T3</div>
-                <div>T4</div>
-                <div>T5</div>
-                <div>T6</div>
-                <div>T7</div>
-                <div>CN</div>
-            </div>
-            <div class="calendar-days" id="calendar-days-grid">
-                </div>
-            <div class="calendar-legend">
-                <div class="legend-item">
-                    <span class="legend-color period-day"></span> Ngày "dâu rụng" 🍓
-                </div>
-                <div class="legend-item">
-                    <span class="legend-color today"></span> Hôm nay 💖
-                </div>
-            </div>
+        <div class="calendar-header">
+            <button id="prev-month-btn-full">&lt;</button> <h2 id="month-year-title-full">Tháng 10 2025</h2> <button id="next-month-btn-full">&gt;</button> </div>
+
+        <div class="calendar-weekdays">
+            <div>T2</div>
+            <div>T3</div>
+            <div>T4</div>
+            <div>T5</div>
+            <div>T6</div>
+            <div>T7</div>
+            <div>CN</div>
         </div>
-        
+
+        <div class="calendar-days" id="calendar-days-grid-full"> </div>
+
+        <div class="calendar-legend">
+            <div class="legend-item period-legend">
+                 Ngày "dâu rụng"
+            </div>
+        <div class="legend-item today-legend">
+                Hôm nay
+        </div>
+</div>
     </div>
 </body>
 </html>

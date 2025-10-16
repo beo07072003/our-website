@@ -1,66 +1,352 @@
-/* --- CSS CHO CÁC TRANG DASHBOARD --- */
-.nav-button {
-    display: block;
+/* --- CSS CHO CÁC TRANG DASHBOARD (HIỆN ĐẠI/TƯƠNG LAI) --- */
+.dashboard-container {
+    padding: 30px;
+    max-width: 1200px; /* Tăng chiều rộng tối đa cho dashboard */
+    width: 95%;
+    background-color: rgba(255, 255, 255, 0.98); /* Nền sáng và rõ ràng hơn */
+    border-radius: 30px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.back-to-home-btn {
+    position: absolute;
+    top: 25px;
+    right: 30px;
     background-color: #ef476f;
     color: white;
-    padding: 18px 35px;
-    margin: 15px 0;
-    border-radius: 50px;
+    padding: 10px 20px;
+    border-radius: 25px;
     text-decoration: none;
     font-weight: bold;
-    font-size: 1.3em;
+    font-size: 0.9em;
     transition: background-color 0.3s ease, transform 0.2s ease;
-    box-shadow: 0 5px 15px rgba(239, 71, 111, 0.3);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-.nav-button:hover {
+.back-to-home-btn:hover {
     background-color: #d90429;
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(217, 4, 41, 0.4);
+    transform: translateY(-2px);
 }
 
-.big-number {
-    font-size: 7.5rem;
+.dashboard-greeting {
+    font-size: 3.8em;
+    color: #d90429;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+}
+
+.dashboard-slogan {
+    font-size: 1.3em;
+    color: #666;
+    margin-bottom: 40px;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* 300px là kích thước tối thiểu của card */
+    gap: 25px; /* Khoảng cách giữa các card */
+    justify-content: center;
+    align-items: stretch; /* Đảm bảo các card có cùng chiều cao trong hàng */
+}
+
+.dashboard-card {
+    background: linear-gradient(135deg, #ffffff, #f0f0f0); /* Gradient nhẹ cho nền card */
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Để footer luôn ở dưới */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #eee; /* Viền nhẹ */
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.card-icon {
+    font-size: 3em;
+    margin-bottom: 15px;
+    display: block; /* Đảm bảo icon nằm riêng một hàng */
+}
+
+.dashboard-card h3 {
+    font-size: 1.8em;
+    color: #ef476f;
+    margin-bottom: 15px;
+}
+
+.card-big-number {
+    font-size: 4.5em; /* Kích thước số lớn */
+    font-weight: bold;
+    color: #d90429;
+    line-height: 1.1;
+    margin-bottom: 10px;
+}
+
+.card-subtitle {
+    font-size: 1.1em;
+    color: #888;
+    margin-bottom: 20px;
+}
+
+.card-footer {
+    margin-top: auto; /* Đẩy footer xuống dưới */
+    padding-top: 15px;
+    border-top: 1px dashed #eee;
+    font-size: 0.9em;
+    color: #999;
+}
+
+.view-all-link {
+    color: #ef476f;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+.card-button {
+    
+    color: #ef476f;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+
+}
+
+.view-all-link:hover {
+    color: #d90429;
+}
+
+/* --- Đếm ngược cụ thể --- */
+.card-countdown-timer {
+    font-size: 2.2em;
+    font-weight: bold;
+    color: #d90429;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap; /* Cho phép xuống dòng nếu quá dài */
+    gap: 10px;
+}
+
+.card-countdown-timer span {
+    display: inline-block;
+    background-color: #ffe0e6;
+    padding: 5px 10px;
+    border-radius: 8px;
+    color: #d90429;
+    font-size: 0.8em; /* Kích thước số nhỏ hơn một chút */
+}
+
+/* --- Lịch tuần đơn giản trong card --- */
+.weekly-events-list {
+    margin-bottom: 20px;
+    text-align: left;
+    padding-left: 10px;
+}
+
+.event-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px dotted #f0f0f0;
+    font-size: 1em;
+    color: #555;
+}
+.event-item:last-child {
+    border-bottom: none;
+}
+.event-time {
     font-weight: bold;
     color: #ef476f;
-    margin: 20px 0;
-    line-height: 1;
+    flex-shrink: 0; /* Không co lại */
+    margin-right: 10px;
+}
+.event-title {
+    flex-grow: 1; /* Tự động chiếm hết phần còn lại */
+    text-align: right;
 }
 
-/* --- CSS CHO LỊCH THEO DÕI CHU KỲ --- */
-.calendar-container { margin-top: 20px; width: 100%; }
-.calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-.calendar-header h2 { margin: 0; font-size: 1.8em; }
-.calendar-header button { background-color: #ef476f; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 1.5em; cursor: pointer; transition: background-color 0.3s; }
-.calendar-header button:hover { background-color: #d90429; }
-.calendar-weekdays, .calendar-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
-.calendar-weekdays div { font-weight: bold; color: #555; padding-bottom: 10px; }
-.day-cell { display: flex; justify-content: center; align-items: center; height: 45px; border-radius: 50%; transition: background-color 0.3s; }
-.day-cell.empty-day { background-color: transparent; }
-.day-cell.today { border: 2px solid #ef476f; font-weight: bold; }
-.day-cell.period-day { background-color: #ff8fa3; color: white; font-weight: bold; }
-.calendar-legend { margin-top: 25px; display: flex; justify-content: center; gap: 20px; font-size: 0.9em; }
-.legend-item { display: flex; align-items: center; gap: 8px; }
-.legend-color { width: 20px; height: 20px; border-radius: 50%; display: inline-block; }
-.legend-color.period-day { background-color: #ff8fa3; }
-.legend-color.today { border: 2px solid #ef476f; }
+/* --- Lịch "Dâu" trong card --- */
+.card-period-calendar {
+    grid-column: span 1; /* Mặc định 1 cột */
+}
 
-/* --- CSS CHO LỊCH TUẦN --- */
-.schedule-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-top: 30px; }
-.day { background-color: #fff; padding: 20px; border-radius: 12px; border: 2px solid #ef476f; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); }
-.day b { color: #d90429; font-size: 1.3em; margin-bottom: 10px; display: block; }
-.day p { font-size: 1em; line-height: 1.6; color: #444; }
+/* Nếu bạn muốn card này chiếm toàn bộ chiều rộng (2 cột) trên màn hình lớn */
+@media (min-width: 900px) {
+    .full-width-card {
+        grid-column: span 2; /* Chiếm 2 cột */
+    }
+}
 
-/* --- MEDIA QUERIES cho Dashboard --- */
+.calendar-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    background-color: #fff;
+    padding: 8px 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.calendar-nav span {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #d90429;
+}
+
+.calendar-nav button {
+    background-color: #ffc0cb; /* Nút màu hồng nhạt */
+    color: #d90429;
+    border: none;
+    border-radius: 5px;
+    width: 35px;
+    height: 35px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.calendar-nav button:hover {
+    background-color: #ef476f;
+    color: white;
+}
+
+.calendar-grid-header, .calendar-grid-body {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 3px;
+    margin-bottom: 10px;
+}
+
+.calendar-grid-header div {
+    font-weight: bold;
+    color: #888;
+    font-size: 0.85em;
+    padding: 5px 0;
+}
+
+.calendar-grid-body .day-cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 38px;
+    border-radius: 50%;
+    font-size: 0.9em;
+    color: #555;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.calendar-grid-body .day-cell.empty-day {
+    background-color: transparent;
+}
+
+.calendar-grid-body .day-cell.today {
+    border: 2px solid #ef476f;
+    font-weight: bold;
+    color: #d90429;
+}
+
+.calendar-grid-body .day-cell.period-day {
+    background-color: #ffb6c1; /* Màu hồng cho ngày "dâu" */
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(255,182,193,0.5);
+}
+
+/* --- MEDIA QUERIES cho Dashboard (Tối ưu cho điện thoại) --- */
 @media (max-width: 768px) {
-    .nav-button { padding: 15px 25px; font-size: 1.1em; }
-    .big-number { font-size: 5rem; }
+    .dashboard-container {
+        padding: 20px;
+        border-radius: 20px;
+    }
+    .back-to-home-btn {
+        top: 15px;
+        right: 15px;
+        padding: 8px 15px;
+        font-size: 0.8em;
+    }
+    .dashboard-greeting {
+        font-size: 2.5em;
+        margin-bottom: 5px;
+    }
+    .dashboard-slogan {
+        font-size: 1em;
+        margin-bottom: 30px;
+    }
+    .dashboard-grid {
+        grid-template-columns: 1fr; /* 1 cột trên di động */
+        gap: 20px;
+    }
+    .dashboard-card {
+        padding: 25px;
+    }
+    .card-icon {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+    }
+    .dashboard-card h3 {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+    }
+    .card-big-number {
+        font-size: 3.5em;
+    }
+    .card-subtitle {
+        font-size: 0.9em;
+    }
+    .card-countdown-timer {
+        font-size: 1.8em;
+        gap: 5px;
+    }
+    .card-countdown-timer span {
+        padding: 3px 8px;
+    }
+    .weekly-events-list {
+        font-size: 0.9em;
+    }
+    .calendar-nav button {
+        width: 30px;
+        height: 30px;
+        font-size: 1em;
+    }
+    .calendar-nav span {
+        font-size: 1em;
+    }
+    .calendar-grid-body .day-cell {
+        height: 30px;
+        font-size: 0.8em;
+    }
+    .full-width-card {
+        grid-column: span 1; /* Đảm bảo chỉ chiếm 1 cột trên di động */
+    }
+}
+/* --- TÙY CHỈNH MÀU SẮC CHO TỪNG CARD --- */
+
+/* Card 1: Hành trình của chúng ta (Màu hồng đào) */
+.card-love-counter {
+    background: linear-gradient(135deg, #ffe0e6, #ffc0cb);
 }
 
-@media (max-width: 480px) {
-    .nav-button { padding: 12px 20px; font-size: 1em; }
-    .big-number { font-size: 4rem; }
-    .calendar-header h2 { font-size: 1.2em; }
-    .day-cell { height: 35px; font-size: 0.9em; }
-    .schedule-grid { grid-template-columns: 1fr; }
+/* Card 2: Đếm ngược ngày đặc biệt (Màu xanh bạc hà) */
+.card-countdown {
+    background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+}
+
+/* Card 3: Lịch tuần của Em (Màu xanh lá mạ) */
+.card-weekly-schedule {
+    background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+}
+
+/* Card 4: Lịch "Dâu" (Màu tím lavender) */
+.card-period-calendar {
+    background: linear-gradient(135deg, #f3e5f5, #e1bee7);
 }

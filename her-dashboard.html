@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Future-Love Dashboard ✨</title>
+    <script src="js/shared.js"></script>
+    <link rel="icon" type="image/png" href="./images/logo.svg">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <a href="index.html" class="back-to-home-btn">↩ Quay lại Trang chủ</a>
+        
+        <h1 class="dashboard-greeting">Chào mừng Em Yêu! ✨</h1>
+        <p class="dashboard-slogan">Mỗi ngày bên em là một món quà.</p>
+
+        <div class="dashboard-grid">
+
+            <div class="dashboard-card card-love-counter">
+                <span class="card-icon">💖</span>
+                <h3>Hành trình của chúng ta</h3>
+                <div id="love-days" class="card-big-number">...</div>
+                <p class="card-subtitle">ngày hạnh phúc!</p>
+                <div class="card-footer">
+                    <span>Cùng nhau viết tiếp nhé!</span>
+                </div>
+            </div>
+
+            <div class="dashboard-card card-countdown">
+                <span class="card-icon">⏰</span>
+                <h3>Đếm ngược ngày đặc biệt</h3>
+                <div id="countdown-timer" class="card-countdown-timer">
+                    <span id="countdown-days">00</span> Ngày
+                    <span id="countdown-hours">00</span> Giờ
+                    <span id="countdown-minutes">00</span> Phút
+                    <span id="countdown-seconds">00</span> Giây
+                </div>
+                <p class="card-subtitle">đến ngày chúng ta mong chờ!</p>
+                <div class="card-footer">
+                    <span>Đừng quên chuẩn bị nhé!</span>
+                </div>
+            </div>
+
+            <div class="dashboard-card card-weekly-schedule">
+                <span class="card-icon">🗓️</span>
+                <h3>Lịch tuần của Em</h3>
+                <div class="weekly-events-list">
+                    <div class="event-item">
+                        <span class="event-time">T2: 19:00</span>
+                        <span class="event-title">Yoga</span>
+                    </div>
+                    <div class="event-item">
+                        <span class="event-time">T4: 14:00</span>
+                        <span class="event-title">Hẹn hò với Anh ❤️</span>
+                    </div>
+                    <div class="event-item">
+                        <span class="event-time">T6: 20:00</span>
+                        <span class="event-title">Xem phim tại nhà</span>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="schedule.html" class="view-all-link">Xem chi tiết lịch tuần &gt;</a>
+                </div>
+            </div>
+
+            <div class="dashboard-card card-period-calendar full-width-card">
+                <span class="card-icon">🍓</span>
+                <h3>Lịch "Dâu" Thân mật</h3>
+                <div class="calendar-nav">
+                    <button id="prev-month-btn-dash">&lt;</button>
+                    <span id="month-year-title-dash">Tháng 11 2025</span>
+                    <button id="next-month-btn-dash">&gt;</button>
+                </div>
+                <div class="calendar-grid-header">
+                    <div>T2</div><div>T3</div><div>T4</div><div>T5</div><div>T6</div><div>T7</div><div>CN</div>
+                </div>
+                <div id="calendar-days-grid-dash" class="calendar-grid-body">
+                    </div>
+                <div class="card-footer">
+                    <a href="countdown.html" class="card-button">Xem Lịch Chi Tiết &gt;</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
