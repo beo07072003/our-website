@@ -1,20 +1,52 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lịch Tuần Của Em</title>
-    <script src="js/shared.js"></script>
     <link rel="stylesheet" href="css/global.css">
-    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/schedule.css"> <link rel="icon" type="image/png" href="./images/logo.svg">
 </head>
 <body>
-    <div class="container">
-        <a href="index.html" class="back-button">↩ Quay lại</a>
-        <h2>Lịch tuần này của em yêu</h2>
-        <div class="schedule-grid">
-            <div class="day"><b>Thứ Hai</b><p>Sáng: Đi học<br>Chiều: Hẹn hò với anh ❤️</p></div>
-            <div class="day"><b>Thứ Ba</b><p>...</p></div>
-            <div class="day"><b>Thứ Tư</b><p>...</p></div>
+    <div class="schedule-container">
+        <a href="her-dashboard.html" class="back-to-dashboard-btn">↩ Quay lại Dashboard</a>
+        <h1>Lịch Tuần</h1>
+        <div id="schedule-grid" class="schedule-grid">
             </div>
     </div>
+
+    <div id="event-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 id="modal-title">Thêm Sự Kiện Mới</h2>
+            <input type="text" id="event-title-input" placeholder="Tên sự kiện (VD: Học bài)">
+            
+            <div class="form-grid">
+                <select id="event-day-select">
+                    <option value="2">Thứ 2</option>
+                    <option value="3">Thứ 3</option>
+                    <option value="4">Thứ 4</option>
+                    <option value="5">Thứ 5</option>
+                    <option value="6">Thứ 6</option>
+                    <option value="7">Thứ 7</option>
+                    <option value="8">Chủ Nhật</option>
+                </select>
+                <input type="color" id="event-color-input" value="#FFC0CB">
+                
+                <input type="time" id="event-start-time-input" step="1800">
+                <input type="time" id="event-end-time-input" step="1800">
+            </div>
+
+            <div class="modal-actions">
+                <button id="save-event-button" class="modal-btn save">Lưu</button>
+                <button id="delete-event-button" class="modal-btn delete">Xóa</button>
+                <button id="cancel-event-button" class="modal-btn cancel">Hủy</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-init.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>
