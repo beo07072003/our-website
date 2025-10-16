@@ -1,0 +1,66 @@
+/* --- CSS CHO CÁC TRANG DASHBOARD --- */
+.nav-button {
+    display: block;
+    background-color: #ef476f;
+    color: white;
+    padding: 18px 35px;
+    margin: 15px 0;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.3em;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 5px 15px rgba(239, 71, 111, 0.3);
+}
+
+.nav-button:hover {
+    background-color: #d90429;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(217, 4, 41, 0.4);
+}
+
+.big-number {
+    font-size: 7.5rem;
+    font-weight: bold;
+    color: #ef476f;
+    margin: 20px 0;
+    line-height: 1;
+}
+
+/* --- CSS CHO LỊCH THEO DÕI CHU KỲ --- */
+.calendar-container { margin-top: 20px; width: 100%; }
+.calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.calendar-header h2 { margin: 0; font-size: 1.8em; }
+.calendar-header button { background-color: #ef476f; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 1.5em; cursor: pointer; transition: background-color 0.3s; }
+.calendar-header button:hover { background-color: #d90429; }
+.calendar-weekdays, .calendar-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+.calendar-weekdays div { font-weight: bold; color: #555; padding-bottom: 10px; }
+.day-cell { display: flex; justify-content: center; align-items: center; height: 45px; border-radius: 50%; transition: background-color 0.3s; }
+.day-cell.empty-day { background-color: transparent; }
+.day-cell.today { border: 2px solid #ef476f; font-weight: bold; }
+.day-cell.period-day { background-color: #ff8fa3; color: white; font-weight: bold; }
+.calendar-legend { margin-top: 25px; display: flex; justify-content: center; gap: 20px; font-size: 0.9em; }
+.legend-item { display: flex; align-items: center; gap: 8px; }
+.legend-color { width: 20px; height: 20px; border-radius: 50%; display: inline-block; }
+.legend-color.period-day { background-color: #ff8fa3; }
+.legend-color.today { border: 2px solid #ef476f; }
+
+/* --- CSS CHO LỊCH TUẦN --- */
+.schedule-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-top: 30px; }
+.day { background-color: #fff; padding: 20px; border-radius: 12px; border: 2px solid #ef476f; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); }
+.day b { color: #d90429; font-size: 1.3em; margin-bottom: 10px; display: block; }
+.day p { font-size: 1em; line-height: 1.6; color: #444; }
+
+/* --- MEDIA QUERIES cho Dashboard --- */
+@media (max-width: 768px) {
+    .nav-button { padding: 15px 25px; font-size: 1.1em; }
+    .big-number { font-size: 5rem; }
+}
+
+@media (max-width: 480px) {
+    .nav-button { padding: 12px 20px; font-size: 1em; }
+    .big-number { font-size: 4rem; }
+    .calendar-header h2 { font-size: 1.2em; }
+    .day-cell { height: 35px; font-size: 0.9em; }
+    .schedule-grid { grid-template-columns: 1fr; }
+}

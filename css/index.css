@@ -1,0 +1,124 @@
+/* --- CSS CHO TRANG CHỌN PROFILE KIỂU NETFLIX --- */
+body {
+    overflow: hidden; /* Tránh scrollbar nếu có hiệu ứng */
+}
+
+.main-selection-container {
+    text-align: center;
+    max-width: 900px;
+    width: 100%;
+    padding: 40px 20px;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 25px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+.welcome-heading {
+    font-size: 3.5em;
+    color: #d90429;
+    margin-bottom: 45px;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+}
+
+.profile-selection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    flex-wrap: wrap;
+}
+
+.profile-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #333;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.profile-card:hover {
+    transform: translateY(-8px) scale(1.05);
+    box-shadow: 0 15px 30px rgba(239, 71, 111, 0.3);
+}
+
+.profile-card img {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid #ef476f;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    margin-bottom: 15px;
+    transition: border-color 0.3s ease;
+}
+
+.profile-card:hover img {
+    border-color: #d90429;
+}
+
+.profile-name {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #d90429;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.animated-heart-wrapper {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.heart {
+    width: 60px;
+    height: 60px;
+    background-color: #ef476f;
+    position: relative;
+    transform: rotate(-45deg);
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+.heart::before,
+.heart::after {
+    content: '';
+    width: 60px;
+    height: 60px;
+    background-color: #ef476f;
+    border-radius: 50%;
+    position: absolute;
+}
+
+.heart::before { top: -30px; left: 0; }
+.heart::after { left: 30px; top: 0; }
+
+@keyframes pulse {
+    0% { transform: scale(1) rotate(-45deg); }
+    50% { transform: scale(1.15) rotate(-45deg); }
+    100% { transform: scale(1) rotate(-45deg); }
+}
+
+/* --- MEDIA QUERIES cho trang Index --- */
+@media (max-width: 768px) {
+    .main-selection-container { padding: 30px 15px; }
+    .welcome-heading { font-size: 2.5em; margin-bottom: 30px; }
+    .profile-selection { flex-direction: column; gap: 30px; }
+    .profile-card img { width: 120px; height: 120px; border-width: 3px; }
+    .profile-name { font-size: 1.4em; }
+    .animated-heart-wrapper { width: 80px; height: 80px; }
+    .heart, .heart::before, .heart::after { width: 45px; height: 45px; }
+    .heart::before { top: -22.5px; }
+    .heart::after { left: 22.5px; }
+}
+
+@media (max-width: 480px) {
+    .welcome-heading { font-size: 2em; margin-bottom: 25px; }
+    .profile-card img { width: 100px; height: 100px; }
+    .profile-name { font-size: 1.2em; }
+}
