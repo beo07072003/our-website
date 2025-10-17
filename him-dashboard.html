@@ -46,10 +46,33 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore-compat.js"></script>
     <script src="js/firebase-init.js"></script>
-    <script src="js/dashboard.js"></script>
     <script src="js/profile.js"></script>
-    <script src="js/schedule.js"></script>
-    <script src="js/period-calendar.js"></script>
-    <script src="js/app.js"></script>
+
+    <script>
+        // Inline initialization for him-dashboard
+        window.addEventListener('DOMContentLoaded', async () => {
+            if (typeof db === 'undefined') {
+                console.error("Firebase chưa được khởi tạo!");
+                return;
+            }
+
+            try {
+                // Load both her and his data
+                const herDataRef = db.collection('userInfo').doc('herData');
+                const hisDataRef = db.collection('userInfo').doc('hisData');
+                const [herDoc, hisDoc] = await Promise.all([herDataRef.get(), hisDataRef.get()]);
+                
+                const herData = herDoc.exists ? herDoc.data() : {};
+                const hisData = hisDoc.exists ? hisDoc.data() : {};
+
+                // Run him dashboard functions
+                runHimPages(herData, hisData);
+
+            } catch (error) {
+                console.error("Lỗi khi tải dữ liệu:", error);
+                alert("Đã xảy ra lỗi khi kết nối.");
+            }
+        });
+    </script>
 </body>
 </html>

@@ -13,7 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="calendar-page-container" id="full-period-calendar"> <a href="her-dashboard.html" class="back-to-dashboard-btn">↩ Quay lại Dashboard</a>
+    <div class="calendar-page-container" id="full-period-calendar"> <a href="her-dashboard.html" class="back-to-dashboard-btn">↩ Quay lại</a>
         
         <div class="calendar-header">
             <button id="prev-month-btn-full">&lt;</button> <h2 id="month-year-title-full">Tháng 10 2025</h2> <button id="next-month-btn-full">&gt;</button> </div>
@@ -32,10 +32,10 @@
 
         <div class="calendar-legend">
             <div class="legend-item period-legend">
-                 Ngày "dâu rụng"
+                 🍓 Ngày "dâu rụng "  
             </div>
         <div class="legend-item today-legend">
-                Hôm nay
+                 ❤️ Hôm nay 
         </div>
 </div>
     </div>
@@ -44,12 +44,31 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore-compat.js"></script>
 
     <script src="js/firebase-init.js"></script>
-
     <script src="js/dashboard.js"></script>
-    <script src="js/profile.js"></script>
-    <script src="js/schedule.js"></script>
     <script src="js/period-calendar.js"></script>
 
-    <script src="js/app.js"></script>
+    <script>
+        // Inline initialization for countdown page (period calendar)
+        window.addEventListener('DOMContentLoaded', async () => {
+            if (typeof db === 'undefined') {
+                console.error("Firebase chưa được khởi tạo!");
+                return;
+            }
+
+            try {
+                // Load her data
+                const herDataRef = db.collection('userInfo').doc('herData');
+                const herDoc = await herDataRef.get();
+                const herData = herDoc.exists ? herDoc.data() : {};
+
+                // Run full period calendar functions
+                runFullPeriodCalendar(herData);
+
+            } catch (error) {
+                console.error("Lỗi khi tải dữ liệu:", error);
+                alert("Đã xảy ra lỗi khi kết nối.");
+            }
+        });
+    </script>
 </body>
 </html>
