@@ -248,7 +248,7 @@ body {
 }
 
 /* Tối ưu cho iPhone 11 Pro Max (414px) */
-@media (max-width: 414px) {
+/* @media (max-width: 414px) {
     .calendar-page-container {
         max-width: 360px;
         padding: 12px;
@@ -262,7 +262,7 @@ body {
         min-height: 42px;
         font-size: 0.85em;
     }
-}
+} */
 
 /* Tối ưu cho Desktop/Web Tab */
 @media (min-width: 768px) {
