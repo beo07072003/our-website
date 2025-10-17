@@ -1,4 +1,4 @@
-/* --- CSS NÂNG CẤP CHO TRANG LỊCH TUẦN (HIỆN ĐẠI & SANG TRỌNG) --- */
+/* --- CSS NÂNG CẤP CHO TRANG LỊCH TUẦN (MOBILE-OPTIMIZED) --- */
 @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;700;900&display=swap');
 
 :root {
@@ -12,29 +12,31 @@
 
 body {
     font-family: 'Be Vietnam Pro', sans-serif;
+    overflow-x: hidden;
 }
 
 .schedule-container {
-    width: 95%;
+    width: 100%;
     max-width: 1400px;
-    padding: 40px;
+    padding: 35px; /* Giảm từ 40px */
     background: var(--card-bg);
-    border-radius: 30px;
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(12px);
+    border-radius: 25px; /* Giảm từ 30px */
+    box-shadow: 0 13px 35px rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     position: relative;
 }
 
 .back-to-dashboard-btn {
     position: absolute;
-    top: 30px;
-    left: 40px;
+    top: 25px; /* Giảm từ 30px */
+    left: 35px; /* Giảm từ 40px */
     text-decoration: none;
-    font-size: 1em;
+    font-size: 0.98em; /* Giảm từ 1em */
     font-weight: bold;
     color: var(--primary-color);
     transition: color 0.3s ease, transform 0.2s ease;
+    z-index: 100;
 }
 
 .back-to-dashboard-btn:hover {
@@ -43,27 +45,109 @@ body {
 }
 
 .schedule-container h1 {
-    font-size: 3em;
+    font-size: 2.8em; /* Giảm từ 3em */
     font-weight: 900;
-    margin: 0 0 30px 0;
+    margin: 0 0 28px 0; /* Giảm từ 30px */
     text-align: center;
     background: linear-gradient(45deg, var(--primary-dark), var(--primary-color));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     text-fill-color: transparent;
+    line-height: 1.2;
 }
 
+/* === GIAO DIỆN CHO DI ĐỘNG === */
+.schedule-mobile-container {
+    display: flex;
+    flex-direction: column;
+    gap: 18px; /* Giảm từ 20px */
+    padding-bottom: 80px; /* Space cho FAB button */
+}
+
+.mobile-day-card {
+    background: white;
+    border-radius: 14px; /* Giảm từ 15px */
+    padding: 16px 14px; /* Giảm từ 15px */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.mobile-day-card h2 {
+    font-size: 1.35em; /* Giảm từ 1.4em */
+    color: var(--primary-dark);
+    margin: 0 0 12px 0;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--primary-color);
+}
+
+.mobile-event-item {
+    background: #f8f9fa;
+    padding: 12px 14px; /* Giảm padding ngang */
+    margin-bottom: 10px;
+    border-radius: 10px;
+    border-left: 4px solid var(--primary-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.mobile-event-item:last-child {
+    margin-bottom: 0;
+}
+
+.mobile-event-item:hover {
+    transform: translateX(4px); /* Giảm từ 5px */
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-event-item .event-time {
+    font-size: 0.83em; /* Giảm từ 0.85em */
+    color: var(--subtle-text);
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.mobile-event-item .event-title {
+    font-size: 1.03em; /* Giảm từ 1.05em */
+    color: var(--text-color);
+    font-weight: 600;
+}
+
+#add-event-fab {
+    position: fixed;
+    bottom: 22px; /* Giảm từ 25px */
+    right: 22px;
+    width: 54px; /* Giảm từ 56px */
+    height: 54px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    color: white;
+    border: none;
+    font-size: 1.9em; /* Giảm từ 2em */
+    font-weight: 300;
+    box-shadow: 0 5px 18px rgba(239, 71, 111, 0.35);
+    cursor: pointer;
+    z-index: 1000;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+#add-event-fab:hover {
+    transform: scale(1.08) rotate(90deg); /* Giảm từ 1.1 */
+    box-shadow: 0 7px 22px rgba(239, 71, 111, 0.55);
+}
+
+/* === GIAO DIỆN CHO MÁY TÍNH === */
 .schedule-grid {
     display: grid;
-    /* 1 cột giờ 80px, 7 cột ngày bằng nhau */
-    grid-template-columns: 80px repeat(7, 1fr); 
-    /* 1 hàng header 50px, 8 hàng giờ mỗi hàng 80px */
-    grid-template-rows: 50px repeat(8, 80px); 
+    grid-template-columns: 80px repeat(7, 1fr);
+    grid-template-rows: 50px repeat(8, 80px);
     border: 1px solid var(--grid-line-color);
-    border-radius: 15px;
+    border-radius: 13px; /* Giảm từ 15px */
     overflow: hidden;
-    position: relative; /* Rất quan trọng cho việc định vị sự kiện */
+    position: relative;
 }
 
 .grid-cell, .day-header, .time-slot {
@@ -81,14 +165,14 @@ body {
 
 .day-header {
     font-weight: 700;
-    font-size: 1.1em;
+    font-size: 1.05em; /* Giảm từ 1.1em */
     color: var(--text-color);
     background-color: rgba(245, 245, 245, 0.7);
 }
 
 .time-slot {
     font-weight: bold;
-    font-size: 0.9em;
+    font-size: 0.88em; /* Giảm từ 0.9em */
     color: var(--subtle-text);
 }
 
@@ -98,42 +182,42 @@ body {
 }
 
 .grid-cell:hover {
-    background-color: rgba(239, 71, 111, 0.1);
+    background-color: rgba(239, 71, 111, 0.08);
 }
 
 .event-block {
-    position: absolute; /* Rất quan trọng, bây giờ sẽ được định vị tuyệt đối */
+    position: absolute;
     left: 4px;
     right: 4px;
-    border-radius: 10px;
-    padding: 8px 10px;
+    border-radius: 9px; /* Giảm từ 10px */
+    padding: 7px 9px; /* Giảm từ 8px 10px */
     color: white;
-    font-size: 0.85em;
+    font-size: 0.83em; /* Giảm từ 0.85em */
     font-weight: bold;
     overflow: hidden;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    box-shadow: 0 3.5px 9px rgba(0,0,0,0.13);
     display: flex;
     align-items: center;
     border: 1px solid rgba(255, 255, 255, 0.3);
-    box-sizing: border-box; /* Đảm bảo padding không làm thay đổi kích thước */
+    box-sizing: border-box;
 }
 
 .event-block:hover {
-    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-    transform: scale(1.02);
+    box-shadow: 0 5.5px 14px rgba(0,0,0,0.17);
+    transform: scale(1.015); /* Giảm từ 1.02 */
     z-index: 10;
 }
 
-/* --- CSS CHO CỬA SỔ CHỈNH SỬA (MODAL) --- */
+/* === CSS CHO CỬA SỔ CHỈNH SỬA (MODAL) === */
 .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.55); /* Giảm từ 0.6 */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -141,7 +225,8 @@ body {
     pointer-events: none;
     transition: opacity 0.3s ease;
     z-index: 1000;
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(4px);
+    padding: 15px; /* Thêm padding để modal không chạm viền */
 }
 
 .modal-overlay.visible {
@@ -151,44 +236,89 @@ body {
 
 .modal-content {
     background: white;
-    padding: 30px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    padding: 28px; /* Giảm từ 30px */
+    border-radius: 18px; /* Giảm từ 20px */
+    box-shadow: 0 9px 28px rgba(0, 0, 0, 0.18);
     width: 90%;
     max-width: 450px;
     text-align: center;
     transform: scale(0.9);
     transition: transform 0.3s ease;
+    max-height: 85vh; /* Tránh modal quá cao */
+    overflow-y: auto;
 }
 
 .modal-overlay.visible .modal-content {
     transform: scale(1);
 }
 
-.modal-content h2 { margin-top: 0; color: var(--primary-dark); }
-.modal-actions { display: flex; gap: 15px; justify-content: center; }
+.modal-content h2 { 
+    margin-top: 0; 
+    color: var(--primary-dark);
+    font-size: 1.7em; /* Giảm từ mặc định */
+    margin-bottom: 20px;
+}
 
-.modal-btn { padding: 12px 30px; border: none; border-radius: 25px; font-size: 1em; font-weight: bold; cursor: pointer; transition: all 0.3s ease; }
-.modal-btn.save { background-color: var(--primary-color); color: white; }
-.modal-btn.save:hover { background-color: var(--primary-dark); transform: translateY(-2px); }
-.modal-btn.delete { background-color: #e53935; color: white; }
-.modal-btn.delete:hover { background-color: #c62828; transform: translateY(-2px); }
-.modal-btn.cancel { background-color: #eee; color: #555; }
-.modal-btn.cancel:hover { background-color: #ddd; }
+.modal-actions { 
+    display: flex; 
+    gap: 13px; /* Giảm từ 15px */
+    justify-content: center;
+    flex-wrap: wrap; /* Cho phép xuống hàng trên mobile */
+}
+
+.modal-btn { 
+    padding: 11px 26px; /* Giảm từ 12px 30px */
+    border: none; 
+    border-radius: 22px; /* Giảm từ 25px */
+    font-size: 0.98em; /* Giảm từ 1em */
+    font-weight: bold; 
+    cursor: pointer; 
+    transition: all 0.3s ease;
+    min-width: 90px; /* Đảm bảo nút không quá nhỏ */
+}
+
+.modal-btn.save { 
+    background-color: var(--primary-color); 
+    color: white; 
+}
+
+.modal-btn.save:hover { 
+    background-color: var(--primary-dark); 
+    transform: translateY(-2px); 
+}
+
+.modal-btn.delete { 
+    background-color: #e53935; 
+    color: white; 
+}
+
+.modal-btn.delete:hover { 
+    background-color: #c62828; 
+    transform: translateY(-2px); 
+}
+
+.modal-btn.cancel { 
+    background-color: #eee; 
+    color: #555; 
+}
+
+.modal-btn.cancel:hover { 
+    background-color: #ddd; 
+}
 
 .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    margin: 20px 0;
+    gap: 13px; /* Giảm từ 15px */
+    margin: 18px 0; /* Giảm từ 20px */
 }
 
 input, select {
     width: 100%;
-    padding: 12px;
+    padding: 11px; /* Giảm từ 12px */
     border: 2px solid #eee;
-    border-radius: 10px;
-    font-size: 1em;
+    border-radius: 9px; /* Giảm từ 10px */
+    font-size: 0.98em; /* Giảm từ 1em */
     font-family: 'Be Vietnam Pro', sans-serif;
     box-sizing: border-box;
     transition: border-color 0.3s;
@@ -200,6 +330,231 @@ input:focus, select:focus {
 }
 
 input[type="color"] { 
-    height: 48px; 
-    padding: 5px; 
+    height: 45px; /* Giảm từ 48px */
+    padding: 4px; 
+}
+
+/* === MEDIA QUERIES CHO TABLET === */
+@media (max-width: 1024px) {
+    .schedule-container {
+        padding: 30px;
+    }
+
+    .schedule-container h1 {
+        font-size: 2.5em;
+    }
+
+    .schedule-grid {
+        grid-template-columns: 70px repeat(7, 1fr);
+        grid-template-rows: 45px repeat(8, 70px);
+    }
+}
+
+/* === MEDIA QUERIES CHO MOBILE (Điện thoại lớn) === */
+@media (max-width: 768px) {
+    .schedule-container {
+        padding: 20px 12px; /* Giảm mạnh */
+        border-radius: 20px;
+    }
+
+    .back-to-dashboard-btn {
+        top: 15px;
+        left: 15px;
+        font-size: 0.9em;
+    }
+
+    .schedule-container h1 {
+        font-size: 2.1em; /* Giảm mạnh */
+        margin-bottom: 22px;
+    }
+
+    /* Ẩn grid desktop, hiện mobile layout */
+    .schedule-grid {
+        display: none;
+    }
+
+    .schedule-mobile-container {
+        display: flex;
+        gap: 16px;
+    }
+
+    .mobile-day-card {
+        padding: 14px 12px;
+        border-radius: 12px;
+    }
+
+    .mobile-day-card h2 {
+        font-size: 1.25em;
+        margin-bottom: 10px;
+        padding-bottom: 7px;
+    }
+
+    .mobile-event-item {
+        padding: 11px 12px;
+        margin-bottom: 9px;
+        border-radius: 9px;
+    }
+
+    .mobile-event-item .event-time {
+        font-size: 0.8em;
+    }
+
+    .mobile-event-item .event-title {
+        font-size: 0.98em;
+    }
+
+    #add-event-fab {
+        width: 52px;
+        height: 52px;
+        font-size: 1.8em;
+        bottom: 20px;
+        right: 20px;
+    }
+
+    /* Modal trên mobile */
+    .modal-overlay {
+        padding: 10px;
+    }
+
+    .modal-content {
+        padding: 24px 18px;
+        border-radius: 16px;
+        width: 95%;
+        max-height: 90vh;
+    }
+
+    .modal-content h2 {
+        font-size: 1.5em;
+        margin-bottom: 18px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr; /* 1 cột thay vì 2 */
+        gap: 12px;
+        margin: 16px 0;
+    }
+
+    input, select {
+        padding: 10px;
+        font-size: 0.95em;
+    }
+
+    .modal-btn {
+        padding: 10px 22px;
+        font-size: 0.93em;
+        min-width: 85px;
+    }
+}
+
+/* === MEDIA QUERIES CHO MOBILE NHỎ === */
+@media (max-width: 480px) {
+    .schedule-container {
+        padding: 16px 10px;
+        border-radius: 18px;
+    }
+
+    .back-to-dashboard-btn {
+        top: 12px;
+        left: 12px;
+        font-size: 0.85em;
+    }
+
+    .schedule-container h1 {
+        font-size: 1.9em;
+        margin-bottom: 20px;
+    }
+
+    .schedule-mobile-container {
+        gap: 14px;
+        padding-bottom: 75px;
+    }
+
+    .mobile-day-card {
+        padding: 12px 10px;
+    }
+
+    .mobile-day-card h2 {
+        font-size: 1.15em;
+        margin-bottom: 9px;
+    }
+
+    .mobile-event-item {
+        padding: 10px 11px;
+        margin-bottom: 8px;
+    }
+
+    .mobile-event-item .event-time {
+        font-size: 0.78em;
+    }
+
+    .mobile-event-item .event-title {
+        font-size: 0.93em;
+    }
+
+    #add-event-fab {
+        width: 50px;
+        height: 50px;
+        font-size: 1.7em;
+        bottom: 18px;
+        right: 18px;
+    }
+
+    .modal-content {
+        padding: 20px 15px;
+    }
+
+    .modal-content h2 {
+        font-size: 1.35em;
+    }
+
+    input, select {
+        padding: 9px;
+        font-size: 0.9em;
+    }
+
+    .modal-btn {
+        padding: 9px 18px;
+        font-size: 0.88em;
+        min-width: 75px;
+    }
+}
+
+/* === MEDIA QUERIES CHO MÀN HÌNH CỰC NHỎ === */
+@media (max-width: 375px) {
+    .schedule-container {
+        padding: 14px 8px;
+    }
+
+    .schedule-container h1 {
+        font-size: 1.7em;
+    }
+
+    .mobile-day-card h2 {
+        font-size: 1.1em;
+    }
+
+    .mobile-event-item {
+        padding: 9px 10px;
+    }
+
+    #add-event-fab {
+        width: 48px;
+        height: 48px;
+        font-size: 1.6em;
+        bottom: 16px;
+        right: 16px;
+    }
+
+    .modal-content {
+        padding: 18px 12px;
+    }
+
+    .modal-content h2 {
+        font-size: 1.25em;
+    }
+
+    .modal-btn {
+        padding: 8px 16px;
+        font-size: 0.85em;
+    }
 }

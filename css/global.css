@@ -1,4 +1,12 @@
-/* --- GLOBAL STYLES --- */
+/* --- GLOBAL STYLES (MOBILE-OPTIMIZED) --- */
+
+/* Reset cơ bản để tránh bị ép viền */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #fde2e4;
@@ -12,40 +20,41 @@ body {
     min-height: 100vh;
     margin: 0;
     color: #333;
-    padding: 20px;
-    box-sizing: border-box;
+    padding: 15px; /* Giảm từ 20px */
+    overflow-x: hidden; /* Tránh scroll ngang */
 }
 
 .container {
     background-color: rgba(255, 255, 255, 0.95);
-    padding: 50px 30px;
-    border-radius: 25px;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    padding: 40px 25px; /* Giảm padding ngang */
+    border-radius: 20px; /* Giảm từ 25px */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
     text-align: center;
     max-width: 700px;
-    width: 90%;
-    box-sizing: border-box;
+    width: 100%;
 }
 
 h1 {
-    font-size: 3.2em;
+    font-size: 2.8em; /* Giảm từ 3.2em */
     color: #d90429;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
+    line-height: 1.2;
 }
 
 h2 {
-    font-size: 2.5em;
+    font-size: 2.2em; /* Giảm từ 2.5em */
     color: #d90429;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
+    line-height: 1.3;
 }
 
 .back-button {
     display: inline-block;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
     text-decoration: none;
     color: #ef476f;
     font-weight: bold;
-    font-size: 1.1em;
+    font-size: 1em;
     transition: color 0.3s ease;
 }
 
@@ -53,29 +62,75 @@ h2 {
     color: #d90429;
 }
 
-/* --- MEDIA QUERIES cho Global --- */
+/* --- MEDIA QUERIES CHO MOBILE --- */
 @media (max-width: 768px) {
+    body {
+        padding: 10px; /* Giảm padding body */
+    }
+
     .container {
-        padding: 30px 20px;
-        width: 95%;
+        padding: 30px 18px; /* Giảm padding */
+        border-radius: 18px;
+        width: 100%;
     }
 
     h1 {
-        font-size: 2.5em;
+        font-size: 2.2em; /* Thu nhỏ heading */
+        margin-bottom: 15px;
     }
 
     h2 {
-        font-size: 2em;
+        font-size: 1.8em;
+        margin-bottom: 18px;
+    }
+
+    .back-button {
+        font-size: 0.95em;
+        margin-bottom: 20px;
     }
 }
 
 @media (max-width: 480px) {
+    body {
+        padding: 8px; /* Padding cực nhỏ cho màn hình nhỏ */
+    }
+
     .container {
         padding: 25px 15px;
         border-radius: 15px;
     }
 
     h1 {
-        font-size: 2em;
+        font-size: 1.9em;
+        margin-bottom: 12px;
+    }
+
+    h2 {
+        font-size: 1.6em;
+        margin-bottom: 15px;
+    }
+
+    .back-button {
+        font-size: 0.9em;
+    }
+}
+
+/* Đặc biệt cho iPhone SE và các màn hình cực nhỏ */
+@media (max-width: 375px) {
+    body {
+        padding: 5px;
+    }
+
+    .container {
+        padding: 20px 12px;
+        border-radius: 12px;
+    }
+
+    h1 {
+        font-size: 1.7em;
+    }
+
+    h2 {
+        font-size: 1.4em;
     }
 }

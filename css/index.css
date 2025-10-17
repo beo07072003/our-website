@@ -3,15 +3,77 @@ body {
     overflow: hidden; /* Tránh scrollbar nếu có hiệu ứng */
 }
 
+
 .main-selection-container {
     text-align: center;
+    
     max-width: 900px;
     width: 100%;
     padding: 40px 20px;
-    background-color: rgba(255, 255, 255, 0.95);
+    
+    /* Hiệu ứng "Glassmorphism" */
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px); 
+    
     border-radius: 25px;
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    
+    /* DÒNG NÀY ĐÃ ĐƯỢC SỬA LẠI */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    
+    position: relative; /* Quan trọng để định vị viền ruy băng */
+    z-index: 2; /* Đảm bảo nội dung nằm trên hiệu ứng nền */
 }
+
+/* --- Hiệu ứng Viền Ruy Băng Mềm Mại --- */
+.main-selection-container::before {
+    content: '';
+    
+    position: absolute;
+
+    z-index: -1; /* Nằm dưới container chính */
+    
+    /* Kích thước lớn hơn một chút để tạo viền */
+    top: -8px; 
+    left: -8px;
+    right: -8px;
+    bottom: -8px;
+    
+    
+    border-radius: 30px; /* Bo tròn mềm hơn container một chút */
+    background: linear-gradient(45deg, #ffe0e6, #ffc0cb);
+    box-shadow: 0 0 25px rgba(239, 71, 111, 0.3);
+    
+    /* Hiệu ứng "thở" nhẹ nhàng cho viền */
+    animation: border-pulse 0.5s infinite alternate ease-in-out;
+    
+}
+@keyframes heart-pulse {
+    0% { transform: scale(1) rotate(-45deg); }
+    50% { transform: scale(1.15) rotate(-45deg); }
+    100% { transform: scale(1) rotate(-45deg); }
+}
+
+@keyframes border-pulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.015); } /* Phồng lên một chút */
+}
+
+/* Thêm chi tiết góc trang trí */
+.main-selection-container::after {
+    content: '💌'; /* Dùng icon lá thư dễ thương */
+    position: absolute;
+    top: -20px;
+    left: 20px;
+    font-size: 40px;
+    transform: rotate(-20deg);
+    opacity: 0.7;
+
+    
+}
+
+
 
 .welcome-heading {
     font-size: 3.5em;
@@ -82,7 +144,7 @@ body {
     background-color: #ef476f;
     position: relative;
     transform: rotate(-45deg);
-    animation: pulse 1.5s infinite ease-in-out;
+    animation: heart-pulse 1.5s infinite ease-in-out;
 }
 
 .heart::before,
@@ -98,11 +160,7 @@ body {
 .heart::before { top: -30px; left: 0; }
 .heart::after { left: 30px; top: 0; }
 
-@keyframes pulse {
-    0% { transform: scale(1) rotate(-45deg); }
-    50% { transform: scale(1.15) rotate(-45deg); }
-    100% { transform: scale(1) rotate(-45deg); }
-}
+
 
 /* --- MEDIA QUERIES cho trang Index --- */
 /* --- MEDIA QUERIES cho trang Index (Đã tối ưu cho iPhone) --- */
@@ -162,3 +220,4 @@ body {
         font-size: 1.3em;
     }
 }
+
