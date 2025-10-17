@@ -1,27 +1,28 @@
-/* --- CSS NÂNG CẤP CHO TRANG LỊCH "DÂU" (HIỆN ĐẠI & ĐẸP MẮT) --- */
+/* --- CSS NÂNG CẤP CHO TRANG LỊCH "DÂU" (MOBILE-OPTIMIZED) --- */
 @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;700;900&display=swap');
 
 :root {
     --primary-color: #ef476f;
     --primary-dark: #d90429;
     --period-color: #ff8fa3;
-    --card-bg: rgba(255, 255, 255, 0.85); /* Hiệu ứng thủy tinh mờ */
+    --card-bg: rgba(255, 255, 255, 0.85);
     --text-color: #333;
     --subtle-text: #666;
 }
 
 body {
-    font-family: 'Be Vietnam Pro', sans-serif; /* Áp dụng font mới */
+    font-family: 'Be Vietnam Pro', sans-serif;
+    overflow-x: hidden;
 }
 
 .calendar-page-container {
     width: 100%;
     max-width: 900px;
-    padding: 40px;
+    padding: 35px; /* Giảm từ 40px */
     background: var(--card-bg);
-    border-radius: 30px;
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(12px); /* Hiệu ứng mờ nền */
+    border-radius: 25px; /* Giảm từ 30px */
+    box-shadow: 0 13px 35px rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     text-align: center;
     position: relative;
@@ -29,13 +30,14 @@ body {
 
 .back-to-dashboard-btn {
     position: absolute;
-    top: 30px;
-    left: 40px;
+    top: 25px; /* Giảm từ 30px */
+    left: 35px; /* Giảm từ 40px */
     text-decoration: none;
-    font-size: 1em;
+    font-size: 0.98em; /* Giảm từ 1em */
     font-weight: bold;
     color: var(--primary-color);
     transition: color 0.3s ease, transform 0.2s ease;
+    z-index: 100;
 }
 
 .back-to-dashboard-btn:hover {
@@ -47,70 +49,74 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 20px 0 30px 0;
+    margin: 18px 0 28px 0; /* Giảm từ 20px 0 30px 0 */
 }
 
 .calendar-header h2 {
-    font-size: 3em;
-    font-weight: 900; /* Font siêu đậm */
+    font-size: 2.8em; /* Giảm từ 3em */
+    font-weight: 900;
     margin: 0;
-    /* Hiệu ứng chữ gradient */
     background: linear-gradient(45deg, var(--primary-dark), var(--primary-color));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     text-fill-color: transparent;
+    line-height: 1.2;
 }
 
 .calendar-header button {
     background: transparent;
     color: var(--primary-color);
     border: 2px solid var(--primary-color);
-    border-radius: 50%; /* Nút tròn */
-    width: 50px;
-    height: 50px;
-    font-size: 1.5em;
+    border-radius: 50%;
+    width: 48px; /* Giảm từ 50px */
+    height: 48px;
+    font-size: 1.4em; /* Giảm từ 1.5em */
     cursor: pointer;
     transition: all 0.3s ease;
+    flex-shrink: 0; /* Không cho button bị co */
 }
 
 .calendar-header button:hover {
     background-color: var(--primary-color);
     color: white;
-    transform: scale(1.1);
-    box-shadow: 0 5px 15px rgba(239, 71, 111, 0.4);
+    transform: scale(1.08); /* Giảm từ 1.1 */
+    box-shadow: 0 4px 13px rgba(239, 71, 111, 0.35);
 }
 
 .calendar-weekdays, .calendar-days {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 10px;
+    gap: 9px; /* Giảm từ 10px */
 }
 
 .calendar-weekdays div {
     font-weight: bold;
-    font-size: 1.1em;
+    font-size: 1.05em; /* Giảm từ 1.1em */
     color: var(--subtle-text);
-    padding-bottom: 15px;
+    padding-bottom: 13px; /* Giảm từ 15px */
 }
 
 .day-cell {
     background-color: rgba(255, 255, 255, 0.5);
     border: 1px solid #f0f0f0;
-    border-radius: 15px; /* Bo tròn mềm mại hơn */
-    padding: 10px;
-    min-height: 80px;
+    border-radius: 14px; /* Giảm từ 15px */
+    padding: 9px; /* Giảm từ 10px */
+    min-height: 75px; /* Giảm từ 80px */
     text-align: left;
-    font-size: 1.1em;
+    font-size: 1.05em; /* Giảm từ 1.1em */
     font-weight: 700;
     color: var(--text-color);
     transition: all 0.3s ease;
-    position: relative; /* Chuẩn bị cho icon trái tim */
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
 }
 
 .day-cell:not(.empty-day):hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    transform: translateY(-4px); /* Giảm từ -5px */
+    box-shadow: 0 7px 18px rgba(0, 0, 0, 0.08);
 }
 
 .day-cell.empty-day {
@@ -122,9 +128,9 @@ body {
 .day-cell.today::after {
     content: '❤️';
     position: absolute;
-    bottom: 8px;
-    right: 12px;
-    font-size: 1.2em;
+    bottom: 7px; /* Giảm từ 8px */
+    right: 10px; /* Giảm từ 12px */
+    font-size: 1.15em; /* Giảm từ 1.2em */
     opacity: 0.9;
     animation: heartbeat 1.5s infinite ease-in-out;
 }
@@ -136,23 +142,23 @@ body {
 
 @keyframes heartbeat {
     0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.2); }
+    50% { transform: scale(1.18); } /* Giảm từ 1.2 */
 }
 
 /* Thêm dâu vào ngày rụng dâu */
 .day-cell.period-day {
     background: linear-gradient(135deg, #ffc0cb, var(--period-color));
     color: white;
-    box-shadow: 0 6px 15px rgba(255, 143, 163, 0.5);
+    box-shadow: 0 5.5px 13px rgba(255, 143, 163, 0.45);
     border: none;
 }
 
 .day-cell.period-day::after {
     content: '🍓';
     position: absolute;
-    bottom: 8px;
-    right: 12px;
-    font-size: 1.2em;
+    bottom: 7px;
+    right: 10px;
+    font-size: 1.15em;
     opacity: 0.9;
     animation: wiggle 2s infinite ease-in-out; 
 }
@@ -162,28 +168,27 @@ body {
     50% { transform: rotate(5deg); }
 }
 
-
 .calendar-legend {
-    margin-top: 30px;
+    margin-top: 28px; /* Giảm từ 30px */
     display: flex;
     justify-content: center;
-    gap: 25px;
-    font-size: 1em;
+    gap: 23px; /* Giảm từ 25px */
+    font-size: 0.98em; /* Giảm từ 1em */
     color: var(--subtle-text);
+    flex-wrap: wrap; /* Cho phép xuống hàng */
 }
 
 .legend-item {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 9px; /* Giảm từ 10px */
 }
 
 .legend-item::before {
-    font-size: 1.5em;
+    font-size: 1.4em; /* Giảm từ 1.5em */
     line-height: 1;
 }
 
-/* Thêm icon vào phần chú thích */
 .legend-item.period-legend::before {
     content: '🍓';
 }
@@ -192,49 +197,14 @@ body {
     content: '❤️';
 }
 
-/* --- TỐI ƯU CHO iPHONE --- */
-@media (max-width: 768px) {
-    .calendar-page-container {
-        padding: 20px;
-        backdrop-filter: blur(8px);
-    }
-    .back-to-dashboard-btn {
-        top: 20px;
-        left: 20px;
-        font-size: 1em;
-    }
-    .calendar-header h2 {
-        font-size: 1.8em;
-    }
-    .calendar-header button {
-        width: 40px;
-        height: 40px;
-        font-size: 1.5em;
-    }
-    .day-cell {
-        min-height: 45px;
-        padding: 8px;
-        font-size: 0.9em;
-        border-radius: 10px;
-    }
-    .day-cell.today::after, .day-cell.period-day::after {
-        font-size: 1em;
-        bottom: 5px;
-        right: 5px;
-    }
-    .calendar-days {
-        gap: 5px;
-    }
-}
-
-/* --- CSS CHO CỬA SỔ CHỈNH SỬA (MODAL) --- */
+/* === CSS CHO CỬA SỔ CHỈNH SỬA (MODAL) === */
 .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.55);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -242,6 +212,7 @@ body {
     pointer-events: none;
     transition: opacity 0.3s ease;
     z-index: 1000;
+    padding: 15px; /* Bảo vệ modal */
 }
 
 .modal-overlay.visible {
@@ -251,9 +222,9 @@ body {
 
 .modal-content {
     background: white;
-    padding: 30px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    padding: 28px; /* Giảm từ 30px */
+    border-radius: 18px; /* Giảm từ 20px */
+    box-shadow: 0 9px 28px rgba(0, 0, 0, 0.18);
     width: 90%;
     max-width: 400px;
     text-align: center;
@@ -265,11 +236,281 @@ body {
     transform: scale(1);
 }
 
-.modal-content h2 { margin-top: 0; color: var(--primary-dark); }
-#new-period-date-input { width: 100%; padding: 12px; margin: 20px 0; border: 2px solid #ddd; border-radius: 10px; font-size: 1em; font-family: 'Be Vietnam Pro', sans-serif; box-sizing: border-box; }
-.modal-actions { display: flex; gap: 15px; justify-content: center; }
-.modal-btn { padding: 12px 30px; border: none; border-radius: 25px; font-size: 1em; font-weight: bold; cursor: pointer; transition: all 0.3s ease; }
-.modal-btn.save { background-color: var(--primary-color); color: white; }
-.modal-btn.save:hover { background-color: var(--primary-dark); transform: translateY(-2px); }
-.modal-btn.cancel { background-color: #eee; color: #555; }
-.modal-btn.cancel:hover { background-color: #ddd; }
+.modal-content h2 { 
+    margin-top: 0; 
+    color: var(--primary-dark);
+    font-size: 1.7em;
+    margin-bottom: 20px;
+}
+
+#new-period-date-input { 
+    width: 100%; 
+    padding: 11px; /* Giảm từ 12px */
+    margin: 18px 0; /* Giảm từ 20px */
+    border: 2px solid #ddd; 
+    border-radius: 9px; /* Giảm từ 10px */
+    font-size: 0.98em; /* Giảm từ 1em */
+    font-family: 'Be Vietnam Pro', sans-serif; 
+    box-sizing: border-box; 
+}
+
+.modal-actions { 
+    display: flex; 
+    gap: 13px; /* Giảm từ 15px */
+    justify-content: center; 
+    flex-wrap: wrap;
+}
+
+.modal-btn { 
+    padding: 11px 28px; /* Giảm từ 12px 30px */
+    border: none; 
+    border-radius: 22px; /* Giảm từ 25px */
+    font-size: 0.98em; /* Giảm từ 1em */
+    font-weight: bold; 
+    cursor: pointer; 
+    transition: all 0.3s ease;
+    min-width: 90px;
+}
+
+.modal-btn.save { 
+    background-color: var(--primary-color); 
+    color: white; 
+}
+
+.modal-btn.save:hover { 
+    background-color: var(--primary-dark); 
+    transform: translateY(-2px); 
+}
+
+.modal-btn.cancel { 
+    background-color: #eee; 
+    color: #555; 
+}
+
+.modal-btn.cancel:hover { 
+    background-color: #ddd; 
+}
+
+/* === MEDIA QUERIES CHO TABLET === */
+@media (max-width: 1024px) {
+    .calendar-page-container {
+        max-width: 750px;
+        padding: 32px;
+    }
+
+    .calendar-header h2 {
+        font-size: 2.5em;
+    }
+
+    .day-cell {
+        min-height: 70px;
+        font-size: 1em;
+    }
+}
+
+/* === MEDIA QUERIES CHO MOBILE (Điện thoại lớn) === */
+@media (max-width: 768px) {
+    .calendar-page-container {
+        padding: 20px 12px; /* Giảm mạnh */
+        border-radius: 20px;
+    }
+
+    .back-to-dashboard-btn {
+        top: 15px;
+        left: 15px;
+        font-size: 0.9em;
+    }
+
+    .calendar-header {
+        margin: 25px 0 22px 0; /* Tạo space cho nút back */
+    }
+
+    .calendar-header h2 {
+        font-size: 2em; /* Giảm mạnh */
+    }
+
+    .calendar-header button {
+        width: 42px;
+        height: 42px;
+        font-size: 1.3em;
+    }
+
+    .calendar-weekdays, .calendar-days {
+        gap: 6px; /* Giảm gap */
+    }
+
+    .calendar-weekdays div {
+        font-size: 0.9em;
+        padding-bottom: 10px;
+    }
+
+    .day-cell {
+        min-height: 52px; /* Giảm mạnh */
+        padding: 6px;
+        font-size: 0.95em;
+        border-radius: 10px;
+    }
+
+    .day-cell.today::after, 
+    .day-cell.period-day::after {
+        font-size: 1em;
+        bottom: 4px;
+        right: 6px;
+    }
+
+    .calendar-legend {
+        margin-top: 22px;
+        gap: 18px;
+        font-size: 0.9em;
+    }
+
+    .legend-item::before {
+        font-size: 1.25em;
+    }
+
+    /* Modal */
+    .modal-overlay {
+        padding: 12px;
+    }
+
+    .modal-content {
+        padding: 24px 18px;
+        border-radius: 16px;
+        max-width: 350px;
+    }
+
+    .modal-content h2 {
+        font-size: 1.5em;
+        margin-bottom: 18px;
+    }
+
+    #new-period-date-input {
+        padding: 10px;
+        margin: 16px 0;
+        font-size: 0.95em;
+    }
+
+    .modal-btn {
+        padding: 10px 24px;
+        font-size: 0.93em;
+        min-width: 85px;
+    }
+}
+
+/* === MEDIA QUERIES CHO MOBILE NHỎ === */
+@media (max-width: 480px) {
+    .calendar-page-container {
+        padding: 16px 10px;
+        border-radius: 18px;
+    }
+
+    .back-to-dashboard-btn {
+        top: 12px;
+        left: 12px;
+        font-size: 0.85em;
+    }
+
+    .calendar-header {
+        margin: 30px 0 20px 0;
+    }
+
+    .calendar-header h2 {
+        font-size: 1.75em;
+    }
+
+    .calendar-header button {
+        width: 38px;
+        height: 38px;
+        font-size: 1.2em;
+        border-width: 1.5px;
+    }
+
+    .calendar-weekdays, .calendar-days {
+        gap: 4px; /* Gap tối thiểu */
+    }
+
+    .calendar-weekdays div {
+        font-size: 0.82em;
+        padding-bottom: 8px;
+    }
+
+    .day-cell {
+        min-height: 48px;
+        padding: 5px;
+        font-size: 0.88em;
+        border-radius: 9px;
+    }
+
+    .day-cell.today::after, 
+    .day-cell.period-day::after {
+        font-size: 0.95em;
+        bottom: 3px;
+        right: 5px;
+    }
+
+    .calendar-legend {
+        margin-top: 20px;
+        gap: 15px;
+        font-size: 0.85em;
+    }
+
+    .modal-content {
+        padding: 20px 15px;
+    }
+
+    .modal-content h2 {
+        font-size: 1.35em;
+    }
+
+    #new-period-date-input {
+        padding: 9px;
+        font-size: 0.9em;
+    }
+
+    .modal-btn {
+        padding: 9px 20px;
+        font-size: 0.88em;
+        min-width: 75px;
+    }
+}
+
+/* === MEDIA QUERIES CHO MÀN HÌNH CỰC NHỎ === */
+@media (max-width: 375px) {
+    .calendar-page-container {
+        padding: 14px 8px;
+    }
+
+    .calendar-header h2 {
+        font-size: 1.6em;
+    }
+
+    .calendar-header button {
+        width: 36px;
+        height: 36px;
+        font-size: 1.1em;
+    }
+
+    .calendar-weekdays div {
+        font-size: 0.75em;
+    }
+
+    .day-cell {
+        min-height: 44px;
+        padding: 4px;
+        font-size: 0.82em;
+    }
+
+    .day-cell.today::after, 
+    .day-cell.period-day::after {
+        font-size: 0.88em;
+    }
+
+    .calendar-legend {
+        font-size: 0.8em;
+        gap: 12px;
+    }
+
+    .legend-item::before {
+        font-size: 1.15em;
+    }
+}
