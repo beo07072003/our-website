@@ -61,51 +61,40 @@
 
 .card-icon {
     font-size: 2.5em;
-    transition: transform 0.3s ease;
-    text-shadow: 0 0 20px rgba(214, 51, 132, 0.8);
-    animation: iconPulse 2s ease-in-out infinite;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    transition: transform 0.2s ease;
+    text-shadow: 0 0 10px rgba(214, 51, 132, 0.4);
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
 }
 
-@keyframes iconPulse {
-    0%, 100% { 
-        transform: scale(1);
-        text-shadow: 0 0 20px rgba(214, 51, 132, 0.8);
-    }
-    50% { 
-        transform: scale(1.05);
-        text-shadow: 0 0 30px rgba(214, 51, 132, 1);
-    }
-}
+/* Removed iconPulse animation for cleaner look */
 
 .card-title {
     font-size: 1.6em;
-    font-weight: 900;
+    font-weight: 700;
     background: linear-gradient(45deg, #d63384, #e83e8c, #fd7e14);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    text-shadow: 0 0 20px rgba(214, 51, 132, 0.8);
+    text-shadow: 0 0 8px rgba(214, 51, 132, 0.4);
     line-height: 1.2;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
 }
 
 .card-subtitle {
     font-size: 0.9em;
     color: #8b1538;
     margin-top: 5px;
-    font-weight: 600;
-    text-shadow: 0 2px 4px rgba(255, 255, 255, 0.8);
-    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+    font-weight: 500;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.6);
+    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.2));
 }
 
 .toggle-icon {
     font-size: 1.8em;
     color: #d63384;
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    text-shadow: 0 0 15px rgba(214, 51, 132, 0.8);
-    animation: iconPulse 2s ease-in-out infinite;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    transition: transform 0.3s ease;
+    text-shadow: 0 0 6px rgba(214, 51, 132, 0.4);
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
 }
 
 /* Expanded State */
@@ -699,6 +688,144 @@
 
 .collapsible-card.expanded .card-body {
     animation: expandCard 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* iPhone 14 Pro Max: 430x932 */
+@media (max-width: 430px) {
+    .collapsible-cards-container {
+        gap: 14px;
+        padding: 0 6px;
+        margin: 0 4px;
+    }
+    
+    .collapsible-card {
+        margin-bottom: 10px;
+        border-radius: 10px;
+    }
+    
+    .card-header {
+        padding: 16px 18px;
+        gap: 14px;
+    }
+    
+    .card-header-left {
+        gap: 12px;
+    }
+    
+    .card-icon {
+        font-size: 2.2em;
+    }
+    
+    .card-title {
+        font-size: 1.3em;
+        line-height: 1.1;
+    }
+    
+    .card-subtitle {
+        font-size: 0.8em;
+        margin-top: 3px;
+    }
+    
+    .toggle-icon {
+        font-size: 1.5em;
+    }
+    
+    .collapsible-card.expanded .card-body {
+        padding: 18px;
+    }
+    
+    .mini-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .countdown-display {
+        gap: 6px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .countdown-item {
+        padding: 10px 12px;
+        min-width: 60px;
+    }
+    
+    .countdown-number {
+        font-size: 1.4em;
+    }
+    
+    .countdown-label {
+        font-size: 0.7em;
+    }
+}
+
+/* iPhone 11 Pro Max: 414x896 */
+@media (max-width: 414px) {
+    .collapsible-cards-container {
+        gap: 12px;
+        padding: 0 4px;
+        margin: 0 2px;
+    }
+    
+    .collapsible-card {
+        margin-bottom: 8px;
+        border-radius: 8px;
+    }
+    
+    .card-header {
+        padding: 14px 16px;
+        gap: 12px;
+    }
+    
+    .card-header-left {
+        gap: 10px;
+    }
+    
+    .card-icon {
+        font-size: 2em;
+    }
+    
+    .card-title {
+        font-size: 1.2em;
+        line-height: 1.1;
+    }
+    
+    .card-subtitle {
+        font-size: 0.75em;
+        margin-top: 2px;
+    }
+    
+    .toggle-icon {
+        font-size: 1.4em;
+    }
+    
+    .collapsible-card.expanded .card-body {
+        padding: 16px;
+    }
+    
+    .mini-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .countdown-display {
+        gap: 5px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .countdown-item {
+        padding: 8px 10px;
+        min-width: 55px;
+    }
+    
+    .countdown-number {
+        font-size: 1.2em;
+    }
+    
+    .countdown-label {
+        font-size: 0.65em;
+    }
 }
 
 /* Smooth transitions for all interactive elements */
