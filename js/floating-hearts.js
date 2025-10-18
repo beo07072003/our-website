@@ -1,8 +1,18 @@
 // === FLOATING HEARTS ANIMATION - OPTIMIZED ===
 
 let heartCount = 0;
-const maxHearts = 15; // Giới hạn số hearts để tránh lag
+let maxHearts = 15; // Giới hạn số hearts để tránh lag
 let heartCreationActive = false;
+
+// Detect mobile device
+function isMobile() {
+    return window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
+// Set max hearts based on device
+if (isMobile()) {
+    maxHearts = 8; // Ít hearts hơn trên mobile
+}
 
 function createFloatingHeart() {
     // Kiểm tra số lượng hearts hiện tại
@@ -16,8 +26,14 @@ function createFloatingHeart() {
     heart.innerHTML = '💕';
     heart.style.left = Math.random() * 100 + '%';
     heart.style.animationDelay = '0s'; // Bỏ delay để tránh conflict
-    heart.style.fontSize = (Math.random() * 10 + 15) + 'px';
-    heart.style.animationDuration = (Math.random() * 4 + 8) + 's'; // Random duration 8-12s
+    // Adjust size and duration based on device
+    if (isMobile()) {
+        heart.style.fontSize = (Math.random() * 6 + 12) + 'px'; // 12-18px on mobile
+        heart.style.animationDuration = (Math.random() * 3 + 6) + 's'; // 6-9s on mobile
+    } else {
+        heart.style.fontSize = (Math.random() * 10 + 15) + 'px'; // 15-25px on desktop
+        heart.style.animationDuration = (Math.random() * 4 + 8) + 's'; // 8-12s on desktop
+    }
     
     // Thêm ID để track
     heart.id = 'heart-' + (++heartCount);
@@ -40,7 +56,10 @@ function startHeartCreation() {
     if (!heartCreationActive) return;
     
     createFloatingHeart();
-    const nextDelay = Math.random() * 2000 + 1000; // 1-3 giây
+    // Adjust delay based on device
+    const nextDelay = isMobile() ? 
+        Math.random() * 3000 + 2000 : // 2-5 giây trên mobile
+        Math.random() * 2000 + 1000;  // 1-3 giây trên desktop
     setTimeout(startHeartCreation, nextDelay);
 }
 
@@ -50,8 +69,9 @@ function initFloatingHearts() {
     
     heartCreationActive = true;
     
-    // Tạo hearts ban đầu
-    for (let i = 0; i < 3; i++) {
+    // Tạo hearts ban đầu - ít hơn trên mobile
+    const initialHearts = isMobile() ? 2 : 3;
+    for (let i = 0; i < initialHearts; i++) {
         setTimeout(() => createFloatingHeart(), i * 500);
     }
     

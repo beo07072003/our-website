@@ -155,11 +155,40 @@ body {
     z-index: 1;
     
 }
+
 @keyframes heart-pulse {
     0% { transform: scale(1) rotate(-45deg); }
     50% { transform: scale(1.15) rotate(-45deg); }
     100% { transform: scale(1) rotate(-45deg); }
 }
+
+/* @keyframes heart-pulse {
+    0% { 
+        transform: scale(1) rotate(-45deg);
+        box-shadow: 0 4px 15px rgba(239, 71, 111, 0.4);
+    }
+    50% { 
+        transform: scale(1.15) rotate(-45deg);
+        box-shadow: 0 6px 20px rgba(239, 71, 111, 0.6);
+    }
+    100% { 
+        transform: scale(1) rotate(-45deg);
+        box-shadow: 0 4px 15px rgba(239, 71, 111, 0.4);
+    }
+} */
+
+/* Keyframes cho ::before và ::after */
+/* @keyframes heart-pulse-before {
+    0% { 
+        transform: scale(1);
+    }
+    50% { 
+        transform: scale(1.15);
+    }
+    100% { 
+        transform: scale(1);
+    }
+} */
 
 
 
@@ -282,20 +311,28 @@ body {
     position: relative;
     width: 100px;
     height: 100px;
-    display: flex;
+    display: flex !important;
     justify-content: center;
     align-items: center;
-    animation: fadeInScale 0.8s ease-out 1.2s both;
     margin: 20px 0;
+    z-index: 10; /* Đảm bảo hiển thị trên cùng */
+    opacity: 1 !important; /* Hiển thị từ đầu */
+    visibility: visible !important; /* Hiển thị từ đầu */
+    background: transparent; /* Đảm bảo không có background che khuất */
 }
 
 .heart {
     width: 60px;
     height: 60px;
-    background-color: #ef476f;
+    background-color: #ef476f !important;
     position: relative;
     transform: rotate(-45deg);
     animation: heart-pulse 1.5s infinite ease-in-out;
+    z-index: 11; /* Đảm bảo hiển thị trên cùng */
+    box-shadow: 0 4px 15px rgba(239, 71, 111, 0.4); /* Thêm shadow để nổi bật */
+    opacity: 1 !important; /* Hiển thị từ đầu */
+    visibility: visible !important; /* Hiển thị từ đầu */
+    display: block !important; /* Đảm bảo hiển thị */
 }
 
 .heart::before,
@@ -303,13 +340,63 @@ body {
     content: '';
     width: 60px;
     height: 60px;
-    background-color: #ef476f;
+    background-color: #ef476f !important;
     border-radius: 50%;
     position: absolute;
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
 }
 
 .heart::before { top: -30px; left: 0; }
 .heart::after { left: 30px; top: 0; }
+
+/* Bỏ hover effect phức tạp - chỉ giữ heart pulse */
+
+/* Override sunset-theme.css cho trái tim ở giữa profile */
+.animated-heart-wrapper .heart {
+    position: relative !important;
+    color: transparent !important;
+    font-size: inherit !important;
+    animation: heart-pulse 1.5s infinite ease-in-out !important;
+    pointer-events: auto !important;
+    will-change: transform, box-shadow !important;
+    transform: rotate(-45deg) !important;
+    backface-visibility: visible !important;
+    -webkit-font-smoothing: auto !important;
+    -moz-osx-font-smoothing: auto !important;
+    width: 60px !important;
+    height: 60px !important;
+    background-color: #ef476f !important;
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    z-index: 11 !important;
+    box-shadow: 0 4px 15px rgba(239, 71, 111, 0.4) !important;
+    border-radius: 0 !important; /* Đảm bảo không có border-radius */
+}
+
+.animated-heart-wrapper .heart::before,
+.animated-heart-wrapper .heart::after {
+    content: '' !important;
+    width: 60px !important;
+    height: 60px !important;
+    background-color: #ef476f !important;
+    border-radius: 50% !important;
+    position: absolute !important;
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    color: transparent !important;
+    font-size: inherit !important;
+    animation: heart-pulse-before 1.5s infinite ease-in-out !important;
+    pointer-events: none !important;
+    will-change: transform !important;
+    transform: none !important;
+    backface-visibility: visible !important;
+    -webkit-font-smoothing: auto !important;
+    -moz-osx-font-smoothing: auto !important;
+}
 
 
 
@@ -344,20 +431,36 @@ body {
         animation: slideInUp 0.6s ease-out 1s both;
     }
     .animated-heart-wrapper {
-        width: 70px;
-        height: 70px;
-        margin: 0; /* Bỏ margin thừa nếu có */
-        animation: fadeInScale 0.8s ease-out 1.2s both;
+        width: 80px;
+        height: 80px;
+        margin: 10px 0; /* Thêm margin nhẹ */
+        z-index: 10;
+        opacity: 1; /* Hiển thị từ đầu */
+        visibility: visible; /* Hiển thị từ đầu */
     }
     .heart, .heart::before, .heart::after {
-        width: 40px; /* Làm trái tim nhỏ lại một chút */
-        height: 40px;
+        width: 50px !important; /* Tăng kích thước một chút cho mobile */
+        height: 50px !important;
+    }
+    
+    /* Override sunset-theme.css cho mobile */
+    .animated-heart-wrapper .heart {
+        width: 50px !important;
+        height: 50px !important;
+        animation: heart-pulse 1.5s infinite ease-in-out !important;
+    }
+    
+    .animated-heart-wrapper .heart::before,
+    .animated-heart-wrapper .heart::after {
+        width: 50px !important;
+        height: 50px !important;
+        animation: heart-pulse-before 1.5s infinite ease-in-out !important;
     }
     .heart::before {
-        top: -20px;
+        top: -25px;
     }
     .heart::after {
-        left: 20px;
+        left: 25px;
     }
 }
 
@@ -384,7 +487,36 @@ body {
         animation: slideInUp 0.6s ease-out 1s both;
     }
     .animated-heart-wrapper {
-        animation: fadeInScale 0.8s ease-out 1.2s both;
+        width: 70px;
+        height: 70px;
+        margin: 8px 0;
+        z-index: 10;
+        opacity: 1; /* Hiển thị từ đầu */
+        visibility: visible; /* Hiển thị từ đầu */
+    }
+    .heart, .heart::before, .heart::after {
+        width: 45px !important;
+        height: 45px !important;
+    }
+    
+    /* Override sunset-theme.css cho mobile nhỏ */
+    .animated-heart-wrapper .heart {
+        width: 45px !important;
+        height: 45px !important;
+        animation: heart-pulse 1.5s infinite ease-in-out !important;
+    }
+    
+    .animated-heart-wrapper .heart::before,
+    .animated-heart-wrapper .heart::after {
+        width: 45px !important;
+        height: 45px !important;
+        animation: heart-pulse-before 1.5s infinite ease-in-out !important;
+    }
+    .heart::before {
+        top: -22px;
+    }
+    .heart::after {
+        left: 22px;
     }
 }
 
