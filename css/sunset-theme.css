@@ -1,0 +1,448 @@
+/* === ROMANTIC SUNSET THEME === */
+
+/* CSS Variables for Sunset Theme */
+:root {
+    /* Primary Colors - Warm Sunset Palette */
+    --sunset-primary: #ff6b6b;
+    --sunset-secondary: #ff8e8e;
+    --sunset-accent: #ffa8a8;
+    --sunset-warm: #ffb3ba;
+    --sunset-pink: #ffc0cb;
+    --sunset-peach: #ffd3a5;
+    --sunset-orange: #ff9a9e;
+    --sunset-coral: #fecfef;
+    
+    /* Background Gradients */
+    --sunset-bg-main: linear-gradient(-45deg, #ff9a9e, #fecfef, #fecfef, #ff9a9e);
+    --sunset-bg-card: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+    --sunset-bg-glass: rgba(255, 255, 255, 0.1);
+    
+    /* Text Colors */
+    --sunset-text-primary: #ff6b6b;
+    --sunset-text-secondary: #ff8e8e;
+    --sunset-text-warm: #ffa8a8;
+    --sunset-text-white: rgba(255, 255, 255, 0.9);
+    
+    /* Shadows and Effects */
+    --sunset-shadow-soft: 0 8px 32px rgba(255, 107, 107, 0.2);
+    --sunset-shadow-medium: 0 15px 50px rgba(255, 107, 107, 0.3);
+    --sunset-shadow-strong: 0 25px 60px rgba(255, 107, 107, 0.4);
+    --sunset-glow: 0 0 30px rgba(255, 107, 107, 0.5);
+}
+
+/* Animated Background */
+body {
+    background: var(--sunset-bg-main);
+    background-size: 400% 400%;
+    animation: sunsetGradient 15s ease infinite;
+    position: relative;
+    overflow-x: hidden;
+}
+
+@keyframes sunsetGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Floating Hearts Animation */
+.floating-hearts {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.heart {
+    position: absolute;
+    color: rgba(255, 182, 193, 0.6);
+    font-size: 20px;
+    animation: floatUp 8s linear infinite;
+    pointer-events: none;
+    will-change: transform, opacity;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.heart:nth-child(odd) {
+    animation-delay: -2s;
+    animation-duration: 10s;
+}
+
+.heart:nth-child(even) {
+    animation-delay: -4s;
+    animation-duration: 12s;
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translate3d(0, 100vh, 0) rotate(0deg) scale(0.5);
+        opacity: 0;
+    }
+    5% {
+        opacity: 0.3;
+        transform: translate3d(0, 95vh, 0) rotate(18deg) scale(0.6);
+    }
+    10% { 
+        opacity: 0.8; 
+        transform: translate3d(0, 90vh, 0) rotate(36deg) scale(0.8);
+    }
+    25% {
+        opacity: 1;
+        transform: translate3d(0, 75vh, 0) rotate(90deg) scale(0.9);
+    }
+    50% {
+        opacity: 1;
+        transform: translate3d(0, 50vh, 0) rotate(180deg) scale(1);
+    }
+    75% {
+        opacity: 0.9;
+        transform: translate3d(0, 25vh, 0) rotate(270deg) scale(0.9);
+    }
+    90% { 
+        opacity: 0.6; 
+        transform: translate3d(0, 10vh, 0) rotate(324deg) scale(0.8);
+    }
+    95% {
+        opacity: 0.3;
+        transform: translate3d(0, 5vh, 0) rotate(342deg) scale(0.6);
+    }
+    100% {
+        transform: translate3d(0, -100px, 0) rotate(360deg) scale(0.5);
+        opacity: 0;
+    }
+}
+
+/* Glassmorphism Effects */
+.glass-card {
+    background: var(--sunset-bg-glass);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: var(--sunset-shadow-soft);
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.glass-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.8s ease;
+}
+
+.glass-card:hover::before {
+    left: 100%;
+}
+
+/* Enhanced Button Styles */
+.sunset-button {
+    background: linear-gradient(45deg, var(--sunset-primary), var(--sunset-secondary));
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--sunset-shadow-soft);
+}
+
+.sunset-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.6s ease;
+}
+
+.sunset-button:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: var(--sunset-shadow-medium);
+}
+
+.sunset-button:hover::before {
+    left: 100%;
+}
+
+.sunset-button:active {
+    transform: translateY(-1px) scale(1.02);
+    transition: all 0.1s ease;
+}
+
+/* Text Effects */
+.sunset-title {
+    background: linear-gradient(45deg, #d63384, #e83e8c, #fd7e14);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 20px rgba(214, 51, 132, 0.8);
+    animation: titleGlow 3s ease-in-out infinite alternate;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+@keyframes titleGlow {
+    from { 
+        text-shadow: 0 0 20px rgba(214, 51, 132, 0.8);
+        filter: brightness(1) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    }
+    to { 
+        text-shadow: 0 0 40px rgba(214, 51, 132, 1), 0 0 60px rgba(214, 51, 132, 0.6);
+        filter: brightness(1.1) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+    }
+}
+
+.sunset-subtitle {
+    color: #8b1538;
+    text-shadow: 0 2px 4px rgba(255, 255, 255, 0.8);
+    font-weight: 600;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+
+/* Card Hover Effects */
+.sunset-card {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.sunset-card::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 182, 193, 0.1) 0%, transparent 70%);
+    animation: gentleFloat 8s ease-in-out infinite;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.sunset-card:hover::after {
+    opacity: 1;
+}
+
+.sunset-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: var(--sunset-shadow-strong);
+}
+
+
+
+/* Icon Animations */
+.sunset-icon {
+    animation: iconPulse 2s ease-in-out infinite;
+    text-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+    transition: all 0.3s ease;
+}
+
+.sunset-card:hover .sunset-icon {
+    animation: iconBounce 0.6s ease;
+    transform: scale(1.1);
+}
+
+@keyframes iconPulse {
+    0%, 100% { 
+        transform: scale(1);
+        text-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+    }
+    50% { 
+        transform: scale(1.05);
+        text-shadow: 0 0 30px rgba(255, 107, 107, 0.8);
+    }
+}
+
+@keyframes iconBounce {
+    0%, 100% { transform: scale(1.1) rotate(0deg); }
+    25% { transform: scale(1.2) rotate(-5deg); }
+    75% { transform: scale(1.15) rotate(5deg); }
+}
+
+/* Input Field Styling */
+.sunset-input {
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 107, 107, 0.3);
+    border-radius: 15px;
+    padding: 15px 20px;
+    color: var(--sunset-text-primary);
+    font-weight: 500;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.sunset-input:focus {
+    outline: none;
+    border-color: var(--sunset-primary);
+    box-shadow: 0 0 20px rgba(255, 107, 107, 0.3);
+    transform: translateY(-2px);
+}
+
+.sunset-input::placeholder {
+    color: var(--sunset-text-warm);
+    opacity: 0.8;
+}
+
+/* Loading Animation */
+.sunset-loading {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border: 3px solid rgba(255, 107, 107, 0.3);
+    border-top: 3px solid var(--sunset-primary);
+    border-radius: 50%;
+    animation: sunsetSpin 1s linear infinite;
+}
+
+@keyframes sunsetSpin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Ripple Effect */
+.ripple-effect {
+    position: relative;
+    overflow: hidden;
+}
+
+.ripple-effect::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    transform: scale(0);
+    animation: ripple 0.6s linear;
+    pointer-events: none;
+}
+
+@keyframes ripple {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .heart {
+        font-size: 16px;
+    }
+    
+    .sunset-button {
+        padding: 12px 24px;
+        font-size: 0.9em;
+    }
+    
+    .glass-card {
+        border-radius: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .heart {
+        font-size: 14px;
+    }
+    
+    .sunset-button {
+        padding: 10px 20px;
+        font-size: 0.85em;
+    }
+    
+    .glass-card {
+        border-radius: 12px;
+    }
+}
+
+/* Smooth Transitions for All Elements */
+* {
+    transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, 
+                transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+}
+
+/* Performance Optimizations */
+.sunset-card,
+.glass-card,
+.sunset-button {
+    will-change: transform, box-shadow;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+/* Text Contrast Improvements */
+p, span, div, label {
+    color: #2c1810 !important;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8) !important;
+    font-weight: 500 !important;
+}
+
+/* Card content text */
+.card-content p,
+.card-content span,
+.card-content div {
+    color: #2c1810 !important;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.9) !important;
+    font-weight: 500 !important;
+}
+
+/* Dashboard text - Simple and clean */
+.dashboard-greeting {
+    color: #2c1810 !important;
+    text-shadow: 0 2px 4px rgba(255, 255, 255, 0.8) !important;
+    font-weight: 600 !important;
+    background: none !important;
+    -webkit-background-clip: unset !important;
+    -webkit-text-fill-color: unset !important;
+    background-clip: unset !important;
+    animation: none !important;
+    filter: none !important;
+}
+
+.dashboard-slogan {
+    color: #2c1810 !important;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8) !important;
+    font-weight: 500 !important;
+}
+
+/* Button text */
+button, .button, .btn {
+    color: white !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+    font-weight: 600 !important;
+}
+
+/* Input text */
+input, textarea {
+    color: #2c1810 !important;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8) !important;
+    font-weight: 500 !important;
+}
+
+/* Accessibility Improvements */
+@media (prefers-reduced-motion: reduce) {
+    .heart,
+    .sunset-card::after,
+    .sunset-icon,
+    .sunset-title {
+        animation: none;
+    }
+    
+    .sunset-card:hover {
+        transform: none;
+    }
+}

@@ -9,9 +9,11 @@
     padding: 25px 15px; /* Giảm padding */
     max-width: 1200px;
     width: 100%;
-    background-color: rgba(255, 255, 255, 0.98);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 25px; /* Giảm từ 30px */
-    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 20px 60px rgba(255, 107, 107, 0.2);
     text-align: center;
     position: relative;
     transform: translateZ(0); /* Force hardware acceleration */
@@ -19,6 +21,7 @@
     contain: layout style paint; /* Isolate rendering */
     overscroll-behavior: contain; /* Prevent scroll bounce */
     -webkit-overflow-scrolling: touch; /* iOS smooth scrolling */
+    overflow: hidden;
 }
 
 .back-to-home-btn {
@@ -53,18 +56,22 @@
 
 .dashboard-greeting {
     font-size: 3.2em; /* Giảm từ 3.8em */
-    color: #d90429;
+    color: #2c1810;
     margin-bottom: 8px;
     margin-top: 15px; /* Khoảng cách với nút back */
-    letter-spacing: 0.8px;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.08);
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 4px rgba(255, 255, 255, 0.8);
     line-height: 1.2;
+    font-weight: 600;
 }
 
 .dashboard-slogan {
     font-size: 1.2em; /* Giảm từ 1.3em */
-    color: #666;
+    color: #2c1810;
     margin-bottom: 35px; /* Giảm từ 40px */
+    font-weight: 500;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+    line-height: 1.4;
 }
 
 .dashboard-grid {

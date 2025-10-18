@@ -6,40 +6,136 @@
     <title>Bảng Điều Khiển Của Anh</title>
     <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" href="css/him-dashboard.css">
+    <link rel="stylesheet" href="css/collapsible-cards.css">
+    <link rel="stylesheet" href="css/sunset-theme.css">
     <link rel="icon" type="image/png" href="./images/logo.svg">
 </head>
 <body>
+    <!-- Floating Hearts Animation -->
+    <div class="floating-hearts" id="floating-hearts"></div>
+    
     <div class="dashboard-container">
         <a href="index.html" class="back-to-home-btn">↩ Quay lại Trang chủ</a>
         
         <h1 class="dashboard-greeting">Bảng Điều Khiển Của Anh 👨‍💻</h1>
         <p class="dashboard-slogan">Nơi những điều bất ngờ bắt đầu.</p>
 
-        <div class="dashboard-grid">
-            <div class="dashboard-card card-note">
-                <span class="card-icon">💌</span>
-                <h3>Hộp Thư Gửi Em</h3>
-                <textarea id="note-input" placeholder="Viết một lời nhắn yêu thương..."></textarea>
-                <button id="save-note-btn" class="card-button">Gửi vào hộp thư</button>
-            </div>
+        <div class="collapsible-cards-container">
 
-            <div class="dashboard-card card-ideas">
-                <span class="card-icon">💡</span>
-                <h3>Ngân Hàng Ý Tưởng</h3>
-                <div id="idea-preview-list" class="idea-preview">
-                    <p>Chưa có ý tưởng nào...</p>
-            </div>
-            <a href="ideas.html" class="card-button">Quản lý ý tưởng</a>
-        </div>
-
-            <div class="dashboard-card card-schedule-manager">
-                <span class="card-icon">🗓️</span>
-                <h3>Lịch Tuần Của Em</h3>
-                <div id="next-event-preview">
-                    <p>Đang tải lịch trình...</p>
+            <!-- Card 1: Giao Tiếp -->
+            <div class="collapsible-card communication expanded">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <div class="card-header-left">
+                        <span class="card-icon">💌</span>
+                        <div>
+                            <div class="card-title">Giao Tiếp & Tin Nhắn</div>
+                            <div class="card-subtitle">Gửi thư và kết nối với Em</div>
+                        </div>
+                    </div>
+                    <span class="toggle-icon">▼</span>
                 </div>
-                <a href="schedule.html?from=him" class="card-button">Quản lý Lịch Tuần</a>
+                <div class="card-body">
+                    <div class="card-content">
+                        <h4>📨 Hộp Thư Gửi Em</h4>
+                        <div class="preview-content">
+                            <textarea id="note-input" placeholder="Viết một lời nhắn yêu thương..." 
+                                style="width: 100%; min-height: 100px; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-family: inherit; font-size: 1em; resize: vertical; outline: none; transition: border-color 0.3s ease;"></textarea>
+                        </div>
+                        <div class="card-actions">
+                            <button id="save-note-btn" class="card-button">💌 Gửi Vào Hộp Thư</button>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+            <!-- Card 2: Ý Tưởng -->
+            <div class="collapsible-card ideas">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <div class="card-header-left">
+                        <span class="card-icon">💡</span>
+                        <div>
+                            <div class="card-title">Ngân Hàng Ý Tưởng</div>
+                            <div class="card-subtitle">Lưu trữ và quản lý ý tưởng hẹn hò</div>
+                        </div>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-content">
+                        <h4>💡 Ý Tưởng Hẹn Hò</h4>
+                        <div id="idea-preview-list" class="preview-content">
+                            <div class="loading-state">
+                                <div class="loading-spinner"></div>
+                                <p>Đang tải ý tưởng...</p>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <a href="ideas.html" class="card-button">💡 Quản Lý Ý Tưởng</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: Lịch Trình -->
+            <div class="collapsible-card schedule">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <div class="card-header-left">
+                        <span class="card-icon">🗓️</span>
+                        <div>
+                            <div class="card-title">Lịch Trình & Kế Hoạch</div>
+                            <div class="card-subtitle">Quản lý lịch tuần của Em</div>
+                        </div>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-content">
+                        <h4>📅 Lịch Tuần Của Em</h4>
+                        <div id="next-event-preview" class="preview-content">
+                            <div class="loading-state">
+                                <div class="loading-spinner"></div>
+                                <p>Đang tải lịch trình...</p>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <a href="schedule.html?from=him" class="card-button">🗓️ Quản Lý Lịch Tuần</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4: Thống Kê -->
+            <div class="collapsible-card love-info">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <div class="card-header-left">
+                        <span class="card-icon">📊</span>
+                        <div>
+                            <div class="card-title">Thống Kê & Theo Dõi</div>
+                            <div class="card-subtitle">Dữ liệu và thông tin về mối quan hệ</div>
+                        </div>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-content">
+                        <div class="mini-grid">
+                            <div class="mini-card love">
+                                <h5>Thống kê giao tiếp</h5>
+                                <p>Tin nhắn đã gửi: <strong>143</strong><br>
+                                Ý tưởng đã tạo: <strong>25</strong><br>
+                                Lịch đã lập: <strong>12</strong></p>
+                            </div>
+                            <div class="mini-card love">
+                                <h5>Hoạt động gần đây</h5>
+                                <p>Tin nhắn cuối: 2 giờ trước<br>
+                                Ý tưởng mới: Hôm qua<br>
+                                Cập nhật lịch: 3 ngày trước</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -48,6 +144,8 @@
     <script src="js/firebase-init.js"></script>
     <script src="js/realtime-sync.js"></script>
     <script src="js/profile.js"></script>
+    <script src="js/collapsible-cards.js"></script>
+    <script src="js/floating-hearts.js"></script>
 
     <script>
         // Inline initialization for him-dashboard with realtime sync
@@ -84,6 +182,11 @@
 
                 // Khởi tạo dashboard
                 runHimPages(herData, hisData);
+                
+                // Initialize collapsible cards after data is loaded
+                if (typeof initCollapsibleCards === 'function') {
+                    initCollapsibleCards();
+                }
 
                 // Thiết lập đồng bộ thời gian thực
                 console.log('🔄 Thiết lập đồng bộ thời gian thực...');
@@ -107,6 +210,8 @@
                 });
 
                 console.log('✅ Đồng bộ thời gian thực đã được thiết lập!');
+
+                // Floating Hearts sẽ được tự động khởi tạo bởi floating-hearts.js
 
             } catch (error) {
                 console.error("Lỗi khi thiết lập đồng bộ thời gian thực:", error);

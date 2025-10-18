@@ -7,87 +7,196 @@
     <link rel="icon" type="image/png" href="./images/logo.svg">
     <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/collapsible-cards.css">
+    <link rel="stylesheet" href="css/sunset-theme.css">
 </head>
 <body>
+    <!-- Floating Hearts Animation -->
+    <div class="floating-hearts" id="floating-hearts"></div>
+    
     <div class="dashboard-container">
         <a href="index.html" class="back-to-home-btn">↩ Quay lại Trang chủ</a>
         
         <h1 class="dashboard-greeting">Chào mừng Em Yêu! ✨</h1>
         <p class="dashboard-slogan">Mỗi ngày bên em là một món quà.</p>
 
-        <div class="dashboard-grid">
+        <div class="collapsible-cards-container">
 
-            <div class="dashboard-card card-love-counter">
-                <span class="card-icon">💖</span>
-                <h3>Hành trình của chúng ta</h3>
-                <div id="love-days" class="card-big-number">...</div>
-                <p class="card-subtitle">ngày hạnh phúc!</p>
-                <div class="card-footer">
-                    <span>Cùng nhau viết tiếp nhé!</span>
+            <!-- Card 1: Thông Tin Yêu Thương -->
+            <div class="collapsible-card love-info expanded">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <div class="card-header-left">
+                        <span class="card-icon">💖</span>
+                        <div>
+                            <div class="card-title">Thông Tin Yêu Thương</div>
+                            <div class="card-subtitle">Hành trình và kỷ niệm của chúng ta</div>
+                        </div>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-content">
+                        <div class="mini-grid">
+                            <div class="mini-card love">
+                                <h5>Hành trình của ta</h5>
+                                <div class="card-big-number" id="love-days">...</div>
+                                <p>ngày hạnh phúc!</p>
+                            </div>
+                            <div class="mini-card love">
+                                <h5>Kỷ niệm đặc biệt</h5>
+                                <p>Ngày bắt đầu: 15/12/2024<br>
+                                Lần đầu hẹn hò: 20/12/2024<br>
+                                Lần đầu nói "Anh yêu em": 25/12/2024</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="dashboard-card card-countdown">
-                <span class="card-icon">⏰</span>
-                <h3>Đếm ngược ngày đặc biệt</h3>
-                <div id="countdown-timer" class="card-countdown-timer">
-                    <span id="countdown-days">00</span> Ngày
-                    <span id="countdown-hours">00</span> Giờ
-                    <span id="countdown-minutes">00</span> Phút
-                    <span id="countdown-seconds">00</span> Giây
+            <!-- Card 2: Đếm Ngược -->
+            <div class="collapsible-card countdown">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <div class="card-header-left">
+                        <span class="card-icon">⏰</span>
+                        <div>
+                            <div class="card-title">Đếm Ngược Ngày Đặc Biệt</div>
+                            <div class="card-subtitle">Thời gian còn lại đến sự kiện quan trọng</div>
+                        </div>
+                    </div>
+                    <span class="toggle-icon">▼</span>
                 </div>
-                <p class="card-subtitle">đến ngày chúng ta mong chờ!</p>
-                <div class="card-footer">
-                    <span>Đừng quên chuẩn bị nhé!</span>
+                <div class="card-body">
+                    <div class="card-content">
+                        <div class="countdown-display" id="countdown-timer">
+                            <div class="countdown-item">
+                                <span class="countdown-number" id="countdown-days">00</span>
+                                <span class="countdown-label">Ngày</span>
+                            </div>
+                            <div class="countdown-item">
+                                <span class="countdown-number" id="countdown-hours">00</span>
+                                <span class="countdown-label">Giờ</span>
+                            </div>
+                            <div class="countdown-item">
+                                <span class="countdown-number" id="countdown-minutes">00</span>
+                                <span class="countdown-label">Phút</span>
+                            </div>
+                            <div class="countdown-item">
+                                <span class="countdown-number" id="countdown-seconds">00</span>
+                                <span class="countdown-label">Giây</span>
+                            </div>
+                        </div>
+                        <p style="text-align: center; color: #666; margin-top: 20px;">
+                            <strong>đến ngày chúng ta mong chờ!</strong><br>
+                            <small>Đừng quên chuẩn bị nhé! 💕</small>
+                        </p>
+                    </div>
                 </div>
             </div>
 
-            <div class="dashboard-card card-weekly-schedule">
-                <span class="card-icon">🗓️</span>
-                <h3>Lịch tuần của Em</h3>
-                <div class="weekly-events-list">
-                    <div class="event-item">
-                        <span class="event-time">T2: 19:00</span>
-                        <span class="event-title">Yoga</span>
+            <!-- Card 3: Lịch Trình -->
+            <div class="collapsible-card schedule">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <div class="card-header-left">
+                        <span class="card-icon">🗓️</span>
+                        <div>
+                            <div class="card-title">Lịch Trình & Kế Hoạch</div>
+                            <div class="card-subtitle">Lịch tuần và sự kiện sắp tới</div>
+                        </div>
                     </div>
-                    <div class="event-item">
-                        <span class="event-time">T4: 14:00</span>
-                        <span class="event-title">Hẹn hò với Anh ❤️</span>
-                    </div>
-                    <div class="event-item">
-                        <span class="event-time">T6: 20:00</span>
-                        <span class="event-title">Xem phim tại nhà</span>
-                    </div>
+                    <span class="toggle-icon">▼</span>
                 </div>
-                <div class="card-footer">
-                    <a href="schedule.html?from=her" class="view-all-link">Xem chi tiết lịch tuần &gt;</a>
+                <div class="card-body">
+                    <div class="card-content">
+                        <h4>📅 Lịch tuần của Em</h4>
+                        <div class="preview-content">
+                            <div class="event-item">
+                                <span class="event-time">T2: 19:00</span>
+                                <span class="event-title">Yoga</span>
+                            </div>
+                            <div class="event-item">
+                                <span class="event-time">T4: 14:00</span>
+                                <span class="event-title">Hẹn hò với Anh ❤️</span>
+                            </div>
+                            <div class="event-item">
+                                <span class="event-time">T6: 20:00</span>
+                                <span class="event-title">Xem phim tại nhà</span>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <a href="schedule.html?from=her" class="card-button">📅 Xem Chi Tiết Lịch Tuần</a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="dashboard-card card-mailbox">
-                <span class="card-icon">💌</span>
-                <h3>Hộp Thư Từ Anh</h3>
-                <div id="mailbox-preview" class="mailbox-preview">
-                    <p>Đang tải thư...</p>
+            <!-- Card 4: Giao Tiếp -->
+            <div class="collapsible-card communication">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <div class="card-header-left">
+                        <span class="card-icon">💌</span>
+                        <div>
+                            <div class="card-title">Giao Tiếp & Tin Nhắn</div>
+                            <div class="card-subtitle">Hộp thư và kết nối với Anh</div>
+                        </div>
+                    </div>
+                    <span class="toggle-icon">▼</span>
                 </div>
-                <a href="mailbox.html" class="card-button">📨 Xem Tất Cả Thư</a>
+                <div class="card-body">
+                    <div class="card-content">
+                        <h4>📨 Hộp Thư Từ Anh</h4>
+                        <div id="mailbox-preview" class="preview-content">
+                            <div class="loading-state">
+                                <div class="loading-spinner"></div>
+                                <p>Đang tải thư...</p>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <a href="mailbox.html" class="card-button">📨 Xem Tất Cả Thư</a>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="dashboard-card card-period-calendar full-width-card">
-                <span class="card-icon">🍓</span>
-                <h3>Lịch "Dâu" Thân mật</h3>
-                <div class="calendar-nav">
-                    <button id="prev-month-btn-dash">&lt;</button>
-                    <span id="month-year-title-dash">Tháng 11 2025</span>
-                    <button id="next-month-btn-dash">&gt;</button>
-                </div>
-                <div class="calendar-grid-header">
-                    <div>T2</div><div>T3</div><div>T4</div><div>T5</div><div>T6</div><div>T7</div><div>CN</div>
-                </div>
-                <div id="calendar-days-grid-dash" class="calendar-grid-body">
+            <!-- Card 5: Sức Khỏe -->
+            <div class="collapsible-card health">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <div class="card-header-left">
+                        <span class="card-icon">🍓</span>
+                        <div>
+                            <div class="card-title">Sức Khỏe & Chăm Sóc</div>
+                            <div class="card-subtitle">Lịch "Dâu" và theo dõi sức khỏe</div>
+                        </div>
                     </div>
-                <div class="card-footer">
-                    <a href="countdown.html?from=her" class="card-button">Xem Lịch Chi Tiết &gt;</a>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-content">
+                        <h4>🍓 Lịch "Dâu" Thân Mật</h4>
+                        <div class="mini-grid">
+                            <div class="mini-card health">
+                                <h5>Chu kỳ hiện tại</h5>
+                                <p>Chu kỳ tiếp theo: <strong>5 ngày nữa</strong><br>
+                                Chu kỳ trung bình: 28 ngày<br>
+                                Thời gian: 5 ngày</p>
+                            </div>
+                            <div class="mini-card health">
+                                <h5>Lịch mini</h5>
+                                <div class="calendar-nav">
+                                    <button id="prev-month-btn-dash">&lt;</button>
+                                    <span id="month-year-title-dash">Tháng 11 2025</span>
+                                    <button id="next-month-btn-dash">&gt;</button>
+                                </div>
+                                <div class="calendar-grid-header">
+                                    <div>T2</div><div>T3</div><div>T4</div><div>T5</div><div>T6</div><div>T7</div><div>CN</div>
+                                </div>
+                                <div id="calendar-days-grid-dash" class="calendar-grid-body">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <a href="countdown.html?from=her" class="card-button">🍓 Xem Lịch Chi Tiết</a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -101,6 +210,8 @@
     <script src="js/realtime-sync.js"></script>
     <script src="js/smooth-scroll.js"></script>
     <script src="js/dashboard.js"></script>
+    <script src="js/collapsible-cards.js"></script>
+    <script src="js/floating-hearts.js"></script>
 
     <script>
         // Inline initialization for her-dashboard
@@ -134,6 +245,11 @@
 
                 // Run her dashboard functions
                 runHerDashboard(herData);
+                
+                // Initialize collapsible cards after data is loaded
+                if (typeof initCollapsibleCards === 'function') {
+                    initCollapsibleCards();
+                }
 
                 // Thiết lập đồng bộ thời gian thực cho hộp thư
                 console.log('🔄 Thiết lập đồng bộ thời gian thực cho hộp thư...');
@@ -151,6 +267,8 @@
                 alert("Đã xảy ra lỗi khi kết nối.");
             }
         });
+
+        // Floating Hearts sẽ được tự động khởi tạo bởi floating-hearts.js
 
         // Hàm cập nhật preview hộp thư
         function updateMailboxPreview(notes) {

@@ -77,7 +77,7 @@ body {
     margin: 0;
     padding: 10px;
     background-color: #fde2e4;
-    background-image: url('../images/background.jpg');
+    background-image: url('../images/backgound.jpg');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -353,4 +353,81 @@ body {
     .full-idea-list .idea-text {
         font-size: 1em;
     }
+}
+
+/* === SUNSET THEME INTEGRATION === */
+body {
+    background: linear-gradient(-45deg, #ff9a9e, #fecfef, #fecfef, #ff9a9e) !important;
+    background-size: 400% 400% !important;
+    animation: sunsetGradient 15s ease infinite !important;
+    position: relative !important;
+}
+
+@keyframes sunsetGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.ideas-container {
+    background: rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 20px 60px rgba(255, 107, 107, 0.2) !important;
+}
+
+.ideas-header h1 {
+    background: linear-gradient(45deg, #ff6b6b, #ff8e8e, #ffa8a8) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    text-shadow: 0 0 30px rgba(255, 107, 107, 0.5) !important;
+    animation: titleGlow 3s ease-in-out infinite alternate !important;
+}
+
+@keyframes titleGlow {
+    from { 
+        text-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+        filter: brightness(1);
+    }
+    to { 
+        text-shadow: 0 0 40px rgba(255, 107, 107, 0.8), 0 0 60px rgba(255, 107, 107, 0.3);
+        filter: brightness(1.1);
+    }
+}
+
+.idea-card {
+    background: rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.2) !important;
+}
+
+.idea-card:hover {
+    box-shadow: 0 12px 35px rgba(255, 107, 107, 0.3) !important;
+}
+
+.idea-card h3 {
+    color: #ff6b6b !important;
+    text-shadow: 0 0 10px rgba(255, 107, 107, 0.3) !important;
+}
+
+.idea-btn {
+    background: linear-gradient(45deg, #ff6b6b, #ff8e8e) !important;
+    color: white !important;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3) !important;
+}
+
+.idea-btn:hover {
+    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4) !important;
+}
+
+.submit-btn {
+    background: linear-gradient(45deg, #ff6b6b, #ff8e8e) !important;
+    color: white !important;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3) !important;
+}
+
+.submit-btn:hover {
+    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4) !important;
 }

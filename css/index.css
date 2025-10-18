@@ -267,7 +267,7 @@ body {
 .profile-name {
     font-size: 1.8em;
     font-weight: bold;
-    background: linear-gradient(45deg, #d90429, #ef476f);
+    background: linear-gradient(45deg, #f70808, #f50707);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;

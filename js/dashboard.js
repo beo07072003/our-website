@@ -46,6 +46,16 @@ function runCountdown(data) {
         if(hoursSpan) hoursSpan.innerText = String(hours).padStart(2, '0');
         if(minutesSpan) minutesSpan.innerText = String(minutes).padStart(2, '0');
         if(secondsSpan) secondsSpan.innerText = String(seconds).padStart(2, '0');
+        
+        // Also update collapsible cards countdown if available
+        if (typeof updateCountdownDisplay === 'function') {
+            updateCountdownDisplay({
+                days: days,
+                hours: hours,
+                minutes: minutes,
+                seconds: seconds
+            });
+        }
     }, 1000);
 }
 

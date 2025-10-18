@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Background Demo - Romantic Sunset Theme</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .demo-container {
+            max-width: 1200px;
+            width: 100%;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c1810;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 0 2px 4px rgba(255, 255, 255, 0.8);
+        }
+        
+        .background-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .background-demo {
+            height: 200px;
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .background-demo:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .demo-label {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        
+        /* Background Themes */
+        .theme-1 {
+            background: linear-gradient(-45deg, #ff9a9e, #fecfef, #fecfef, #ff9a9e);
+            background-size: 400% 400%;
+            animation: sunsetGradient 15s ease infinite;
+        }
+        
+        .theme-2 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .theme-3 {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e, #ffa8a8, #ffb3ba);
+        }
+        
+        .theme-4 {
+            background: linear-gradient(-45deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .theme-5 {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #4facfe 100%);
+        }
+        
+        .theme-6 {
+            background: linear-gradient(45deg, #ffecd2 0%, #fcb69f 100%);
+        }
+        
+        .theme-7 {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        }
+        
+        .theme-8 {
+            background: 
+                radial-gradient(circle at 25% 25%, rgba(255, 182, 193, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(255, 192, 203, 0.3) 0%, transparent 50%),
+                linear-gradient(-45deg, #ff9a9e, #fecfef);
+            background-size: 100px 100px, 150px 150px, 100% 100%;
+        }
+        
+        @keyframes sunsetGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .heart {
+            position: absolute;
+            color: rgba(255, 182, 193, 0.6);
+            font-size: 20px;
+            animation: floatUp 8s linear infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes floatUp {
+            0% {
+                transform: translate3d(0, 100vh, 0) rotate(0deg) scale(0.5);
+                opacity: 0;
+            }
+            10% { 
+                opacity: 0.8; 
+                transform: translate3d(0, 90vh, 0) rotate(36deg) scale(0.8);
+            }
+            50% {
+                opacity: 1;
+                transform: translate3d(0, 50vh, 0) rotate(180deg) scale(1);
+            }
+            90% { 
+                opacity: 0.6; 
+                transform: translate3d(0, 10vh, 0) rotate(324deg) scale(0.8);
+            }
+            100% {
+                transform: translate3d(0, -100px, 0) rotate(360deg) scale(0.5);
+                opacity: 0;
+            }
+        }
+        
+        .instructions {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+            color: #2c1810;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+        }
+        
+        .instructions h3 {
+            margin-bottom: 10px;
+            color: #d63384;
+        }
+        
+        .instructions p {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Hearts -->
+    <div class="floating-hearts" id="floating-hearts"></div>
+    
+    <div class="demo-container">
+        <h1>🎨 Background Demo Collection</h1>
+        
+        <div class="background-grid">
+            <div class="background-demo theme-1">
+                <div class="demo-label">1. Current Sunset (Hiện tại)</div>
+            </div>
+            
+            <div class="background-demo theme-2">
+                <div class="demo-label">2. Deep Sunset</div>
+            </div>
+            
+            <div class="background-demo theme-3">
+                <div class="demo-label">3. Warm Sunset</div>
+            </div>
+            
+            <div class="background-demo theme-4">
+                <div class="demo-label">4. Golden Hour</div>
+            </div>
+            
+            <div class="background-demo theme-5">
+                <div class="demo-label">5. Pink Dreams</div>
+            </div>
+            
+            <div class="background-demo theme-6">
+                <div class="demo-label">6. Rose Gold</div>
+            </div>
+            
+            <div class="background-demo theme-7">
+                <div class="demo-label">7. Lavender Love</div>
+            </div>
+            
+            <div class="background-demo theme-8">
+                <div class="demo-label">8. Pattern Dots</div>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h3>💡 Hướng dẫn sử dụng</h3>
+            <p>• Hover vào từng background để xem hiệu ứng</p>
+            <p>• Click để xem chi tiết</p>
+            <p>• Background số 1 là theme hiện tại của bạn</p>
+            <p>• Tất cả đều có floating hearts animation</p>
+        </div>
+    </div>
+    
+    <script>
+        // Floating Hearts Animation
+        function createFloatingHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '💕';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDelay = '0s';
+            heart.style.fontSize = (Math.random() * 10 + 15) + 'px';
+            heart.style.animationDuration = (Math.random() * 4 + 8) + 's';
+            document.getElementById('floating-hearts').appendChild(heart);
+            
+            setTimeout(() => {
+                if (heart.parentNode) {
+                    heart.remove();
+                }
+            }, 15000);
+        }
+        
+        // Tạo hearts liên tục
+        function startHeartCreation() {
+            createFloatingHeart();
+            const nextDelay = Math.random() * 2000 + 1000;
+            setTimeout(startHeartCreation, nextDelay);
+        }
+        
+        // Bắt đầu tạo hearts
+        startHeartCreation();
+        
+        // Tạo hearts ban đầu
+        for (let i = 0; i < 3; i++) {
+            setTimeout(() => createFloatingHeart(), i * 500);
+        }
+        
+        // Click để xem chi tiết
+        document.querySelectorAll('.background-demo').forEach((demo, index) => {
+            demo.addEventListener('click', () => {
+                alert(`Background ${index + 1} được chọn!\n\nBạn có muốn áp dụng background này vào website không?`);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -44,11 +44,9 @@ body.touch-active {
 
 body {
     font-family: "Tilt Neon", sans-serif;
-    background-color: #fde2e4;
-    background-image: url('../images/backgound.jpg');
-    background-size: cover;
-    background-position: center;
-    background-attachment: scroll; /* Changed from fixed for better performance */
+    background: linear-gradient(-45deg, #ff9a9e, #fecfef, #fecfef, #ff9a9e);
+    background-size: 400% 400%;
+    animation: sunsetGradient 15s ease infinite;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -63,13 +61,22 @@ body {
     text-rendering: optimizeSpeed;
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
+    position: relative;
+}
+
+@keyframes sunsetGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 .container {
-    background-color: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     padding: 40px 25px; /* Giảm padding ngang */
     border-radius: 20px; /* Giảm từ 25px */
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 20px 60px rgba(255, 107, 107, 0.2);
     text-align: center;
     max-width: 700px;
     width: 100%;
@@ -77,34 +84,96 @@ body {
     will-change: scroll-position; /* Hint browser for optimization */
     contain: layout style paint; /* Isolate rendering */
     overscroll-behavior: contain; /* Prevent scroll bounce */
+    position: relative;
+    overflow: hidden;
+}
+
+.container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.8s ease;
+    pointer-events: none;
+}
+
+.container:hover::before {
+    left: 100%;
 }
 
 h1 {
     font-size: 2.8em; /* Giảm từ 3.2em */
-    color: #d90429;
+    background: linear-gradient(45deg, #d63384, #e83e8c, #fd7e14);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     margin-bottom: 18px;
     line-height: 1.2;
+    text-shadow: 0 0 20px rgba(214, 51, 132, 0.8);
+    animation: titleGlow 3s ease-in-out infinite alternate;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
 h2 {
     font-size: 2.2em; /* Giảm từ 2.5em */
-    color: #d90429;
+    background: linear-gradient(45deg, #d63384, #e83e8c);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     margin-bottom: 20px;
     line-height: 1.3;
+    text-shadow: 0 0 15px rgba(214, 51, 132, 0.6);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+@keyframes titleGlow {
+    from { 
+        text-shadow: 0 0 20px rgba(214, 51, 132, 0.8);
+        filter: brightness(1) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    }
+    to { 
+        text-shadow: 0 0 40px rgba(214, 51, 132, 1), 0 0 60px rgba(214, 51, 132, 0.6);
+        filter: brightness(1.1) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+    }
 }
 
 .back-button {
     display: inline-block;
     margin-bottom: 25px;
     text-decoration: none;
-    color: #ef476f;
+    background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 25px;
     font-weight: bold;
     font-size: 1em;
-    transition: color 0.3s ease;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.back-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.6s ease;
 }
 
 .back-button:hover {
-    color: #d90429;
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+}
+
+.back-button:hover::before {
+    left: 100%;
 }
 
 /* --- MEDIA QUERIES CHO MOBILE --- */
