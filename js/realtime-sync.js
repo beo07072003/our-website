@@ -12,7 +12,7 @@ class RealtimeSync {
             return;
         }
         this.isInitialized = true;
-        console.log('🔄 Hệ thống đồng bộ thời gian thực đã được khởi tạo');
+        // console.log('🔄 Hệ thống đồng bộ thời gian thực đã được khởi tạo');
     }
 
     // Lắng nghe thay đổi dữ liệu của "em"
@@ -27,10 +27,10 @@ class RealtimeSync {
         const unsubscribe = herDataRef.onSnapshot((doc) => {
             if (doc.exists) {
                 const data = doc.data();
-                console.log('📱 Dữ liệu "em" đã được cập nhật:', data);
+                // console.log('📱 Dữ liệu "em" đã được cập nhật:', data);
                 callback(data);
             } else {
-                console.log('📱 Không tìm thấy dữ liệu "em"');
+                // console.log('📱 Không tìm thấy dữ liệu "em"');
                 callback({});
             }
         }, (error) => {
@@ -54,10 +54,10 @@ class RealtimeSync {
         const unsubscribe = hisDataRef.onSnapshot((doc) => {
             if (doc.exists) {
                 const data = doc.data();
-                console.log('👨‍💻 Dữ liệu "anh" đã được cập nhật:', data);
+                // console.log('👨‍💻 Dữ liệu "anh" đã được cập nhật:', data);
                 callback(data);
             } else {
-                console.log('👨‍💻 Không tìm thấy dữ liệu "anh"');
+                // console.log('👨‍💻 Không tìm thấy dữ liệu "anh"');
                 callback({});
             }
         }, (error) => {
@@ -73,7 +73,7 @@ class RealtimeSync {
     listenToSchedule(callback) {
         return this.listenToHerData((data) => {
             if (data.schedule) {
-                console.log('📅 Lịch tuần đã được cập nhật:', data.schedule);
+                // console.log('📅 Lịch tuần đã được cập nhật:', data.schedule);
                 callback(data.schedule);
             }
         });
@@ -83,7 +83,7 @@ class RealtimeSync {
     listenToIdeas(callback) {
         return this.listenToHisData((data) => {
             if (data.ideaBank) {
-                console.log('💡 Ý tưởng đã được cập nhật:', data.ideaBank);
+                // console.log('💡 Ý tưởng đã được cập nhật:', data.ideaBank);
                 callback(data.ideaBank);
             }
         });
@@ -93,7 +93,7 @@ class RealtimeSync {
     listenToNotes(callback) {
         return this.listenToHisData((data) => {
             if (data.noteForHer) {
-                console.log('💌 Ghi chú đã được cập nhật:', data.noteForHer);
+                // console.log('💌 Ghi chú đã được cập nhật:', data.noteForHer);
                 callback(data.noteForHer);
             }
         });
@@ -103,7 +103,7 @@ class RealtimeSync {
     listenToMailbox(callback) {
         return this.listenToHisData((data) => {
             if (data.notesForHer) {
-                console.log('📨 Hộp thư đã được cập nhật:', data.notesForHer);
+                // console.log('📨 Hộp thư đã được cập nhật:', data.notesForHer);
                 callback(data.notesForHer);
             }
         });
@@ -123,7 +123,7 @@ class RealtimeSync {
                 lastUpdated: new Date().toISOString()
             });
             
-            console.log(`✅ Đã cập nhật ${field} cho ${userType}:`, value);
+            // console.log(`✅ Đã cập nhật ${field} cho ${userType}:`, value);
             return true;
         } catch (error) {
             console.error(`❌ Lỗi khi cập nhật ${field} cho ${userType}:`, error);
@@ -149,12 +149,12 @@ class RealtimeSync {
     // Hủy tất cả listeners
     cleanup() {
         this.listeners.forEach((unsubscribe, key) => {
-            console.log(`🔇 Hủy listener cho ${key}`);
+            // console.log(`🔇 Hủy listener cho ${key}`);
             unsubscribe();
         });
         this.listeners.clear();
         this.isInitialized = false;
-        console.log('🧹 Đã dọn dẹp tất cả listeners');
+        // console.log('🧹 Đã dọn dẹp tất cả listeners');
     }
 
     // Hủy listener cụ thể
@@ -162,7 +162,7 @@ class RealtimeSync {
         if (this.listeners.has(listenerKey)) {
             this.listeners.get(listenerKey)();
             this.listeners.delete(listenerKey);
-            console.log(`🔇 Đã hủy listener: ${listenerKey}`);
+            // console.log(`🔇 Đã hủy listener: ${listenerKey}`);
         }
     }
 

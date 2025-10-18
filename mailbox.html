@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" href="css/mailbox.css">
     <link rel="stylesheet" href="css/sunset-theme.css">
+    <link rel="stylesheet" href="css/notifications.css">
     <link rel="icon" type="image/png" href="./images/logo.svg">
 </head>
 <body>
@@ -38,6 +39,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore-compat.js"></script>
     <script src="js/firebase-init.js"></script>
+    <script src="js/notifications.js"></script>
     <script src="js/realtime-sync.js"></script>
     <script src="js/navigation.js"></script>
     <script src="js/mailbox.js"></script>
@@ -72,18 +74,18 @@
                 initializeMailbox();
 
                 // Thiết lập đồng bộ thời gian thực cho hộp thư
-                console.log('🔄 Thiết lập đồng bộ thời gian thực cho hộp thư...');
+                // console.log('🔄 Thiết lập đồng bộ thời gian thực cho hộp thư...');
                 
                 window.realtimeSync.listenToHisData((hisData) => {
-                    console.log('📨 Hộp thư đã được cập nhật theo thời gian thực');
+                    // console.log('📨 Hộp thư đã được cập nhật theo thời gian thực');
                     updateMailbox(hisData.notesForHer || []);
                 });
 
-                console.log('✅ Đồng bộ thời gian thực cho hộp thư đã được thiết lập!');
+                // console.log('✅ Đồng bộ thời gian thực cho hộp thư đã được thiết lập!');
 
             } catch (error) {
                 console.error("Lỗi khi thiết lập đồng bộ thời gian thực:", error);
-                alert("Đã xảy ra lỗi khi kết nối.");
+                showError("Đã xảy ra lỗi khi kết nối.");
             }
         });
     </script>

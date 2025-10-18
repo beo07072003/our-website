@@ -23,8 +23,8 @@ function renderMobileSchedule(events, container) {
     container.innerHTML = ''; // Xóa lưới cũ
     container.className = 'schedule-mobile-container'; // Đổi class để áp dụng style mới
 
-    // Sắp xếp sự kiện theo ngày và giờ
-    const sortedEvents = events.sort((a, b) => {
+    // Sắp xếp sự kiện theo ngày và giờ (tạo bản sao để không thay đổi mảng gốc)
+    const sortedEvents = [...events].sort((a, b) => {
         if (a.day !== b.day) return a.day - b.day;
         return a.startTime.localeCompare(b.startTime);
     });
@@ -168,30 +168,30 @@ function setupRobustGridClickListener(gridElement) {
             return;
         }
 
-        console.log("--- BẮT ĐẦU GIÁM ĐỊNH CÚ CLICK ---");
+        // console.log("--- BẮT ĐẦU GIÁM ĐỊNH CÚ CLICK ---");
 
         const gridRect = gridElement.getBoundingClientRect();
         const x = e.clientX - gridRect.left;
         const y = e.clientY - gridRect.top;
 
-        console.log(`Tọa độ click (so với lưới): X=${x.toFixed(2)}, Y=${y.toFixed(2)}`);
+        // console.log(`Tọa độ click (so với lưới): X=${x.toFixed(2)}, Y=${y.toFixed(2)}`);
         
         const headerHeight = 50;
         const timeColumnWidth = 80;
         const rowHeight = 80;
 
-        console.log(`Đang kiểm tra với điều kiện: Y > ${headerHeight} và X > ${timeColumnWidth}`);
+        // console.log(`Đang kiểm tra với điều kiện: Y > ${headerHeight} và X > ${timeColumnWidth}`);
 
         if (y > headerHeight && x > timeColumnWidth) {
-            console.log("=> Điều kiện HỢP LỆ. Bắt đầu tính toán ô...");
+            // console.log("=> Điều kiện HỢP LỆ. Bắt đầu tính toán ô...");
 
             const dayColumnWidth = (gridElement.offsetWidth - timeColumnWidth) / 7;
             const dayIndex = Math.floor((x - timeColumnWidth) / dayColumnWidth);
             const timeIndex = Math.floor((y - headerHeight) / rowHeight);
 
-            console.log(`Chiều rộng cột ngày (tính toán): ${dayColumnWidth.toFixed(2)}px`);
-            console.log(`Chỉ số cột (dayIndex): ${dayIndex}`);
-            console.log(`Chỉ số hàng (timeIndex): ${timeIndex}`);
+            // console.log(`Chiều rộng cột ngày (tính toán): ${dayColumnWidth.toFixed(2)}px`);
+            // console.log(`Chỉ số cột (dayIndex): ${dayIndex}`);
+            // console.log(`Chỉ số hàng (timeIndex): ${timeIndex}`);
             
             if (dayIndex < 0 || dayIndex > 6 || timeIndex < 0 || timeIndex > 7) {
                 console.error("LỖI TÍNH TOÁN: Chỉ số hàng hoặc cột nằm ngoài phạm vi. Click bị hủy.");
@@ -202,7 +202,7 @@ function setupRobustGridClickListener(gridElement) {
             const startHour = 7 + (timeIndex * 2);
             const time = `${String(startHour).padStart(2, '0')}:00`;
             
-            console.log(`=> Kết quả: Ngày=${day}, Giờ=${time}. Đang mở cửa sổ...`);
+            // console.log(`=> Kết quả: Ngày=${day}, Giờ=${time}. Đang mở cửa sổ...`);
 
             openEventModal();
             document.getElementById('event-day-select').value = day;
@@ -210,7 +210,7 @@ function setupRobustGridClickListener(gridElement) {
         } else {
             console.error("LỖI: Điều kiện KHÔNG HỢP LỆ. Click được coi là nằm ngoài lưới chính.");
         }
-        console.log("--- KẾT THÚC GIÁM ĐỊNH ---");
+        // console.log("--- KẾT THÚC GIÁM ĐỊNH ---");
     });
 }
 
@@ -251,12 +251,34 @@ function openEventModal(event = null) {
 }
 
 // Gắn sự kiện cho các nút trong modal LỊCH TUẦN
+document.addEventListener('DOMContentLoaded', () => {
+    // console.log('📅 Schedule page loaded');
+    // console.log('🔍 showSuccess function available:', typeof showSuccess);
+    // console.log('🔍 showWarning function available:', typeof showWarning);
+    // console.log('🔍 notifications object available:', typeof window.notifications);
+    
+    // Đợi một chút để đảm bảo notifications.js đã load xong
+    setTimeout(() => {
+        // console.log('🔍 After delay - showSuccess function available:', typeof showSuccess);
+        // console.log('🔍 After delay - showWarning function available:', typeof showWarning);
+        // console.log('🔍 After delay - notifications object available:', typeof window.notifications);
+    }, 1000);
+});
+
 document.getElementById('cancel-event-button')?.addEventListener('click', () => {
     document.getElementById('event-modal').classList.remove('visible');
 });
 
 document.getElementById('delete-event-button')?.addEventListener('click', async () => {
-    if (!currentEventId || !confirm('Bạn có chắc muốn xóa sự kiện này?')) return;
+    // console.log('🗑️ Delete button clicked');
+    // console.log('🔍 showSuccess function available:', typeof showSuccess);
+    // console.log('🔍 showWarning function available:', typeof showWarning);
+    
+    if (!currentEventId) return;
+    
+    // Hiển thị thông báo xác nhận đẹp thay vì confirm()
+    const confirmed = await showConfirmDialog('Xác nhận xóa', 'Bạn có chắc muốn xóa sự kiện này?');
+    if (!confirmed) return;
     
     const herDataRef = db.collection('userInfo').doc('herData');
     const doc = await herDataRef.get();
@@ -264,11 +286,24 @@ document.getElementById('delete-event-button')?.addEventListener('click', async 
     const newSchedule = existingSchedule.filter(event => event.id !== currentEventId);
     
     await herDataRef.update({ schedule: newSchedule });
-    alert('Đã xóa sự kiện!');
+    
+    // Fallback nếu showSuccess không có sẵn
+    if (typeof showSuccess === 'function') {
+        showSuccess('Đã xóa sự kiện!');
+    } else if (typeof window.notifications === 'object' && window.notifications.success) {
+        window.notifications.success('Đã xóa sự kiện!');
+    } else {
+        console.error('❌ Không thể hiển thị thông báo thành công');
+        alert('Đã xóa sự kiện!');
+    }
     location.reload();
 });
 
 document.getElementById('save-event-button')?.addEventListener('click', async () => {
+    // console.log('💾 Save button clicked');
+    // console.log('🔍 showSuccess function available:', typeof showSuccess);
+    // console.log('🔍 showWarning function available:', typeof showWarning);
+    
     const newEvent = {
         id: currentEventId || Date.now().toString(),
         title: document.getElementById('event-title-input').value,
@@ -279,7 +314,15 @@ document.getElementById('save-event-button')?.addEventListener('click', async ()
     };
 
     if (!newEvent.title || !newEvent.startTime || !newEvent.endTime) {
-        alert('Vui lòng điền đủ thông tin!');
+        // Fallback nếu showWarning không có sẵn
+        if (typeof showWarning === 'function') {
+            showWarning('Vui lòng điền đủ thông tin!');
+        } else if (typeof window.notifications === 'object' && window.notifications.warning) {
+            window.notifications.warning('Vui lòng điền đủ thông tin!');
+        } else {
+            console.error('❌ Không thể hiển thị thông báo cảnh báo');
+            alert('Vui lòng điền đủ thông tin!');
+        }
         return;
     }
 
@@ -294,6 +337,14 @@ document.getElementById('save-event-button')?.addEventListener('click', async ()
     }
 
     await herDataRef.update({ schedule: schedule });
-    alert('Đã lưu thành công!');
+    
+    // Fallback nếu showSuccess không có sẵn
+    if (typeof showSuccess === 'function') {
+        showSuccess('Đã lưu thành công!');
+    } else if (typeof window.notifications === 'object' && window.notifications.success) {
+        window.notifications.success('Đã lưu thành công!');
+    } else {
+        alert('Đã lưu thành công!');
+    }
     location.reload();
 });

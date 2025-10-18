@@ -3,7 +3,7 @@ let mailboxData = [];
 
 // Khởi tạo hộp thư
 async function initializeMailbox() {
-    console.log('📨 Khởi tạo hộp thư...');
+    // console.log('📨 Khởi tạo hộp thư...');
     
     try {
         // Load dữ liệu ban đầu
@@ -17,16 +17,16 @@ async function initializeMailbox() {
             showEmptyMailbox();
         }
         
-        console.log('✅ Hộp thư đã được khởi tạo');
+        // console.log('✅ Hộp thư đã được khởi tạo');
     } catch (error) {
         console.error('❌ Lỗi khi khởi tạo hộp thư:', error);
-        showErrorMessage('Có lỗi xảy ra khi tải hộp thư');
+        showError('Có lỗi xảy ra khi tải hộp thư');
     }
 }
 
 // Cập nhật hiển thị hộp thư
 function updateMailbox(notes) {
-    console.log('📬 Cập nhật hộp thư với', notes.length, 'thư');
+    // console.log('📬 Cập nhật hộp thư với', notes.length, 'thư');
     
     mailboxData = notes || [];
     const mailboxContent = document.getElementById('mailbox-content');
@@ -116,7 +116,7 @@ function showErrorMessage(message) {
 
 // Làm mới hộp thư
 async function refreshMailbox() {
-    console.log('🔄 Làm mới hộp thư...');
+    // console.log('🔄 Làm mới hộp thư...');
     
     const refreshBtn = document.getElementById('refresh-mailbox-btn');
     if (refreshBtn) {
@@ -131,13 +131,13 @@ async function refreshMailbox() {
         if (hisDoc.exists && hisDoc.data().notesForHer) {
             mailboxData = hisDoc.data().notesForHer;
             updateMailbox(mailboxData);
-            console.log('✅ Đã làm mới hộp thư');
+            // console.log('✅ Đã làm mới hộp thư');
         } else {
             showEmptyMailbox();
         }
     } catch (error) {
         console.error('❌ Lỗi khi làm mới hộp thư:', error);
-        showErrorMessage('Không thể làm mới hộp thư');
+        showError('Không thể làm mới hộp thư');
     } finally {
         if (refreshBtn) {
             refreshBtn.innerHTML = '🔄 Làm mới hộp thư';
@@ -154,5 +154,5 @@ document.addEventListener('DOMContentLoaded', () => {
         refreshBtn.addEventListener('click', refreshMailbox);
     }
     
-    console.log('📨 Mailbox event listeners đã được gắn');
+    // console.log('📨 Mailbox event listeners đã được gắn');
 });

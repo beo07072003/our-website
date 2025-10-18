@@ -79,6 +79,22 @@ function updateCardState(card) {
 }
 
 /**
+ * Clear all card states from localStorage
+ */
+function clearAllCardStates() {
+    const cards = document.querySelectorAll('.collapsible-card');
+    cards.forEach(card => {
+        const cardClass = Array.from(card.classList).find(cls => 
+            cls !== 'collapsible-card' && cls !== 'expanded'
+        );
+        
+        if (cardClass) {
+            localStorage.removeItem(`card-${cardClass}`);
+        }
+    });
+}
+
+/**
  * Restore card states from localStorage on page load
  */
 function restoreCardStates() {
@@ -101,8 +117,14 @@ function restoreCardStates() {
  * Initialize collapsible cards functionality
  */
 function initCollapsibleCards() {
-    // Restore saved states
-    restoreCardStates();
+    // Clear any saved card states from localStorage
+    clearAllCardStates();
+    
+    // Close all cards first to ensure clean state
+    closeAllCards();
+    
+    // Don't restore saved states - always start with all cards closed
+    // restoreCardStates();
     
     // Add keyboard support
     document.addEventListener('keydown', (e) => {
@@ -319,5 +341,6 @@ document.addEventListener('DOMContentLoaded', () => {
 window.toggleCard = toggleCard;
 window.openCard = openCard;
 window.closeAllCards = closeAllCards;
+window.clearAllCardStates = clearAllCardStates;
 window.updateMailboxPreview = updateMailboxPreview;
 window.updateCountdownDisplay = updateCountdownDisplay;

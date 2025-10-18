@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="css/collapsible-cards.css">
     <link rel="stylesheet" href="css/sunset-theme.css">
+    <link rel="stylesheet" href="css/notifications.css">
 </head>
 <body>
     <!-- Floating Hearts Animation -->
@@ -17,7 +18,7 @@
     <div class="dashboard-container">
         <a href="index.html" class="back-to-home-btn">↩ Quay lại Trang chủ</a>
         
-        <h1 class="dashboard-greeting">Chào mừng Em Yêu! ✨</h1>
+        <h1 class="dashboard-greeting">Chào mừng Em Yêu! </h1>
         <p class="dashboard-slogan">Mỗi ngày bên em là một món quà.</p>
 
         <div class="collapsible-cards-container">
@@ -44,9 +45,9 @@
                             </div>
                             <div class="mini-card love">
                                 <h5>Kỷ niệm đặc biệt</h5>
-                                <p>Ngày bắt đầu: 15/12/2024<br>
-                                Lần đầu hẹn hò: 20/12/2024<br>
-                                Lần đầu nói "Anh yêu em": 25/12/2024</p>
+                                <p>Ngày bắt đầu: 01/07/2025<br>
+                                Lần đầu hẹn hò: 28/04/2025<br>
+                                Lần đầu nói "Anh yêu em": hehe ai nhớ nữa </p>
                             </div>
                         </div>
                     </div>
@@ -111,7 +112,7 @@
                         <div class="preview-content">
                             <div class="event-item">
                                 <span class="event-time">T2: 19:00</span>
-                                <span class="event-title">Yoga</span>
+                                <span class="event-title">Nói iu anh ❤️</span>
                             </div>
                             <div class="event-item">
                                 <span class="event-time">T4: 14:00</span>
@@ -119,7 +120,7 @@
                             </div>
                             <div class="event-item">
                                 <span class="event-time">T6: 20:00</span>
-                                <span class="event-title">Xem phim tại nhà</span>
+                                <span class="event-title">Gọi cho anh để nói chuyện ❤️</span>
                             </div>
                         </div>
                         <div class="card-actions">
@@ -207,6 +208,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore-compat.js"></script>
 
     <script src="js/firebase-init.js"></script>
+    <script src="js/notifications.js"></script>
     <script src="js/realtime-sync.js"></script>
     <script src="js/smooth-scroll.js"></script>
     <script src="js/dashboard.js"></script>
@@ -238,13 +240,20 @@
             try {
                 await waitForRealtimeSync();
                 
-                // Load her data
+                // Load her data and his data (for mailbox)
                 const herDataRef = db.collection('userInfo').doc('herData');
-                const herDoc = await herDataRef.get();
+                const hisDataRef = db.collection('userInfo').doc('hisData');
+                const [herDoc, hisDoc] = await Promise.all([herDataRef.get(), hisDataRef.get()]);
+                
                 const herData = herDoc.exists ? herDoc.data() : {};
+                const hisData = hisDoc.exists ? hisDoc.data() : {};
 
                 // Run her dashboard functions
                 runHerDashboard(herData);
+                
+                // Initialize mailbox preview
+                console.log('📨 Khởi tạo preview hộp thư...');
+                updateMailboxPreview(hisData.notesForHer || []);
                 
                 // Initialize collapsible cards after data is loaded
                 if (typeof initCollapsibleCards === 'function') {
@@ -252,19 +261,19 @@
                 }
 
                 // Thiết lập đồng bộ thời gian thực cho hộp thư
-                console.log('🔄 Thiết lập đồng bộ thời gian thực cho hộp thư...');
+                // console.log('🔄 Thiết lập đồng bộ thời gian thực cho hộp thư...');
                 
                 // Lắng nghe thay đổi hộp thư từ anh
                 window.realtimeSync.listenToMailbox((notes) => {
-                    console.log('📨 Hộp thư đã được cập nhật theo thời gian thực');
+                    // console.log('📨 Hộp thư đã được cập nhật theo thời gian thực');
                     updateMailboxPreview(notes);
                 });
 
-                console.log('✅ Đồng bộ thời gian thực cho hộp thư đã được thiết lập!');
+                // console.log('✅ Đồng bộ thời gian thực cho hộp thư đã được thiết lập!');
 
             } catch (error) {
                 console.error("Lỗi khi thiết lập đồng bộ thời gian thực:", error);
-                alert("Đã xảy ra lỗi khi kết nối.");
+                showError("Đã xảy ra lỗi khi kết nối.");
             }
         });
 

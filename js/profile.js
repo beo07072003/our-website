@@ -84,7 +84,7 @@ function setupNoteWidget() {
         saveBtn.addEventListener('click', async () => {
             const noteText = noteInput.value.trim();
             if (!noteText) {
-                alert('Vui lòng nhập nội dung thư!');
+                showWarning('Vui lòng nhập nội dung thư!');
                 return;
             }
             
@@ -93,12 +93,24 @@ function setupNoteWidget() {
             saveBtn.textContent = 'Đang gửi...';
             
             try {
+                // console.log('🔍 Bắt đầu gửi thư...');
+                // console.log('🔍 Firebase db object:', typeof db);
+                
+                if (typeof db === 'undefined') {
+                    throw new Error('Firebase chưa được khởi tạo!');
+                }
+                
                 const hisDataRef = db.collection('userInfo').doc('hisData');
+                // console.log('🔍 Reference created:', hisDataRef);
                 
                 // Lấy dữ liệu hiện tại
+                // console.log('🔍 Đang lấy dữ liệu hiện tại...');
                 const hisDoc = await hisDataRef.get();
+                // console.log('🔍 Document exists:', hisDoc.exists);
+                
                 const currentData = hisDoc.exists ? hisDoc.data() : {};
                 const existingNotes = currentData.notesForHer || [];
+                // console.log('🔍 Existing notes count:', existingNotes.length);
                 
                 // Tạo thư mới
                 const newNote = {
@@ -106,24 +118,53 @@ function setupNoteWidget() {
                     timestamp: new Date().toISOString(),
                     id: Date.now().toString()
                 };
+                // console.log('🔍 New note created:', newNote);
                 
                 // Thêm thư mới vào danh sách
                 const updatedNotes = [newNote, ...existingNotes];
+                // console.log('🔍 Updated notes count:', updatedNotes.length);
                 
                 // Cập nhật lên Firebase
+                // console.log('🔍 Đang cập nhật lên Firebase...');
+                // console.log('🔍 Data to update:', {
+                //     notesForHer: updatedNotes,
+                //     lastUpdated: new Date().toISOString()
+                // });
+                
                 await hisDataRef.update({
                     notesForHer: updatedNotes,
                     lastUpdated: new Date().toISOString()
                 });
+                // console.log('✅ Firebase update completed!');
+                
+                // Verify the update
+                const verifyDoc = await hisDataRef.get();
+                const verifyData = verifyDoc.data();
+                // console.log('🔍 Verification - notesForHer count:', verifyData.notesForHer?.length || 0);
+                // console.log('🔍 Verification - latest note:', verifyData.notesForHer?.[0]);
                 
                 noteInput.value = '';
-                alert('Đã gửi thư thành công! 💌 Em sẽ nhận được thư ngay lập tức!');
+                showSuccess('Đã gửi thư thành công! 💌 Em sẽ nhận được thư ngay lập tức!');
                 
-                console.log('✅ Đã gửi thư mới:', newNote);
+                // console.log('✅ Đã gửi thư mới:', newNote);
+                
+                // Test: Kiểm tra xem hộp thư có được lưu không
+                setTimeout(async () => {
+                    try {
+                        const testDoc = await hisDataRef.get();
+                        const testData = testDoc.data();
+                        // console.log('🧪 Test - Hộp thư trong database:', testData.notesForHer?.length || 0, 'thư');
+                        // if (testData.notesForHer && testData.notesForHer.length > 0) {
+                        //     console.log('🧪 Test - Thư mới nhất:', testData.notesForHer[0]);
+                        // }
+                    } catch (error) {
+                        console.error('🧪 Test - Lỗi khi kiểm tra:', error);
+                    }
+                }, 1000);
                 
             } catch (error) {
                 console.error("Lỗi khi gửi thư:", error);
-                alert("Đã có lỗi xảy ra khi gửi thư.");
+                showError("Đã có lỗi xảy ra khi gửi thư.");
             } finally {
                 // Re-enable button
                 saveBtn.disabled = false;
@@ -174,44 +215,127 @@ function setupSchedulePreview(schedule) {
     const currentMinute = now.getMinutes();
     const currentTime = currentHour * 60 + currentMinute;
     
+    // Debug: Log thời gian hiện tại chi tiết
+    // console.log(`🕐 Detailed current time:`, {
+    //     now: now.toString(),
+    //     currentDay: currentDay,
+    //     currentHour: currentHour,
+    //     currentMinute: currentMinute,
+    //     currentTime: currentTime,
+    //     timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+    // });
+    
     // Convert currentDay to match schedule format (2 = Thứ 2, 3 = Thứ 3, ..., 8 = Chủ nhật)
     const scheduleCurrentDay = currentDay === 0 ? 8 : currentDay + 1;
+    
+    // Debug: Log thông tin thời gian hiện tại
+    // console.log(`🕐 Current time debug:`, {
+    //     currentDay: currentDay,
+    //     scheduleCurrentDay: scheduleCurrentDay,
+    //     currentHour: currentHour,
+    //     currentMinute: currentMinute,
+    //     currentTime: currentTime,
+    //     dayName: currentDay === 0 ? 'Chủ nhật' : ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'][currentDay - 1]
+    // });
     
     let nextEvent = null;
     let earliestEvent = null;
     
-    // Sắp xếp events theo timeline
-    const sortedEvents = schedule.sort((a, b) => {
+    // Sắp xếp events theo timeline (tạo bản sao để không thay đổi mảng gốc)
+    const sortedEvents = [...schedule].sort((a, b) => {
         if (a.day !== b.day) return a.day - b.day;
         return a.startTime.localeCompare(b.startTime);
     });
     
+    // Debug: Log thứ tự sự kiện
+    // console.log('📅 Schedule events (sorted):', sortedEvents.map(e => `${e.day}-${e.startTime}: ${e.title}`));
+    
+    // Debug: Kiểm tra sự kiện Chủ nhật
+    const sundayEvents = sortedEvents.filter(e => e.day === 8);
+    // console.log('📅 Sunday events:', sundayEvents.map(e => `${e.startTime}: ${e.title}`));
+    // console.log('📅 Sunday events count:', sundayEvents.length);
+    
+    // Debug: Kiểm tra nếu hôm nay là Chủ nhật
+    if (scheduleCurrentDay === 8) {
+        // console.log('📅 Today is Sunday! Looking for Sunday events...');
+        const todaySundayEvents = sundayEvents.filter(e => {
+            const [eventHour, eventMinute] = e.startTime.split(':').map(Number);
+            const eventTime = eventHour * 60 + eventMinute;
+            return eventTime > currentTime;
+        });
+        // console.log('📅 Sunday events after current time:', todaySundayEvents.map(e => `${e.startTime}: ${e.title}`));
+    }
+    
     // Tìm sự kiện sắp tới
-    for (const event of sortedEvents) {
-        const [eventHour, eventMinute] = event.startTime.split(':').map(Number);
-        const eventTime = eventHour * 60 + eventMinute;
-        
-        // Nếu event trong ngày hiện tại và thời gian chưa qua
-        if (event.day === scheduleCurrentDay && eventTime > currentTime) {
+    // Tìm sự kiện sắp tới
+for (const event of sortedEvents) {
+    const [eventHour, eventMinute] = event.startTime.split(':').map(Number);
+    const eventTime = eventHour * 60 + eventMinute;
+    
+    // Debug: Kiểm tra parsing thời gian
+    // console.log(`⏰ Time parsing for ${event.title}:`, {
+    //     startTime: event.startTime,
+    //     eventHour: eventHour,
+    //     eventMinute: eventMinute,
+    //     eventTime: eventTime,
+    //     isNaN: isNaN(eventTime)
+    // });
+    
+    // console.log(`🔍 Checking event: ${event.title} (Day: ${event.day}, Time: ${event.startTime}, EventTime: ${eventTime}, CurrentTime: ${currentTime})`);
+    // console.log(`   - Is today? ${event.day === scheduleCurrentDay} (event.day: ${event.day}, scheduleCurrentDay: ${scheduleCurrentDay})`);
+    // console.log(`   - Time not passed? ${eventTime > currentTime} (eventTime: ${eventTime}, currentTime: ${currentTime})`);
+    
+    // Nếu event trong ngày hiện tại và thời gian chưa qua
+    if (event.day === scheduleCurrentDay && eventTime > currentTime) {
+        nextEvent = event;
+        // console.log(`✅ Found next event today: ${event.title}`);
+        break;
+    }
+    // Nếu event trong ngày tương lai (trừ trường hợp Chủ nhật đặc biệt)
+    else if (event.day > scheduleCurrentDay && !(scheduleCurrentDay === 8 && event.day === 8)) {
+        nextEvent = event;
+        // console.log(`✅ Found next event future: ${event.title}`);
+        break;
+    }
+    // Xử lý trường hợp Chủ nhật: nếu hôm nay là Chủ nhật và có sự kiện Chủ nhật
+    else if (scheduleCurrentDay === 8 && event.day === 8) {
+        // Nếu thời gian chưa qua, chọn sự kiện này
+        if (eventTime > currentTime) {
             nextEvent = event;
+            // console.log(`✅ Found next event Sunday: ${event.title}`);
             break;
         }
-        // Nếu event trong ngày tương lai
-        else if (event.day > scheduleCurrentDay) {
-            nextEvent = event;
-            break;
-        }
-        
-        // Lưu event đầu tiên làm fallback
+        // Nếu thời gian đã qua, lưu làm fallback
         if (!earliestEvent) {
             earliestEvent = event;
+            // console.log(`📌 Set as Sunday fallback: ${event.title}`);
         }
     }
     
+    // Lưu event đầu tiên làm fallback
+    if (!earliestEvent) {
+        earliestEvent = event;
+        // console.log(`📌 Set as earliest event: ${event.title}`);
+    }
+}
     // Nếu không tìm thấy event sắp tới, lấy event đầu tiên trong tuần
     if (!nextEvent) {
         nextEvent = earliestEvent;
+        // console.log(`🔄 Using earliest event as fallback: ${earliestEvent?.title}`);
     }
+    
+    // console.log(`🎯 Final selected event: ${nextEvent?.title} (Day: ${nextEvent?.day}, Time: ${nextEvent?.startTime})`);
+    // console.log(`🎯 Event selection reason:`, {
+    //     isSunday: scheduleCurrentDay === 8,
+    //     selectedEventDay: nextEvent?.day,
+    //     selectedEventTime: nextEvent?.startTime,
+    //     currentTime: currentTime,
+    //     wasTimePassed: nextEvent ? (() => {
+    //         const [eventHour, eventMinute] = nextEvent.startTime.split(':').map(Number);
+    //         const eventTime = eventHour * 60 + eventMinute;
+    //         return eventTime <= currentTime;
+    //     })() : null
+    // });
     
     // Format ngày hiển thị
     const dayNames = ['', '', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ Nhật'];
@@ -272,7 +396,7 @@ function setupDatePlanner(plan) {
         };
         const herDataRef = db.collection('userInfo').doc('herData');
         await herDataRef.update({ dateNightPlan: newPlan });
-        alert('Đã gửi lời mời hẹn hò! ❤️');
+        showSuccess('Đã gửi lời mời hẹn hò! ❤️');
         location.reload();
     });
 
@@ -280,7 +404,7 @@ function setupDatePlanner(plan) {
         if (!confirm('Bạn có chắc muốn hủy kế hoạch hẹn hò này?')) return;
         const herDataRef = db.collection('userInfo').doc('herData');
         await herDataRef.update({ 'dateNightPlan.isActive': false });
-        alert('Đã hủy kế hoạch.');
+        showInfo('Đã hủy kế hoạch.');
         location.reload();
     });
 }

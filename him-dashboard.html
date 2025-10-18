@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="css/him-dashboard.css">
     <link rel="stylesheet" href="css/collapsible-cards.css">
     <link rel="stylesheet" href="css/sunset-theme.css">
+    <link rel="stylesheet" href="css/notifications.css">
     <link rel="icon" type="image/png" href="./images/logo.svg">
 </head>
 <body>
@@ -17,7 +18,7 @@
     <div class="dashboard-container">
         <a href="index.html" class="back-to-home-btn">↩ Quay lại Trang chủ</a>
         
-        <h1 class="dashboard-greeting">Bảng Điều Khiển Của Anh 👨‍💻</h1>
+        <h1 class="dashboard-greeting">Bảng Điều Khiển Của Anh </h1>
         <p class="dashboard-slogan">Nơi những điều bất ngờ bắt đầu.</p>
 
         <div class="collapsible-cards-container">
@@ -142,6 +143,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore-compat.js"></script>
     <script src="js/firebase-init.js"></script>
+    <script src="js/notifications.js"></script>
     <script src="js/realtime-sync.js"></script>
     <script src="js/profile.js"></script>
     <script src="js/collapsible-cards.js"></script>
@@ -189,11 +191,11 @@
                 }
 
                 // Thiết lập đồng bộ thời gian thực
-                console.log('🔄 Thiết lập đồng bộ thời gian thực...');
+                // console.log('🔄 Thiết lập đồng bộ thời gian thực...');
                 
                 // Lắng nghe thay đổi dữ liệu "em" (lịch tuần)
                 window.realtimeSync.listenToHerData((herData) => {
-                    console.log('📱 Cập nhật dữ liệu "em" theo thời gian thực');
+                    // console.log('📱 Cập nhật dữ liệu "em" theo thời gian thực');
                     // Cập nhật lịch tuần preview
                     if (typeof setupSchedulePreview === 'function') {
                         setupSchedulePreview(herData.schedule || []);
@@ -202,14 +204,14 @@
 
                 // Lắng nghe thay đổi dữ liệu "anh" (ý tưởng, ghi chú)
                 window.realtimeSync.listenToHisData((hisData) => {
-                    console.log('👨‍💻 Cập nhật dữ liệu "anh" theo thời gian thực');
+                    // console.log('👨‍💻 Cập nhật dữ liệu "anh" theo thời gian thực');
                     // Cập nhật ý tưởng preview
                     if (typeof setupIdeaWidget === 'function') {
                         setupIdeaWidget(hisData.ideaBank || []);
                     }
                 });
 
-                console.log('✅ Đồng bộ thời gian thực đã được thiết lập!');
+                // console.log('✅ Đồng bộ thời gian thực đã được thiết lập!');
 
                 // Floating Hearts sẽ được tự động khởi tạo bởi floating-hearts.js
 

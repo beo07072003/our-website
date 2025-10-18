@@ -29,6 +29,6 @@ window.addEventListener('DOMContentLoaded', async () => {
 
     } catch (error) {
         console.error("Lỗi khi tải dữ liệu:", error);
-        alert("Đã xảy ra lỗi khi kết nối.");
+        showError("Đã xảy ra lỗi khi kết nối.");
     }
 });

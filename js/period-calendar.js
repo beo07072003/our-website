@@ -36,7 +36,7 @@ document.getElementById('save-button')?.addEventListener('click', () => {
     if (!isNaN(correctedDate.getTime())) { // Checks if the date is valid
         saveNewDateToFirestore(correctedDate);
     } else {
-        alert("The selected date is invalid!");
+        showError("Ngày được chọn không hợp lệ!");
     }
 });
 
@@ -49,11 +49,11 @@ function saveNewDateToFirestore(newDate) {
         lastPeriodStartDate: firebase.firestore.Timestamp.fromDate(newDate)
     })
     .then(() => {
-        alert("Update successful!");
+        showSuccess("Cập nhật thành công!");
         location.reload(); // Reloads the page to show the changes
     })
     .catch((error) => {
         console.error("Error updating document: ", error);
-        alert("An error occurred. Please try again.");
+        showError("Đã xảy ra lỗi. Vui lòng thử lại.");
     });
 }

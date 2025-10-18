@@ -19,5 +19,6 @@ try {
     var db = firebase.firestore(); 
 } catch (e) {
     console.error('Error initializing Firebase:', e);
-    alert('Could not initialize Firebase. Please check your configuration.');
+    // Chỉ log error, không gọi showError vì notifications.js chưa được load
+    console.error('Không thể khởi tạo Firebase. Vui lòng kiểm tra cấu hình.');
 }

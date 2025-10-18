@@ -49,10 +49,10 @@ window.addEventListener('DOMContentLoaded', () => {
             window.realtimeSync.listenToIdeas((newIdeas) => {
                 ideas = newIdeas || [];
                 renderIdeas();
-                console.log('💡 Ý tưởng đã được cập nhật theo thời gian thực');
+                // console.log('💡 Ý tưởng đã được cập nhật theo thời gian thực');
             });
 
-            console.log('✅ Trang ý tưởng đã được thiết lập đồng bộ thời gian thực!');
+            // console.log('✅ Trang ý tưởng đã được thiết lập đồng bộ thời gian thực!');
         } catch (error) {
             console.error('❌ Lỗi khi thiết lập đồng bộ thời gian thực:', error);
         }
@@ -73,10 +73,10 @@ window.addEventListener('DOMContentLoaded', () => {
         
         if (success) {
             inputEl.value = '';
-            console.log('✅ Đã thêm ý tưởng mới:', newIdea);
+            // console.log('✅ Đã thêm ý tưởng mới:', newIdea);
         } else {
             console.error('❌ Lỗi khi thêm ý tưởng');
-            alert('Có lỗi xảy ra khi thêm ý tưởng!');
+            showError('Có lỗi xảy ra khi thêm ý tưởng!');
         }
     });
 
@@ -93,10 +93,10 @@ window.addEventListener('DOMContentLoaded', () => {
                 const success = await window.realtimeSync.updateIdeas(ideas);
                 
                 if (success) {
-                    console.log('✅ Đã xóa ý tưởng:', deletedIdea);
+                    // console.log('✅ Đã xóa ý tưởng:', deletedIdea);
                 } else {
                     console.error('❌ Lỗi khi xóa ý tưởng');
-                    alert('Có lỗi xảy ra khi xóa ý tưởng!');
+                    showError('Có lỗi xảy ra khi xóa ý tưởng!');
                     // Khôi phục lại ý tưởng nếu lỗi
                     ideas.splice(indexToDelete, 0, deletedIdea);
                 }
