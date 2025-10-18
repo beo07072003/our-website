@@ -72,7 +72,7 @@ function renderMobileSchedule(events, container) {
 // --- CÁC HÀM CHO GIAO DIỆN MÁY TÍNH ---
 function drawScheduleGrid(gridElement) {
     gridElement.innerHTML = '';
-    const days = ['', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'CN'];
+    const days = ['Time', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'CN'];
     const timeSlots = ['7-9h', '9-11h', '11-13h', '13-15h', '15-17h', '17-19h', '19-21h', '21-23h'];
     days.forEach(day => {
         const dayCell = document.createElement('div');
@@ -106,7 +106,12 @@ function renderEvents(events, gridElement) {
     events.forEach(event => {
         const eventBlock = document.createElement('div');
         eventBlock.className = 'event-block';
-        eventBlock.innerText = event.title;
+        
+        // Tạo HTML structure với title và time
+        eventBlock.innerHTML = `
+            <div class="event-title">${event.title}</div>
+            <div class="event-time">${event.startTime} - ${event.endTime}</div>
+        `;
         eventBlock.style.backgroundColor = event.color;
 
         const [startHour, startMinute] = event.startTime.split(':').map(Number);
@@ -124,7 +129,7 @@ function renderEvents(events, gridElement) {
         const leftPosition = timeColumnWidth + (dayIndex * dayColumnWidth);
         
         eventBlock.style.top = `${topPosition}px`;
-        eventBlock.style.height = `${eventHeight - 2}px`;
+        eventBlock.style.height = `${Math.max(eventHeight - 2, 32)}px`;
         eventBlock.style.left = `${leftPosition}px`;
         eventBlock.style.width = `${dayColumnWidth - 4}px`;
         
@@ -136,6 +141,7 @@ function renderEvents(events, gridElement) {
         gridElement.appendChild(eventBlock);
     });
 }
+
 
 // === HÀM XỬ LÝ CLICK ĐÃ GẮN "CAMERA GIÁM SÁT" CHI TIẾT ===
 function setupRobustGridClickListener(gridElement) {

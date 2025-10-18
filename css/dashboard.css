@@ -14,34 +14,48 @@
     box-shadow: 0 18px 45px rgba(0, 0, 0, 0.12);
     text-align: center;
     position: relative;
+    transform: translateZ(0); /* Force hardware acceleration */
+    will-change: scroll-position; /* Hint browser for optimization */
+    contain: layout style paint; /* Isolate rendering */
+    overscroll-behavior: contain; /* Prevent scroll bounce */
+    -webkit-overflow-scrolling: touch; /* iOS smooth scrolling */
 }
 
 .back-to-home-btn {
     position: absolute;
-    top: 20px; /* Giảm từ 25px */
-    right: 20px; /* Giảm từ 30px */
-    background-color: #ef476f;
+    top: 25px;
+    right: 450px;
+    background: linear-gradient(135deg, #ef476f, #d90429);
     color: white;
-    padding: 9px 18px; /* Giảm từ 10px 20px */
-    border-radius: 22px;
+    padding: 10px 20px;
+    border-radius: 25px;
     text-decoration: none;
     font-weight: bold;
-    font-size: 0.88em; /* Giảm từ 0.9em */
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-    z-index: 100; /* Đảm bảo nằm trên các element khác */
+    font-size: 0.9em;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
 }
 
+
 .back-to-home-btn:hover {
-    background-color: #d90429;
-    transform: translateY(-2px);
+    background: linear-gradient(135deg, #d90429, #ff6b6b);
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(239, 71, 111, 0.4);
+}
+
+
+.back-to-home-btn:active {
+    transform: translateY(0) scale(1.02);
+    transition: all 0.1s ease;
 }
 
 .dashboard-greeting {
     font-size: 3.2em; /* Giảm từ 3.8em */
     color: #d90429;
     margin-bottom: 8px;
-    margin-top: 10px; /* Khoảng cách với nút back */
+    margin-top: 15px; /* Khoảng cách với nút back */
     letter-spacing: 0.8px;
     text-shadow: 1px 1px 2px rgba(0,0,0,0.08);
     line-height: 1.2;
@@ -59,6 +73,8 @@
     gap: 22px; /* Giảm từ 25px */
     justify-content: center;
     align-items: stretch;
+    contain: layout style; /* Performance optimization */
+    transform: translateZ(0); /* Hardware acceleration */
 }
 
 .dashboard-card {
@@ -121,14 +137,111 @@
 }
 
 .card-button {
-    color: #ef476f;
+    background: linear-gradient(135deg, #ef476f, #ff6b6b);
+    color: white;
+    padding: 12px 25px;
+    border-radius: 25px;
     text-decoration: none;
     font-weight: bold;
-    transition: color 0.3s;
+    display: inline-block;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(239, 71, 111, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.card-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.6s ease;
+}
+
+.card-button:hover {
+    background: linear-gradient(135deg, #d90429, #ff6b6b);
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(239, 71, 111, 0.4);
+}
+
+.card-button:hover::before {
+    left: 100%;
+}
+
+.card-button:active {
+    transform: translateY(0) scale(1.02);
+    transition: all 0.1s ease;
+}
+
+/* Styling cho buttons và links */
+.view-all-link {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.view-all-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.6s ease;
 }
 
 .view-all-link:hover {
-    color: #d90429;
+    background: linear-gradient(135deg, #45a049, #3d8b40);
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+}
+
+.view-all-link:hover::before {
+    left: 100%;
+}
+
+.view-all-link:active {
+    transform: translateY(0) scale(1.02);
+    transition: all 0.1s ease;
+}
+
+/* Styling cho calendar buttons */
+.calendar-nav button {
+    background: linear-gradient(135deg, #9c27b0, #ce93d8);
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(156, 39, 176, 0.3);
+}
+
+.calendar-nav button:hover {
+    background: linear-gradient(135deg, #8e24aa, #ba68c8);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(156, 39, 176, 0.4);
+}
+
+.calendar-nav span {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 /* --- Đếm ngược cụ thể --- */
@@ -303,6 +416,9 @@
     .dashboard-container {
         padding: 18px 12px; /* Giảm mạnh padding */
         border-radius: 20px;
+        transform: translateZ(0); /* Enable hardware acceleration */
+        overscroll-behavior: contain; /* Prevent scroll bounce */
+        -webkit-overflow-scrolling: touch; /* iOS smooth scrolling */
     }
 
     .back-to-home-btn {
@@ -396,6 +512,7 @@
     .dashboard-container {
         padding: 15px 10px;
         border-radius: 18px;
+        transform: translateZ(0); /* Enable hardware acceleration */
     }
 
     .back-to-home-btn {
@@ -407,7 +524,7 @@
 
     .dashboard-greeting {
         font-size: 2em;
-        margin-top: 32px;
+        margin-block:45px 5px ;
     }
 
     .dashboard-slogan {
@@ -455,6 +572,7 @@
 @media (max-width: 375px) {
     .dashboard-container {
         padding: 12px 8px;
+        transform: translateZ(0); /* Enable hardware acceleration */
     }
 
     .dashboard-greeting {
@@ -487,5 +605,331 @@
 
     .card-countdown-timer span {
         padding: 2px 6px;
+    }
+}
+
+/* CSS chung cho tất cả cards trong her-dashboard */
+.dashboard-card {
+    position: relative;
+    overflow: hidden;
+    border: 2px solid;
+    backdrop-filter: blur(15px);
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), 
+                box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform, box-shadow;
+    transform: translateZ(0); /* Hardware acceleration */
+    backface-visibility: hidden; /* Prevent flickering */
+    contain: layout style paint; /* Isolate rendering */
+}
+
+.dashboard-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    animation: gentleFloat 6s ease-in-out infinite;
+    pointer-events: none;
+    will-change: transform;
+}
+
+.dashboard-card .card-icon {
+    animation: glow 2s ease-in-out infinite alternate;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    will-change: text-shadow;
+}
+
+.dashboard-card h3 {
+    font-weight: 900;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* CSS riêng cho từng card */
+.card-love-counter {
+    background: linear-gradient(135deg, #ff6b9d, #ffc3e0);
+    border-color: #ff69b4;
+}
+
+.card-love-counter .card-icon {
+    text-shadow: 0 0 20px rgba(255, 107, 157, 0.5);
+}
+
+.card-love-counter h3 {
+    background: linear-gradient(135deg, #ff1744, #ff6b9d);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.card-countdown {
+    background: linear-gradient(135deg, #a8e6cf, #dcedc1);
+    border-color: #81c784;
+}
+
+.card-countdown .card-icon {
+    text-shadow: 0 0 20px rgba(129, 199, 132, 0.5);
+}
+
+.card-countdown h3 {
+    background: linear-gradient(135deg, #4caf50, #81c784);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.card-weekly-schedule {
+    background: linear-gradient(135deg, #ffd3a5, #fd9853);
+    border-color: #ff9800;
+}
+
+.card-weekly-schedule .card-icon {
+    text-shadow: 0 0 20px rgba(255, 152, 0, 0.5);
+}
+
+.card-weekly-schedule h3 {
+    background: linear-gradient(135deg, #ff9800, #ffb74d);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.card-mailbox {
+    background: linear-gradient(135deg, #ffeef1, #fff0f3);
+    border-color: #ffc0cb;
+}
+
+.card-mailbox .card-icon {
+    text-shadow: 0 0 20px rgba(239, 71, 111, 0.5);
+}
+
+.card-mailbox h3 {
+    background: linear-gradient(135deg, #ef476f, #ff6b6b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.card-period-calendar {
+    background: linear-gradient(135deg, #e1bee7, #f8bbd9);
+    border-color: #ce93d8;
+}
+
+.card-period-calendar .card-icon {
+    text-shadow: 0 0 20px rgba(206, 147, 216, 0.5);
+}
+
+.card-period-calendar h3 {
+    background: linear-gradient(135deg, #9c27b0, #ce93d8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Styling cho các elements bên trong cards */
+.card-big-number {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 20px;
+    margin: 15px 0;
+    font-size: 2.5em;
+    font-weight: bold;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card-countdown-timer {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 20px;
+    margin: 15px 0;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.weekly-events-list {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 15px;
+    margin: 15px 0;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.event-item {
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 10px;
+    padding: 10px;
+    margin: 8px 0;
+    border-left: 3px solid;
+    transition: all 0.3s ease;
+}
+
+.event-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.calendar-nav {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 15px;
+    margin: 15px 0;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.calendar-grid-header,
+.calendar-grid-body {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 15px;
+    margin: 15px 0;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Preview hộp thư */
+.mailbox-preview {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 15px;
+    margin: 15px 0;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    min-height: 80px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.empty-mailbox-preview {
+    text-align: center;
+    color: #999;
+    padding: 20px;
+}
+
+.empty-mailbox-preview .empty-icon {
+    font-size: 2em;
+    margin-bottom: 10px;
+    opacity: 0.5;
+}
+
+.latest-mail-preview {
+    animation: fadeInScale 0.6s ease-out;
+}
+
+.mail-preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 0.9em;
+}
+
+.mail-preview-header .sender {
+    color: #ef476f;
+    font-weight: bold;
+}
+
+.mail-preview-header .time {
+    color: #999;
+    font-size: 0.8em;
+}
+
+.mail-preview-content {
+    color: #333;
+    line-height: 1.4;
+    margin-bottom: 10px;
+    font-size: 0.95em;
+}
+
+.mail-count {
+    text-align: right;
+    color: #ef476f;
+    font-size: 0.8em;
+    font-weight: bold;
+    font-style: italic;
+}
+
+/* Animations */
+@keyframes gentleFloat {
+    0%, 100% {
+        transform: translate3d(0, 0px, 0) rotate(0deg);
+    }
+    50% {
+        transform: translate3d(0, -10px, 0) rotate(180deg);
+    }
+}
+
+@keyframes glow {
+    from {
+        text-shadow: 0 0 20px rgba(239, 71, 111, 0.5);
+    }
+    to {
+        text-shadow: 0 0 30px rgba(239, 71, 111, 0.8), 0 0 40px rgba(239, 71, 111, 0.3);
+    }
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale3d(0.9, 0.9, 1);
+    }
+    to {
+        opacity: 1;
+        transform: scale3d(1, 1, 1);
+    }
+}
+
+/* Hover effects cho tất cả cards */
+.dashboard-card:hover {
+    transform: translate3d(0, -5px, 0) scale(1.02);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.dashboard-card:hover::before {
+    animation-duration: 3s;
+}
+
+.dashboard-card:hover .card-icon {
+    animation-duration: 1s;
+}
+
+/* Staggered animations cho cards */
+.dashboard-card:nth-child(1) {
+    animation: slideInUp 0.6s ease-out 0.1s both;
+}
+
+.dashboard-card:nth-child(2) {
+    animation: slideInUp 0.6s ease-out 0.2s both;
+}
+
+.dashboard-card:nth-child(3) {
+    animation: slideInUp 0.6s ease-out 0.3s both;
+}
+
+.dashboard-card:nth-child(4) {
+    animation: slideInUp 0.6s ease-out 0.4s both;
+}
+
+.dashboard-card:nth-child(5) {
+    animation: slideInUp 0.6s ease-out 0.5s both;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 30px, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
     }
 }

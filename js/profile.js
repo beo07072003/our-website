@@ -81,25 +81,55 @@ function setupNoteWidget() {
     const noteInput = document.getElementById('note-input');
     if(!saveBtn) return;
 
-    saveBtn.addEventListener('click', async () => {
-        const text = noteInput.value.trim();
-        if (!text) {
-            alert('Vui lòng viết gì đó!');
-            return;
-        }
-
-        try {
-            await db.collection('loveNotes').add({
-                text: text,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
-            alert('Đã gửi lời nhắn vào hộp thư! ❤️');
-            noteInput.value = '';
-        } catch (error) {
-            console.error("Lỗi khi lưu lời nhắn:", error);
-            alert("Đã có lỗi xảy ra.");
-        }
-    });
+        saveBtn.addEventListener('click', async () => {
+            const noteText = noteInput.value.trim();
+            if (!noteText) {
+                alert('Vui lòng nhập nội dung thư!');
+                return;
+            }
+            
+            // Disable button để tránh double click
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'Đang gửi...';
+            
+            try {
+                const hisDataRef = db.collection('userInfo').doc('hisData');
+                
+                // Lấy dữ liệu hiện tại
+                const hisDoc = await hisDataRef.get();
+                const currentData = hisDoc.exists ? hisDoc.data() : {};
+                const existingNotes = currentData.notesForHer || [];
+                
+                // Tạo thư mới
+                const newNote = {
+                    message: noteText,
+                    timestamp: new Date().toISOString(),
+                    id: Date.now().toString()
+                };
+                
+                // Thêm thư mới vào danh sách
+                const updatedNotes = [newNote, ...existingNotes];
+                
+                // Cập nhật lên Firebase
+                await hisDataRef.update({
+                    notesForHer: updatedNotes,
+                    lastUpdated: new Date().toISOString()
+                });
+                
+                noteInput.value = '';
+                alert('Đã gửi thư thành công! 💌 Em sẽ nhận được thư ngay lập tức!');
+                
+                console.log('✅ Đã gửi thư mới:', newNote);
+                
+            } catch (error) {
+                console.error("Lỗi khi gửi thư:", error);
+                alert("Đã có lỗi xảy ra khi gửi thư.");
+            } finally {
+                // Re-enable button
+                saveBtn.disabled = false;
+                saveBtn.textContent = 'Gửi vào hộp thư';
+            }
+        });
 }
 
 /**
@@ -137,12 +167,60 @@ function setupSchedulePreview(schedule) {
         return;
     }
     
-    // Tìm sự kiện sắp tới (logic đơn giản: lấy sự kiện đầu tiên trong danh sách)
-    const nextEvent = schedule[0]; 
+    // Tìm sự kiện sắp tới dựa trên timeline thực tế
+    const now = new Date();
+    const currentDay = now.getDay(); // 0 = Chủ nhật, 1 = Thứ 2, ..., 6 = Thứ 7
+    const currentHour = now.getHours();
+    const currentMinute = now.getMinutes();
+    const currentTime = currentHour * 60 + currentMinute;
+    
+    // Convert currentDay to match schedule format (2 = Thứ 2, 3 = Thứ 3, ..., 8 = Chủ nhật)
+    const scheduleCurrentDay = currentDay === 0 ? 8 : currentDay + 1;
+    
+    let nextEvent = null;
+    let earliestEvent = null;
+    
+    // Sắp xếp events theo timeline
+    const sortedEvents = schedule.sort((a, b) => {
+        if (a.day !== b.day) return a.day - b.day;
+        return a.startTime.localeCompare(b.startTime);
+    });
+    
+    // Tìm sự kiện sắp tới
+    for (const event of sortedEvents) {
+        const [eventHour, eventMinute] = event.startTime.split(':').map(Number);
+        const eventTime = eventHour * 60 + eventMinute;
+        
+        // Nếu event trong ngày hiện tại và thời gian chưa qua
+        if (event.day === scheduleCurrentDay && eventTime > currentTime) {
+            nextEvent = event;
+            break;
+        }
+        // Nếu event trong ngày tương lai
+        else if (event.day > scheduleCurrentDay) {
+            nextEvent = event;
+            break;
+        }
+        
+        // Lưu event đầu tiên làm fallback
+        if (!earliestEvent) {
+            earliestEvent = event;
+        }
+    }
+    
+    // Nếu không tìm thấy event sắp tới, lấy event đầu tiên trong tuần
+    if (!nextEvent) {
+        nextEvent = earliestEvent;
+    }
+    
+    // Format ngày hiển thị
+    const dayNames = ['', '', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ Nhật'];
+    const dayName = dayNames[nextEvent.day] || `Ngày ${nextEvent.day}`;
+    
     previewEl.innerHTML = `
         <p>Sự kiện tiếp theo</p>
         <div class="event-title">${nextEvent.title}</div>
-        <div class="event-time">${nextEvent.startTime}</div>
+        <div class="event-time">${dayName} - ${nextEvent.startTime}</div>
     `;
 }
 

@@ -3,7 +3,6 @@ window.addEventListener('DOMContentLoaded', () => {
     if (!document.getElementById('full-idea-list')) return;
     if (typeof db === 'undefined') return;
 
-    const hisDataRef = db.collection('userInfo').doc('hisData');
     const ideaListEl = document.getElementById('full-idea-list');
     const addBtn = document.getElementById('add-idea-btn-full');
     const inputEl = document.getElementById('idea-input-full');
@@ -27,24 +26,58 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    // Tải dữ liệu ban đầu
-    hisDataRef.get().then(doc => {
-        if (doc.exists && doc.data().ideaBank) {
-            ideas = doc.data().ideaBank;
-            renderIdeas();
+    // Đợi realtime sync khởi tạo
+    const waitForRealtimeSync = () => {
+        return new Promise((resolve) => {
+            const check = () => {
+                if (window.realtimeSync && window.realtimeSync.isInitialized) {
+                    resolve();
+                } else {
+                    setTimeout(check, 100);
+                }
+            };
+            check();
+        });
+    };
+
+    // Khởi tạo với đồng bộ thời gian thực
+    const initIdeas = async () => {
+        try {
+            await waitForRealtimeSync();
+            
+            // Lắng nghe thay đổi ý tưởng theo thời gian thực
+            window.realtimeSync.listenToIdeas((newIdeas) => {
+                ideas = newIdeas || [];
+                renderIdeas();
+                console.log('💡 Ý tưởng đã được cập nhật theo thời gian thực');
+            });
+
+            console.log('✅ Trang ý tưởng đã được thiết lập đồng bộ thời gian thực!');
+        } catch (error) {
+            console.error('❌ Lỗi khi thiết lập đồng bộ thời gian thực:', error);
         }
-    });
+    };
+
+    initIdeas();
 
     // Xử lý nút Thêm
     addBtn.addEventListener('click', async () => {
         const newIdea = inputEl.value.trim();
         if (!newIdea) return;
         
-        ideas.push(newIdea); // Thêm vào mảng tạm
-        await hisDataRef.update({ ideaBank: ideas }); // Cập nhật lên DB
+        // Thêm vào mảng tạm
+        ideas.push(newIdea);
         
-        inputEl.value = '';
-        renderIdeas(); // Vẽ lại danh sách
+        // Cập nhật lên Firebase với realtime sync
+        const success = await window.realtimeSync.updateIdeas(ideas);
+        
+        if (success) {
+            inputEl.value = '';
+            console.log('✅ Đã thêm ý tưởng mới:', newIdea);
+        } else {
+            console.error('❌ Lỗi khi thêm ý tưởng');
+            alert('Có lỗi xảy ra khi thêm ý tưởng!');
+        }
     });
 
     // Xử lý nút Xóa (dùng event delegation)
@@ -52,9 +85,21 @@ window.addEventListener('DOMContentLoaded', () => {
         if (e.target.classList.contains('delete-idea-btn')) {
             const indexToDelete = parseInt(e.target.dataset.index);
             if (confirm(`Bạn có chắc muốn xóa ý tưởng: "${ideas[indexToDelete]}"?`)) {
-                ideas.splice(indexToDelete, 1); // Xóa khỏi mảng tạm
-                await hisDataRef.update({ ideaBank: ideas }); // Cập nhật lên DB
-                renderIdeas(); // Vẽ lại danh sách
+                // Xóa khỏi mảng tạm
+                const deletedIdea = ideas[indexToDelete];
+                ideas.splice(indexToDelete, 1);
+                
+                // Cập nhật lên Firebase với realtime sync
+                const success = await window.realtimeSync.updateIdeas(ideas);
+                
+                if (success) {
+                    console.log('✅ Đã xóa ý tưởng:', deletedIdea);
+                } else {
+                    console.error('❌ Lỗi khi xóa ý tưởng');
+                    alert('Có lỗi xảy ra khi xóa ý tưởng!');
+                    // Khôi phục lại ý tưởng nếu lỗi
+                    ideas.splice(indexToDelete, 0, deletedIdea);
+                }
             }
         }
     });

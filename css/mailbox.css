@@ -1,0 +1,330 @@
+/* CSS cho trang hộp thư */
+:root {
+    --primary-color: #ef476f;
+    --primary-dark: #d90429;
+    --secondary-color: #ff6b6b;
+    --accent-color: #ffc0cb;
+    --text-color: #333;
+    --light-bg: rgba(255, 255, 255, 0.9);
+    --card-bg: rgba(255, 255, 255, 0.95);
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(135deg, #ffeef1, #fff0f3, #ffe8ed);
+    font-family: "Tilt Neon", sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+.mailbox-container {
+    width: 95%;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 30px;
+    background: var(--card-bg);
+    border-radius: 25px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+    animation: slideInUp 0.8s ease-out;
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><defs><pattern id="hearts" x="0" y="0" width="50" height="50" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="8" fill="%23ffc0cb" opacity="0.1"/><circle cx="35" cy="15" r="6" fill="%23ffb6c1" opacity="0.08"/></pattern></defs><rect width="200" height="200" fill="url(%23hearts)"/></svg>');
+    background-size: 200px 200px;
+    background-repeat: repeat;
+    background-blend-mode: overlay;
+}
+
+/* Back button */
+.back-to-dashboard-btn {
+    position: absolute;
+    top: 25px;
+    left: 30px;
+    background: linear-gradient(135deg, #ef476f, #d90429);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.9em;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.back-to-dashboard-btn:hover {
+    background: linear-gradient(135deg, #d90429, #ff6b6b);
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(239, 71, 111, 0.4);
+}
+
+.back-to-dashboard-btn:active {
+    transform: translateY(0) scale(1.02);
+    transition: all 0.1s ease;
+}
+
+/* Header */
+.mailbox-header {
+    text-align: center;
+    margin-bottom: 30px;
+    margin-top: 20px;
+}
+
+.mailbox-header h1 {
+    font-size: 2.5em;
+    color: var(--primary-color);
+    margin: 0 0 10px 0;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: fadeInScale 0.8s ease-out 0.2s both;
+}
+
+.mailbox-subtitle {
+    font-size: 1.1em;
+    color: #666;
+    margin: 0;
+    opacity: 0.8;
+    animation: fadeInScale 0.8s ease-out 0.4s both;
+}
+
+/* Mailbox content */
+.mailbox-content {
+    min-height: 400px;
+    margin-bottom: 20px;
+}
+
+/* Loading state */
+.loading-message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    color: #666;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Empty state */
+.empty-mailbox {
+    text-align: center;
+    padding: 60px 20px;
+    color: #666;
+}
+
+.empty-mailbox .empty-icon {
+    font-size: 4em;
+    margin-bottom: 20px;
+    opacity: 0.5;
+}
+
+.empty-mailbox h3 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: #999;
+}
+
+.empty-mailbox p {
+    font-size: 1.1em;
+    opacity: 0.7;
+}
+
+/* Mail items */
+.mail-item {
+    background: var(--light-bg);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 15px;
+    border-left: 4px solid var(--primary-color);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    animation: fadeInScale 0.6s ease-out both;
+}
+
+.mail-item:nth-child(1) { animation-delay: 0.1s; }
+.mail-item:nth-child(2) { animation-delay: 0.2s; }
+.mail-item:nth-child(3) { animation-delay: 0.3s; }
+.mail-item:nth-child(4) { animation-delay: 0.4s; }
+.mail-item:nth-child(5) { animation-delay: 0.5s; }
+
+.mail-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+}
+
+.mail-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    border-left-color: var(--secondary-color);
+}
+
+.mail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.mail-sender {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.sender-icon {
+    width: 35px;
+    height: 35px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2em;
+}
+
+.mail-time {
+    font-size: 0.9em;
+    color: #999;
+    background: rgba(0, 0, 0, 0.05);
+    padding: 5px 10px;
+    border-radius: 15px;
+}
+
+.mail-content {
+    font-size: 1.1em;
+    line-height: 1.6;
+    color: var(--text-color);
+    background: rgba(255, 255, 255, 0.5);
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid rgba(239, 71, 111, 0.1);
+}
+
+/* Footer */
+.mailbox-footer {
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.refresh-btn {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 25px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(239, 71, 111, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.refresh-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.6s ease;
+}
+
+.refresh-btn:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(239, 71, 111, 0.4);
+}
+
+.refresh-btn:hover::before {
+    left: 100%;
+}
+
+.refresh-btn:active {
+    transform: translateY(0) scale(1.02);
+    transition: all 0.1s ease;
+}
+
+/* Animations */
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .mailbox-container {
+        width: 98%;
+        padding: 20px;
+        margin: 10px auto;
+    }
+    
+    .mailbox-header h1 {
+        font-size: 2em;
+    }
+    
+    .mail-item {
+        padding: 15px;
+    }
+    
+    .mail-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .mail-time {
+        align-self: flex-end;
+    }
+}

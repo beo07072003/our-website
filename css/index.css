@@ -3,6 +3,91 @@ body {
     overflow: hidden; /* Tránh scrollbar nếu có hiệu ứng */
 }
 
+/* === KEYFRAMES ANIMATIONS === */
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200px 0;
+    }
+    100% {
+        background-position: calc(200px + 100%) 0;
+    }
+}
+
+@keyframes gentleFloat {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-5px) rotate(1deg);
+    }
+}
+
+@keyframes glow {
+    0%, 100% {
+        box-shadow: 0 0 5px rgba(239, 71, 111, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(239, 71, 111, 0.6);
+    }
+}
+
+@keyframes border-pulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.015); } /* Phồng lên một chút */
+}
+
+@keyframes border-pulse {
+    0% {
+        box-shadow: 0 0 25px rgba(239, 71, 111, 0.3);
+    }
+    100% {
+        box-shadow: 0 0 35px rgba(239, 71, 111, 0.5);
+    }
+}
+
 
 .main-selection-container {
     text-align: center;
@@ -24,6 +109,13 @@ body {
     
     position: relative; /* Quan trọng để định vị viền ruy băng */
     z-index: 2; /* Đảm bảo nội dung nằm trên hiệu ứng nền */
+    animation: slideInUp 0.8s ease-out;
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><defs><pattern id="corgi" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="20" cy="20" r="8" fill="%23ffb6c1" opacity="0.1"/><circle cx="80" cy="30" r="6" fill="%23ffc0cb" opacity="0.08"/><circle cx="60" cy="70" r="10" fill="%23ffa0b4" opacity="0.06"/><circle cx="30" cy="80" r="7" fill="%23ffb6c1" opacity="0.09"/><circle cx="70" cy="90" r="5" fill="%23ffc0cb" opacity="0.07"/></pattern></defs><rect width="200" height="200" fill="url(%23corgi)"/></svg>');
+    background-size: 200px 200px;
+    background-repeat: repeat;
+    background-position: 0 0;
+    background-blend-mode: overlay;
+    overflow: hidden;
 }
 
 /* --- Hiệu ứng Viền Ruy Băng Mềm Mại --- */
@@ -31,7 +123,6 @@ body {
     content: '';
     
     position: absolute;
-
     z-index: -1; /* Nằm dưới container chính */
     
     /* Kích thước lớn hơn một chút để tạo viền */
@@ -40,13 +131,28 @@ body {
     right: -8px;
     bottom: -8px;
     
-    
     border-radius: 30px; /* Bo tròn mềm hơn container một chút */
     background: linear-gradient(45deg, #ffe0e6, #ffc0cb);
     box-shadow: 0 0 25px rgba(239, 71, 111, 0.3);
     
     /* Hiệu ứng "thở" nhẹ nhàng cho viền */
-    animation: border-pulse 0.5s infinite alternate ease-in-out;
+    animation: border-pulse 1s infinite alternate ease-in-out;
+}
+
+.main-selection-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, 
+        rgba(239, 71, 111, 0.05) 0%, 
+        transparent 50%, 
+        rgba(255, 182, 193, 0.05) 100%);
+    border-radius: 25px;
+    pointer-events: none;
+    z-index: 1;
     
 }
 @keyframes heart-pulse {
@@ -55,32 +161,33 @@ body {
     100% { transform: scale(1) rotate(-45deg); }
 }
 
-@keyframes border-pulse {
-    from { transform: scale(1); }
-    to { transform: scale(1.015); } /* Phồng lên một chút */
-}
-
-/* Thêm chi tiết góc trang trí */
-.main-selection-container::after {
-    content: '💌'; /* Dùng icon lá thư dễ thương */
-    position: absolute;
-    top: -20px;
-    left: 20px;
-    font-size: 40px;
-    transform: rotate(-20deg);
-    opacity: 0.7;
-
-    
-}
-
 
 
 .welcome-heading {
     font-size: 3.5em;
-    color: #d90429;
+    background: linear-gradient(45deg, #d90429, #ef476f);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
     margin-bottom: 45px;
     letter-spacing: 1px;
     text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+    animation: slideInUp 0.8s ease-out 0.2s both;
+    position: relative;
+}
+
+.welcome-heading::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(45deg, #ef476f, #d90429);
+    border-radius: 2px;
+    animation: slideInUp 0.8s ease-out 0.4s both;
 }
 
 .profile-selection {
@@ -89,6 +196,7 @@ body {
     align-items: center;
     gap: 50px;
     flex-wrap: wrap;
+    animation: fadeInScale 0.8s ease-out 0.6s both;
 }
 
 .profile-card {
@@ -97,13 +205,43 @@ body {
     align-items: center;
     text-decoration: none;
     color: #333;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     padding: 20px;
     border-radius: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+    animation: fadeInScale 0.5s ease-out 0.8s both;
+}
+
+.profile-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: left 0.6s ease;
 }
 
 .profile-card:hover {
     transform: translateY(-8px) scale(1.05);
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 25px rgba(239, 71, 111, 0.2);
+    border-color: rgba(239, 71, 111, 0.3);
+}
+
+.profile-card:hover::before {
+    left: 100%;
+}
+
+.profile-card:active {
+    transform: translateY(-4px) scale(1.02);
+    transition: all 0.1s ease;
     box-shadow: 0 15px 30px rgba(239, 71, 111, 0.3);
 }
 
@@ -115,18 +253,29 @@ body {
     border: 5px solid #ef476f;
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     margin-bottom: 15px;
-    transition: border-color 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    z-index: 2;
 }
 
 .profile-card:hover img {
     border-color: #d90429;
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(239, 71, 111, 0.3);
 }
 
 .profile-name {
     font-size: 1.8em;
     font-weight: bold;
-    color: #d90429;
+    background: linear-gradient(45deg, #d90429, #ef476f);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
     text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    position: relative;
+    z-index: 2;
+    animation: slideInUp 0.6s ease-out 1s both;
 }
 
 .animated-heart-wrapper {
@@ -136,6 +285,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    animation: fadeInScale 0.8s ease-out 1.2s both;
+    margin: 20px 0;
 }
 
 .heart {
@@ -162,35 +313,41 @@ body {
 
 
 
-/* --- MEDIA QUERIES cho trang Index --- */
 /* --- MEDIA QUERIES cho trang Index (Đã tối ưu cho iPhone) --- */
 @media (max-width: 768px) {
     .main-selection-container {
         padding: 30px 20px;
+        animation: slideInUp 0.8s ease-out;
     }
     .welcome-heading {
         font-size: 2.4em; /* Giảm một chút cho gọn */
         margin-bottom: 30px;
+        animation: slideInUp 0.8s ease-out 0.2s both;
     }
     .profile-selection {
         flex-direction: column; /* Vẫn giữ chiều dọc */
         gap: 20px; /* Giảm khoảng cách để các mục gần nhau hơn */
+        animation: fadeInScale 0.8s ease-out 0.6s both;
     }
     .profile-card {
         padding: 10px; /* Giảm padding của card */
+        animation: fadeInScale 0.5s ease-out 0.8s both;
     }
     .profile-card img {
         width: 130px; /* Kích thước hợp lý hơn */
         height: 130px;
         border-width: 4px;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .profile-name {
         font-size: 1.5em;
+        animation: slideInUp 0.6s ease-out 1s both;
     }
     .animated-heart-wrapper {
         width: 70px;
         height: 70px;
         margin: 0; /* Bỏ margin thừa nếu có */
+        animation: fadeInScale 0.8s ease-out 1.2s both;
     }
     .heart, .heart::before, .heart::after {
         width: 40px; /* Làm trái tim nhỏ lại một chút */
@@ -208,16 +365,26 @@ body {
     .welcome-heading {
         font-size: 2em;
         margin-bottom: 25px;
+        animation: slideInUp 0.8s ease-out 0.2s both;
     }
     .profile-selection {
         gap: 15px; /* Giảm khoảng cách hơn nữa */
+        animation: fadeInScale 0.8s ease-out 0.6s both;
+    }
+    .profile-card {
+        animation: fadeInScale 0.5s ease-out 0.8s both;
     }
     .profile-card img {
         width: 110px; /* Nhỏ hơn nữa trên màn hình hẹp */
         height: 110px;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .profile-name {
         font-size: 1.3em;
+        animation: slideInUp 0.6s ease-out 1s both;
+    }
+    .animated-heart-wrapper {
+        animation: fadeInScale 0.8s ease-out 1.2s both;
     }
 }
 

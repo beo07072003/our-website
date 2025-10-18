@@ -1,61 +1,356 @@
 /* --- CSS CHO TRANG QUẢN LÝ Ý TƯỞNG --- */
+@import url('https://fonts.googleapis.com/css2?family=Exo:ital,wght@0,100..900;1,100..900&family=Tilt+Neon&display=swap');
+
+:root {
+    --primary-color: #ef476f;
+    --primary-dark: #d90429;
+    --card-bg: rgba(255, 255, 255, 0.85);
+    --text-color: #333;
+    --subtle-text: #666;
+}
+
+/* === KEYFRAMES ANIMATIONS === */
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200px 0;
+    }
+    100% {
+        background-position: calc(200px + 100%) 0;
+    }
+}
+
+@keyframes gentleFloat {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-5px) rotate(1deg);
+    }
+}
+
+body {
+    font-family: "Tilt Neon", sans-serif;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 10px;
+    background-color: #fde2e4;
+    background-image: url('../images/background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
 .ideas-container {
     width: 95%;
     max-width: 800px;
     padding: 40px;
-    background: var(--card-bg, rgba(255, 255, 255, 0.9));
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    background: var(--card-bg);
+    border-radius: 25px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+    animation: slideInUp 0.8s ease-out;
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><defs><pattern id="corgi" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="20" cy="20" r="8" fill="%23ffb6c1" opacity="0.1"/><circle cx="80" cy="30" r="6" fill="%23ffc0cb" opacity="0.08"/><circle cx="60" cy="70" r="10" fill="%23ffa0b4" opacity="0.06"/><circle cx="30" cy="80" r="7" fill="%23ffb6c1" opacity="0.09"/><circle cx="70" cy="90" r="5" fill="%23ffc0cb" opacity="0.07"/></pattern></defs><rect width="200" height="200" fill="url(%23corgi)"/></svg>');
+    background-size: 200px 200px;
+    background-repeat: repeat;
+    background-position: 0 0;
+    background-blend-mode: overlay;
+    overflow: hidden;
+}
+
+.ideas-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, 
+        rgba(239, 71, 111, 0.05) 0%, 
+        transparent 50%, 
+        rgba(255, 182, 193, 0.05) 100%);
+    border-radius: 25px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.back-to-dashboard-btn {
+    position: absolute;
+    top: -10px;
+    
+    background: linear-gradient(135deg, #ef476f, #d90429);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.9em;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+
+.back-to-dashboard-btn:hover {
+    background: linear-gradient(135deg, #d90429, #ff6b6b);
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(239, 71, 111, 0.4);
+}
+
+
+.back-to-dashboard-btn:active {
+    transform: translateY(0) scale(1.02);
+    transition: all 0.1s ease;
 }
 
 .add-idea-form {
     display: flex;
     gap: 15px;
     margin: 20px 0 30px 0;
+    animation: fadeInScale 0.8s ease-out 0.2s both;
+    position: relative;
+    z-index: 2;
 }
 
 #idea-input-full {
     flex-grow: 1;
-    padding: 15px;
-    border: 2px solid #eee;
-    border-radius: 10px;
+    padding: 15px 20px;
+    border: 2px solid rgba(239, 71, 111, 0.2);
+    border-radius: 15px;
     font-size: 1.1em;
+    font-family: "Tilt Neon", sans-serif;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+#idea-input-full:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 6px 25px rgba(239, 71, 111, 0.2);
+    transform: translateY(-2px);
+}
+
+#idea-input-full::placeholder {
+    color: var(--subtle-text);
+    opacity: 0.7;
 }
 
 #add-idea-btn-full {
     padding: 0 30px;
     border: none;
-    background-color: var(--primary-color, #ef476f);
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
     color: white;
     font-weight: bold;
     font-size: 1em;
-    border-radius: 10px;
+    border-radius: 15px;
     cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(239, 71, 111, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+#add-idea-btn-full::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: left 0.6s ease;
+}
+
+#add-idea-btn-full:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(239, 71, 111, 0.4);
+}
+
+#add-idea-btn-full:hover::before {
+    left: 100%;
+}
+
+#add-idea-btn-full:active {
+    transform: translateY(0) scale(1.02);
+    transition: all 0.1s ease;
 }
 
 .full-idea-list .idea-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #fff;
-    padding: 15px;
-    border-radius: 10px;
-    margin-bottom: 10px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    background: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    animation: slideInUp 0.6s ease-out;
+}
+
+.full-idea-list .idea-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(239, 71, 111, 0.1), transparent);
+    transition: left 0.6s ease;
+}
+
+.full-idea-list .idea-item:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    border-color: rgba(239, 71, 111, 0.3);
+}
+
+.full-idea-list .idea-item:hover::before {
+    left: 100%;
 }
 
 .full-idea-list .idea-text {
-    color: #333;
+    color: var(--text-color);
+    font-size: 1.1em;
+    line-height: 1.4;
+    flex-grow: 1;
+    margin-right: 15px;
+    position: relative;
+    z-index: 2;
 }
 
 .full-idea-list .delete-idea-btn {
-    background: #ffcdd2;
+    background: linear-gradient(135deg, #ffcdd2, #ffb3ba);
     color: #c62828;
     border: none;
     border-radius: 50%;
-    width: 30px;
-    height: 30px;
+    width: 35px;
+    height: 35px;
     font-weight: bold;
     cursor: pointer;
     flex-shrink: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 8px rgba(198, 40, 40, 0.2);
+    position: relative;
+    z-index: 2;
+}
+
+.full-idea-list .delete-idea-btn:hover {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 4px 15px rgba(198, 40, 40, 0.3);
+    background: linear-gradient(135deg, #ffb3ba, #ff9999);
+}
+
+.full-idea-list .delete-idea-btn:active {
+    transform: scale(0.95);
+    transition: all 0.1s ease;
+}
+
+/* === RESPONSIVE DESIGN === */
+@media (max-width: 768px) {
+    .ideas-container {
+        width: 95%;
+        max-width: 500px;
+        padding: 30px 20px;
+    }
+    
+    .add-idea-form {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    #idea-input-full {
+        padding: 12px 15px;
+        font-size: 1em;
+    }
+    
+    #add-idea-btn-full {
+        padding: 12px 20px;
+        font-size: 0.9em;
+    }
+    
+    .full-idea-list .idea-item {
+        padding: 15px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .full-idea-list .idea-text {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+    
+    .full-idea-list .delete-idea-btn {
+        align-self: flex-end;
+    }
+}
+
+@media (max-width: 480px) {
+    .ideas-container {
+        padding: 20px 15px;
+    }
+    
+    .full-idea-list .idea-item {
+        padding: 12px;
+    }
+    
+    .full-idea-list .idea-text {
+        font-size: 1em;
+    }
 }

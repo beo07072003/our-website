@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="schedule-container">
-        <a href="her-dashboard.html" class="back-to-dashboard-btn">↩ Quay lại</a>
+        <a href="#" id="back-to-dashboard-btn" class="back-to-dashboard-btn">↩ Quay lại</a>
         <h1>Lịch Tuần</h1>
         <div id="schedule-grid" class="schedule-grid">
             </div>
@@ -48,6 +48,9 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore-compat.js"></script>
 
     <script src="js/firebase-init.js"></script>
+    <script src="js/realtime-sync.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/smooth-scroll.js"></script>
     <script src="js/schedule.js"></script>
 
     <script>
@@ -58,7 +61,23 @@
                 return;
             }
 
+            // Đợi realtime sync khởi tạo
+            const waitForRealtimeSync = () => {
+                return new Promise((resolve) => {
+                    const check = () => {
+                        if (window.realtimeSync && window.realtimeSync.isInitialized) {
+                            resolve();
+                        } else {
+                            setTimeout(check, 100);
+                        }
+                    };
+                    check();
+                });
+            };
+
             try {
+                await waitForRealtimeSync();
+                
                 // Load her data
                 const herDataRef = db.collection('userInfo').doc('herData');
                 const herDoc = await herDataRef.get();
@@ -67,8 +86,23 @@
                 // Run schedule page functions
                 runSchedulePage(herData);
 
+                // Thiết lập đồng bộ thời gian thực cho lịch tuần
+                console.log('🔄 Thiết lập đồng bộ thời gian thực cho lịch tuần...');
+                
+                window.realtimeSync.listenToSchedule((schedule) => {
+                    console.log('📅 Lịch tuần đã được cập nhật theo thời gian thực');
+                    
+                    // Cập nhật lại trang schedule với dữ liệu mới
+                    if (typeof runSchedulePage === 'function') {
+                        const updatedHerData = { ...herData, schedule: schedule };
+                        runSchedulePage(updatedHerData);
+                    }
+                });
+
+                console.log('✅ Đồng bộ thời gian thực cho lịch tuần đã được thiết lập!');
+
             } catch (error) {
-                console.error("Lỗi khi tải dữ liệu:", error);
+                console.error("Lỗi khi thiết lập đồng bộ thời gian thực:", error);
                 alert("Đã xảy ra lỗi khi kết nối.");
             }
         });

@@ -38,7 +38,7 @@
                 <div id="next-event-preview">
                     <p>Đang tải lịch trình...</p>
                 </div>
-                <a href="schedule.html" class="card-button">Quản lý Lịch Tuần</a>
+                <a href="schedule.html?from=him" class="card-button">Quản lý Lịch Tuần</a>
             </div>
         </div>
     </div>
@@ -46,18 +46,35 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore-compat.js"></script>
     <script src="js/firebase-init.js"></script>
+    <script src="js/realtime-sync.js"></script>
     <script src="js/profile.js"></script>
 
     <script>
-        // Inline initialization for him-dashboard
+        // Inline initialization for him-dashboard with realtime sync
         window.addEventListener('DOMContentLoaded', async () => {
             if (typeof db === 'undefined') {
                 console.error("Firebase chưa được khởi tạo!");
                 return;
             }
 
+            // Đợi realtime sync khởi tạo
+            const waitForRealtimeSync = () => {
+                return new Promise((resolve) => {
+                    const check = () => {
+                        if (window.realtimeSync && window.realtimeSync.isInitialized) {
+                            resolve();
+                        } else {
+                            setTimeout(check, 100);
+                        }
+                    };
+                    check();
+                });
+            };
+
             try {
-                // Load both her and his data
+                await waitForRealtimeSync();
+                
+                // Load dữ liệu ban đầu
                 const herDataRef = db.collection('userInfo').doc('herData');
                 const hisDataRef = db.collection('userInfo').doc('hisData');
                 const [herDoc, hisDoc] = await Promise.all([herDataRef.get(), hisDataRef.get()]);
@@ -65,11 +82,34 @@
                 const herData = herDoc.exists ? herDoc.data() : {};
                 const hisData = hisDoc.exists ? hisDoc.data() : {};
 
-                // Run him dashboard functions
+                // Khởi tạo dashboard
                 runHimPages(herData, hisData);
 
+                // Thiết lập đồng bộ thời gian thực
+                console.log('🔄 Thiết lập đồng bộ thời gian thực...');
+                
+                // Lắng nghe thay đổi dữ liệu "em" (lịch tuần)
+                window.realtimeSync.listenToHerData((herData) => {
+                    console.log('📱 Cập nhật dữ liệu "em" theo thời gian thực');
+                    // Cập nhật lịch tuần preview
+                    if (typeof setupSchedulePreview === 'function') {
+                        setupSchedulePreview(herData.schedule || []);
+                    }
+                });
+
+                // Lắng nghe thay đổi dữ liệu "anh" (ý tưởng, ghi chú)
+                window.realtimeSync.listenToHisData((hisData) => {
+                    console.log('👨‍💻 Cập nhật dữ liệu "anh" theo thời gian thực');
+                    // Cập nhật ý tưởng preview
+                    if (typeof setupIdeaWidget === 'function') {
+                        setupIdeaWidget(hisData.ideaBank || []);
+                    }
+                });
+
+                console.log('✅ Đồng bộ thời gian thực đã được thiết lập!');
+
             } catch (error) {
-                console.error("Lỗi khi tải dữ liệu:", error);
+                console.error("Lỗi khi thiết lập đồng bộ thời gian thực:", error);
                 alert("Đã xảy ra lỗi khi kết nối.");
             }
         });
