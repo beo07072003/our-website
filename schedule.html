@@ -9,12 +9,34 @@
     <link rel="stylesheet" href="css/sunset-theme.css">
     <link rel="stylesheet" href="css/notifications.css">
     <link rel="icon" type="image/png" href="./images/logo.svg">
+    <style>
+        .schedule-container::after {
+            content: '' !important;
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            background-image: url('./images/xe.jpg') !important;
+            background-size: 200px 200px !important;
+            background-repeat: repeat !important;
+            background-position: 0 0 !important;
+            opacity: 0.08 !important;
+            z-index: 1 !important;
+            pointer-events: none !important;
+        }
+        
+        .schedule-container:hover::after {
+            opacity: 0.08 !important;
+            transform: none !important;
+        }
+    </style>
 </head>
 <body>
     <!-- Floating Hearts Animation -->
     <div class="floating-hearts" id="floating-hearts"></div>
     
-    <div class="schedule-container" style="background-image: url('./images/xe.jpg') !important; background-size: 200px 200px !important; background-repeat: repeat !important;">
+    <div class="schedule-container">
         <a href="#" id="back-to-dashboard-btn" class="back-to-dashboard-btn">↩ Quay lại</a>
         
         <!-- Icon decorations around container -->
