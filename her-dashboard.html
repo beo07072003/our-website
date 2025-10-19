@@ -68,28 +68,43 @@
                 </div>
                 <div class="card-body">
                     <div class="card-content">
-                        <div class="countdown-display" id="countdown-timer">
-                            <div class="countdown-item">
-                                <span class="countdown-number" id="countdown-days">00</span>
-                                <span class="countdown-label">Ngày</span>
+                        <div id="countdown-content">
+                            <div class="countdown-display" id="countdown-timer">
+                                <div class="countdown-item">
+                                    <span class="countdown-number" id="countdown-days">00</span>
+                                    <span class="countdown-label">Ngày</span>
+                                </div>
+                                <div class="countdown-item">
+                                    <span class="countdown-number" id="countdown-hours">00</span>
+                                    <span class="countdown-label">Giờ</span>
+                                </div>
+                                <div class="countdown-item">
+                                    <span class="countdown-number" id="countdown-minutes">00</span>
+                                    <span class="countdown-label">Phút</span>
+                                </div>
+                                <div class="countdown-item">
+                                    <span class="countdown-number" id="countdown-seconds">00</span>
+                                    <span class="countdown-label">Giây</span>
+                                </div>
                             </div>
-                            <div class="countdown-item">
-                                <span class="countdown-number" id="countdown-hours">00</span>
-                                <span class="countdown-label">Giờ</span>
-                            </div>
-                            <div class="countdown-item">
-                                <span class="countdown-number" id="countdown-minutes">00</span>
-                                <span class="countdown-label">Phút</span>
-                            </div>
-                            <div class="countdown-item">
-                                <span class="countdown-number" id="countdown-seconds">00</span>
-                                <span class="countdown-label">Giây</span>
+                            <div id="countdown-event-info" style="text-align: center; margin-top: 20px;">
+                                <h3 id="event-title-display" style="color: #ff6b6b; margin-bottom: 10px;">Sự kiện đặc biệt</h3>
+                                <p id="event-location-display" style="color: #666; font-size: 1.1em; margin-bottom: 5px;">
+                                    <strong>📍 Địa điểm:</strong> <span id="event-location-text">Chưa có thông tin</span>
+                                </p>
+                                <p id="event-datetime-display" style="color: #666; font-size: 1em; margin-bottom: 10px;">
+                                    <strong>📅 Thời gian:</strong> <span id="event-datetime-text">Chưa có thông tin</span>
+                                </p>
+                                <p id="event-description-display" style="color: #888; font-style: italic; font-size: 0.9em;">
+                                    <span id="event-description-text">Chưa có mô tả</span>
+                                </p>
                             </div>
                         </div>
-                        <p style="text-align: center; color: #666; margin-top: 20px;">
-                            <strong>đến ngày chúng ta mong chờ!</strong><br>
-                            <small>Đừng quên chuẩn bị nhé! 💕</small>
-                        </p>
+                        <div id="no-event-message" style="text-align: center; color: #999; padding: 40px 20px; display: none;">
+                            <h3>⏰ Chưa có sự kiện đặc biệt</h3>
+                            <p>Anh chưa tạo sự kiện đếm ngược nào cả!</p>
+                            <small>Hãy nhắc anh tạo sự kiện đặc biệt nhé! 💕</small>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -176,9 +191,11 @@
                         <div class="mini-grid">
                             <div class="mini-card health">
                                 <h5>Chu kỳ hiện tại</h5>
-                                <p>Chu kỳ tiếp theo: <strong>5 ngày nữa</strong><br>
-                                Chu kỳ trung bình: 28 ngày<br>
-                                Thời gian: 5 ngày</p>
+                                <p id="period-info">
+                                    <span id="next-period-countdown">Đang tính toán...</span><br>
+                                    <span id="cycle-length">Chu kỳ trung bình: 28 ngày</span><br>
+                                    <span id="period-duration">Thời gian: 5 ngày</span>
+                                </p>
                             </div>
                             <div class="mini-card health">
                                 <h5>Lịch mini</h5>
@@ -247,6 +264,11 @@
                 
                 const herData = herDoc.exists ? herDoc.data() : {};
                 const hisData = hisDoc.exists ? hisDoc.data() : {};
+
+                // Merge countdown event từ hisData vào herData
+                if (hisData.countdownEvent) {
+                    herData.countdownEvent = hisData.countdownEvent;
+                }
 
                 // Run her dashboard functions
                 runHerDashboard(herData);

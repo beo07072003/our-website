@@ -5,6 +5,115 @@ function runHerDashboard(data) {
     runCountdown(data);
     // Chạy widget lịch dâu
     runPeriodCalendar(data, 'period-calendar-widget', 'month-year-title-dash', 'calendar-days-grid-dash', 'prev-month-btn-dash', 'next-month-btn-dash', false);
+    // Cập nhật hiển thị thông tin chu kỳ
+    updatePeriodDisplay(data);
+}
+
+// Hàm tính toán chu kỳ kinh nguyệt
+function calculatePeriodInfo(data) {
+    if (!data.lastPeriodStartDate) {
+        return {
+            nextPeriodDays: null,
+            cycleLength: data.cycleLength || 28,
+            periodDuration: data.periodDuration || 5,
+            status: 'Chưa có dữ liệu'
+        };
+    }
+
+    // Xử lý lastPeriodStartDate có thể là Date object hoặc Firebase Timestamp
+    let lastPeriodStart;
+    if (data.lastPeriodStartDate && typeof data.lastPeriodStartDate.toDate === 'function') {
+        lastPeriodStart = data.lastPeriodStartDate.toDate();
+    } else if (data.lastPeriodStartDate instanceof Date) {
+        lastPeriodStart = data.lastPeriodStartDate;
+    } else if (data.lastPeriodStartDate) {
+        lastPeriodStart = new Date(data.lastPeriodStartDate);
+    } else {
+        return {
+            nextPeriodDays: null,
+            cycleLength: data.cycleLength || 28,
+            periodDuration: data.periodDuration || 5,
+            status: 'Chưa có dữ liệu'
+        };
+    }
+    
+    const cycleLength = data.cycleLength || 28;
+    const periodDuration = data.periodDuration || 5;
+    const today = new Date();
+    
+    // Tính ngày bắt đầu kỳ tiếp theo
+    const nextPeriodStart = new Date(lastPeriodStart);
+    nextPeriodStart.setDate(nextPeriodStart.getDate() + cycleLength);
+    
+    // Tính số ngày còn lại đến kỳ tiếp theo
+    const timeDiff = nextPeriodStart.getTime() - today.getTime();
+    const daysUntilNext = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    
+    // Debug log để kiểm tra
+    console.log('🔍 Debug chu kỳ:');
+    console.log('Ngày bắt đầu kỳ cuối:', lastPeriodStart.toLocaleDateString('vi-VN'));
+    console.log('Chu kỳ trung bình:', cycleLength, 'ngày');
+    console.log('Ngày dự đoán kỳ tiếp theo:', nextPeriodStart.toLocaleDateString('vi-VN'));
+    console.log('Hôm nay:', today.toLocaleDateString('vi-VN'));
+    console.log('Số ngày còn lại:', daysUntilNext);
+    
+    // Xác định trạng thái hiện tại
+    let status = '';
+    const daysSinceLastPeriod = Math.floor((today.getTime() - lastPeriodStart.getTime()) / (1000 * 3600 * 24));
+    
+    if (daysSinceLastPeriod < periodDuration) {
+        status = 'Đang trong kỳ';
+    } else if (daysSinceLastPeriod < cycleLength - 7) {
+        status = 'Giai đoạn nang trứng';
+    } else if (daysSinceLastPeriod < cycleLength - 1) {
+        status = 'Giai đoạn hoàng thể';
+    } else {
+        status = 'Sắp đến kỳ';
+    }
+    
+    return {
+        nextPeriodDays: daysUntilNext,
+        nextPeriodDate: nextPeriodStart,
+        cycleLength: cycleLength,
+        periodDuration: periodDuration,
+        status: status,
+        daysSinceLastPeriod: daysSinceLastPeriod
+    };
+}
+
+// Cập nhật hiển thị thông tin chu kỳ
+function updatePeriodDisplay(data) {
+    console.log('📊 Dữ liệu chu kỳ nhận được:', data);
+    const periodInfo = calculatePeriodInfo(data);
+    
+    const countdownEl = document.getElementById('next-period-countdown');
+    const cycleLengthEl = document.getElementById('cycle-length');
+    const periodDurationEl = document.getElementById('period-duration');
+    
+    console.log('🔍 Elements found:', {
+        countdownEl: !!countdownEl,
+        cycleLengthEl: !!cycleLengthEl,
+        periodDurationEl: !!periodDurationEl
+    });
+    
+    if (countdownEl) {
+        console.log('🔍 Cập nhật hiển thị:', periodInfo.nextPeriodDays, 'ngày');
+        if (periodInfo.nextPeriodDays === null) {
+            countdownEl.innerHTML = '<strong>Chưa có dữ liệu</strong>';
+        } else if (periodInfo.nextPeriodDays <= 0) {
+            countdownEl.innerHTML = '<strong>Đang trong kỳ</strong>';
+        } else {
+            countdownEl.innerHTML = `<strong>${periodInfo.nextPeriodDays} ngày nữa</strong> (${periodInfo.status})`;
+        }
+    }
+    
+    if (cycleLengthEl) {
+        cycleLengthEl.textContent = `Chu kỳ trung bình: ${periodInfo.cycleLength} ngày`;
+    }
+    
+    if (periodDurationEl) {
+        periodDurationEl.textContent = `Thời gian: ${periodInfo.periodDuration} ngày`;
+    }
 }
 
 function runLoveCounter(data) {
@@ -19,44 +128,142 @@ function runLoveCounter(data) {
 // NỘI DUNG HOÀN CHỈNH CỦA runCountdown
 function runCountdown(data) {
     const countdownContainerDash = document.getElementById('countdown-timer');
-    if (!countdownContainerDash || !data.specialDate) return;
+    const countdownContent = document.getElementById('countdown-content');
+    const noEventMessage = document.getElementById('no-event-message');
+    
+    if (!countdownContainerDash) return;
 
-    const targetDate = data.specialDate.toDate();
-    const daysSpan = document.getElementById('countdown-days');
-    const hoursSpan = document.getElementById('countdown-hours');
-    const minutesSpan = document.getElementById('countdown-minutes');
-    const secondsSpan = document.getElementById('countdown-seconds');
-
-    const interval = setInterval(() => {
-        const now = new Date().getTime();
-        const distance = targetDate - now;
-
-        if (distance < 0) {
-            clearInterval(interval);
-            countdownContainerDash.innerHTML = "<span class='card-countdown-finished'>Chúc Mừng Ngày Đặc Biệt!</span>";
-            return;
-        }
-
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-        if(daysSpan) daysSpan.innerText = String(days).padStart(2, '0');
-        if(hoursSpan) hoursSpan.innerText = String(hours).padStart(2, '0');
-        if(minutesSpan) minutesSpan.innerText = String(minutes).padStart(2, '0');
-        if(secondsSpan) secondsSpan.innerText = String(seconds).padStart(2, '0');
+    // Kiểm tra có countdown event không
+    if (data.countdownEvent && data.countdownEvent.title) {
+        // Hiển thị thông tin sự kiện
+        displayCountdownEvent(data.countdownEvent);
         
-        // Also update collapsible cards countdown if available
-        if (typeof updateCountdownDisplay === 'function') {
-            updateCountdownDisplay({
-                days: days,
-                hours: hours,
-                minutes: minutes,
-                seconds: seconds
-            });
+        // Hiển thị countdown content, ẩn no-event message
+        if (countdownContent) countdownContent.style.display = 'block';
+        if (noEventMessage) noEventMessage.style.display = 'none';
+        
+        // Tính toán target date từ countdown event
+        const eventDate = data.countdownEvent.date;
+        const eventTime = data.countdownEvent.time;
+        const targetDateTime = new Date(`${eventDate}T${eventTime}:00`);
+        
+        const daysSpan = document.getElementById('countdown-days');
+        const hoursSpan = document.getElementById('countdown-hours');
+        const minutesSpan = document.getElementById('countdown-minutes');
+        const secondsSpan = document.getElementById('countdown-seconds');
+
+        const interval = setInterval(() => {
+            const now = new Date().getTime();
+            const distance = targetDateTime - now;
+
+            if (distance < 0) {
+                clearInterval(interval);
+                countdownContainerDash.innerHTML = "<span class='card-countdown-finished'>🎉 Sự kiện đã bắt đầu!</span>";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            if(daysSpan) daysSpan.innerText = String(days).padStart(2, '0');
+            if(hoursSpan) hoursSpan.innerText = String(hours).padStart(2, '0');
+            if(minutesSpan) minutesSpan.innerText = String(minutes).padStart(2, '0');
+            if(secondsSpan) secondsSpan.innerText = String(seconds).padStart(2, '0');
+            
+            // Also update collapsible cards countdown if available
+            if (typeof updateCountdownDisplay === 'function') {
+                updateCountdownDisplay({
+                    days: days,
+                    hours: hours,
+                    minutes: minutes,
+                    seconds: seconds
+                });
+            }
+        }, 1000);
+        
+    } else if (data.specialDate) {
+        // Fallback về specialDate cũ nếu không có countdown event
+        const targetDate = data.specialDate.toDate();
+        const daysSpan = document.getElementById('countdown-days');
+        const hoursSpan = document.getElementById('countdown-hours');
+        const minutesSpan = document.getElementById('countdown-minutes');
+        const secondsSpan = document.getElementById('countdown-seconds');
+
+        const interval = setInterval(() => {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance < 0) {
+                clearInterval(interval);
+                countdownContainerDash.innerHTML = "<span class='card-countdown-finished'>Chúc Mừng Ngày Đặc Biệt!</span>";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            if(daysSpan) daysSpan.innerText = String(days).padStart(2, '0');
+            if(hoursSpan) hoursSpan.innerText = String(hours).padStart(2, '0');
+            if(minutesSpan) minutesSpan.innerText = String(minutes).padStart(2, '0');
+            if(secondsSpan) secondsSpan.innerText = String(seconds).padStart(2, '0');
+            
+            // Also update collapsible cards countdown if available
+            if (typeof updateCountdownDisplay === 'function') {
+                updateCountdownDisplay({
+                    days: days,
+                    hours: hours,
+                    minutes: minutes,
+                    seconds: seconds
+                });
+            }
+        }, 1000);
+    } else {
+        // Không có sự kiện nào
+        if (countdownContent) countdownContent.style.display = 'none';
+        if (noEventMessage) noEventMessage.style.display = 'block';
+    }
+}
+
+/**
+ * Hiển thị thông tin sự kiện đếm ngược
+ */
+function displayCountdownEvent(eventData) {
+    const titleDisplay = document.getElementById('event-title-display');
+    const locationText = document.getElementById('event-location-text');
+    const datetimeText = document.getElementById('event-datetime-text');
+    const descriptionText = document.getElementById('event-description-text');
+    
+    if (titleDisplay) titleDisplay.textContent = eventData.title || 'Sự kiện đặc biệt';
+    if (locationText) locationText.textContent = eventData.location || 'Chưa có thông tin';
+    
+    // Format datetime
+    if (eventData.date && eventData.time) {
+        const eventDate = new Date(`${eventData.date}T${eventData.time}:00`);
+        const formattedDate = eventDate.toLocaleDateString('vi-VN', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+        const formattedTime = eventDate.toLocaleTimeString('vi-VN', {
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        
+        if (datetimeText) {
+            datetimeText.textContent = `${formattedDate} lúc ${formattedTime}`;
         }
-    }, 1000);
+    } else {
+        if (datetimeText) datetimeText.textContent = 'Chưa có thông tin';
+    }
+    
+    if (descriptionText) {
+        descriptionText.textContent = eventData.description || 'Chưa có mô tả';
+    }
 }
 
 // NỘI DUNG HOÀN CHỈNH CỦA runPeriodCalendar

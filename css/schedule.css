@@ -769,6 +769,22 @@ input[type="color"] {
     transition: all 0.3s ease;
 }
 
+.schedule-container .grid-cell:nth-child(10)::after {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    width: 30px;
+    height: 30px;
+    background-image: url('/images/stitch/girl1.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.7;
+    z-index: 5;
+    transition: all 0.3s ease;
+}
+
 .schedule-container .grid-cell:nth-child(20)::after {
     content: '';
     position: absolute;
@@ -817,6 +833,22 @@ input[type="color"] {
     transition: all 0.3s ease;
 }
 
+.schedule-container .grid-cell:nth-child(35)::after {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    width: 30px;
+    height: 30px;
+    background-image: url('/images/corgi/corgi (5).png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.7;
+    z-index: 5;
+    transition: all 0.3s ease;
+}
+
 .schedule-container .grid-cell:nth-child(38)::after {
     content: '';
     position: absolute;
@@ -832,6 +864,22 @@ input[type="color"] {
     z-index: 5;
     transition: all 0.3s ease;
 }
+.schedule-container .grid-cell:nth-child(55)::after {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    width: 30px;
+    height: 30px;
+    background-image: url('/images/stitch/boy1.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.7;
+    z-index: 5;
+    transition: all 0.3s ease;
+}
+
 
 .schedule-container .grid-cell:nth-child(61)::after {
     content: '';
@@ -840,7 +888,7 @@ input[type="color"] {
     right: 0px;
     width: 40px;
     height: 40px;
-    background-image: url('/images/dragon/2.png');
+    background-image: url('/images/dragon/3.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;

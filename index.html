@@ -16,22 +16,54 @@
     <!-- Floating Hearts Animation -->
     <div class="floating-hearts" id="floating-hearts"></div>
     
-    <div class="main-selection-container">
-        <h1 class="welcome-heading">Babi nào đây    ?</h1>
-        <div class="profile-selection">
-            <a href="him-dashboard.html" class="profile-card your-profile">
-                <img src="images/him.jpg" alt="Your Profile Picture">
-                <span class="profile-name">beo.77.23</span>
-            </a>
-
-            <div class="animated-heart-wrapper">
-                <div class="heart"></div>
+    <!-- Modal xác thực -->
+    <div id="auth-modal" class="auth-modal">
+        <div class="auth-container">
+            <div class="auth-header">
+                <h2>💕 Chào mừng đến với thế giới của chúng ta</h2>
+                <p>Chỉ có 2 người biết được bí mật này...</p>
             </div>
+            
+            <div class="auth-form">
+                <div class="form-group">
+                    <label for="auth-date">📅 Ngày chúng ta quen nhau:</label>
+                    <input type="date" id="auth-date" class="auth-input" placeholder="Chọn ngày đặc biệt...">
+                </div>
+                
+                <button id="auth-submit" class="auth-button">
+                    <span class="button-text">💖 Xác nhận</span>
+                    <span class="button-loading" style="display: none;">⏳ Đang kiểm tra...</span>
+                </button>
+            </div>
+            
+            <div class="auth-hint">
+                <p>💡 Gợi ý: Ngày này rất đặc biệt với cả hai chúng ta</p>
+            </div>
+            
+            <div class="error-message"></div>
+            <div class="success-message"></div>
+        </div>
+    </div>
 
-            <a href="her-dashboard.html" class="profile-card her-profile">
-                <img src="images/her.jpg" alt="Her Profile Picture">
-                <span class="profile-name">_n.tkhzanh17_</span>
-            </a>
+    <!-- Nội dung chính (ẩn ban đầu) -->
+    <div id="main-content" style="display: none;">
+        <div class="main-selection-container">
+            <h1 class="welcome-heading">Babi nào đây ?</h1>
+            <div class="profile-selection">
+                <a href="him-dashboard.html" class="profile-card your-profile">
+                    <img src="images/him.jpg" alt="Your Profile Picture">
+                    <span class="profile-name">beo.77.23</span>
+                </a>
+
+                <div class="animated-heart-wrapper">
+                    <div class="heart"></div>
+                </div>
+
+                <a href="her-dashboard.html" class="profile-card her-profile">
+                    <img src="images/her.jpg" alt="Her Profile Picture">
+                    <span class="profile-name">_n.tkhzanh17_</span>
+                </a>
+            </div>
         </div>
     </div>
 
@@ -41,5 +73,104 @@
     <script src="js/firebase-init.js"></script>
     <script src="js/smooth-scroll.js"></script>
     <script src="js/floating-hearts.js"></script>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Ngày quen nhau (thay đổi theo ngày thực tế)
+        const SPECIAL_DATE = '2025-07-01'; // Thay đổi thành ngày quen nhau thực tế
+        
+        const authModal = document.getElementById('auth-modal');
+        const mainContent = document.getElementById('main-content');
+        const authSubmit = document.getElementById('auth-submit');
+        const authDate = document.getElementById('auth-date');
+        const buttonText = document.querySelector('.button-text');
+        const buttonLoading = document.querySelector('.button-loading');
+        const errorMessage = document.querySelector('.error-message');
+        const successMessage = document.querySelector('.success-message');
+        
+        // Kiểm tra nếu đã xác thực trước đó
+        if (localStorage.getItem('authenticated') === 'true') {
+            showMainContent();
+            return;
+        }
+        
+        // Xử lý submit
+        authSubmit.addEventListener('click', function() {
+            const inputDate = authDate.value;
+            
+            if (!inputDate) {
+                showError('Vui lòng chọn ngày quen nhau!');
+                return;
+            }
+            
+            // Hiển thị loading
+            showLoading();
+            
+            // Giả lập delay để tạo cảm giác kiểm tra
+            setTimeout(() => {
+                if (inputDate === SPECIAL_DATE) {
+                    // Xác thực thành công
+                    localStorage.setItem('authenticated', 'true');
+                    showSuccess('Chào mừng bạn đến với thế giới của chúng ta! 💕');
+                    
+                    setTimeout(() => {
+                        showMainContent();
+                    }, 1500);
+                } else {
+                    // Xác thực thất bại
+                    showError('Hmm... Có vẻ như bạn chưa biết bí mật của chúng ta! 🤔');
+                    hideLoading();
+                }
+            }, 1000);
+        });
+        
+        // Xử lý Enter key
+        authDate.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') authSubmit.click();
+        });
+        
+        function showLoading() {
+            buttonText.style.display = 'none';
+            buttonLoading.style.display = 'inline';
+            authSubmit.disabled = true;
+        }
+        
+        function hideLoading() {
+            buttonText.style.display = 'inline';
+            buttonLoading.style.display = 'none';
+            authSubmit.disabled = false;
+        }
+        
+        function showError(message) {
+            hideLoading();
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            successMessage.style.display = 'none';
+            
+            // Ẩn error sau 3 giây
+            setTimeout(() => {
+                errorMessage.style.display = 'none';
+            }, 3000);
+        }
+        
+        function showSuccess(message) {
+            successMessage.textContent = message;
+            successMessage.style.display = 'block';
+            errorMessage.style.display = 'none';
+        }
+        
+        function showMainContent() {
+            authModal.style.display = 'none';
+            mainContent.style.display = 'block';
+            
+            // Thêm hiệu ứng fade in
+            mainContent.style.opacity = '0';
+            mainContent.style.transition = 'opacity 0.5s ease';
+            setTimeout(() => {
+                mainContent.style.opacity = '1';
+            }, 100);
+        }
+    });
+    </script>
 </body>
 </html>

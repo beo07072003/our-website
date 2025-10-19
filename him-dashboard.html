@@ -105,7 +105,52 @@
                 </div>
             </div>
 
-            <!-- Card 4: Thống Kê -->
+            <!-- Card 4: Sự Kiện Đếm Ngược -->
+            <div class="collapsible-card countdown-event card-countdown-event">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <div class="card-header-left">
+                        <span class="card-icon">⏰</span>
+                        <div>
+                            <div class="card-title">Sự Kiện Đặc Biệt</div>
+                            <div class="card-subtitle">Đếm ngược đến ngày hẹn hò quan trọng</div>
+                        </div>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-content">
+                        <h4>💕 Ngày Hẹn Hò Đặc Biệt</h4>
+                        <div class="countdown-form">
+                            <div class="form-group">
+                                <label for="event-title">Tên sự kiện:</label>
+                                <input type="text" id="event-title" placeholder="Ví dụ: Kỷ niệm 1 năm yêu nhau">
+                            </div>
+                            <div class="form-group">
+                                <label for="event-date">Ngày diễn ra:</label>
+                                <input type="date" id="event-date">
+                            </div>
+                            <div class="form-group">
+                                <label for="event-time">Giờ bắt đầu:</label>
+                                <input type="time" id="event-time">
+                            </div>
+                            <div class="form-group">
+                                <label for="event-location">Địa điểm:</label>
+                                <input type="text" id="event-location" placeholder="Ví dụ: Nhà hàng ABC, Quận 1">
+                            </div>
+                            <div class="form-group">
+                                <label for="event-description">Mô tả chi tiết:</label>
+                                <textarea id="event-description" placeholder="Mô tả về sự kiện đặc biệt này..."></textarea>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <button id="save-event-btn" class="card-button">💾 Lưu Sự Kiện</button>
+                            <button id="clear-event-btn" class="card-button" style="background: #6c757d; margin-top: 10px;">🗑️ Xóa Sự Kiện</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 5: Thống Kê -->
             <div class="collapsible-card love-info">
                 <div class="card-header" onclick="toggleCard(this)">
                     <div class="card-header-left">

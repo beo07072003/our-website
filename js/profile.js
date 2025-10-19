@@ -71,6 +71,7 @@ function runHimDashboard(herData, hisData) {
     setupIdeaWidget(hisData.ideaBank || []);
     setupSchedulePreview(herData.schedule || []);
     setupDatePlanner(herData.dateNightPlan);
+    setupCountdownEvent(hisData.countdownEvent);
 }
 
 /**
@@ -406,5 +407,118 @@ function setupDatePlanner(plan) {
         await herDataRef.update({ 'dateNightPlan.isActive': false });
         showInfo('Đã hủy kế hoạch.');
         location.reload();
+    });
+}
+
+/**
+ * Thiết lập logic cho Widget "Sự Kiện Đếm Ngược".
+ */
+function setupCountdownEvent(eventData) {
+    const saveBtn = document.getElementById('save-event-btn');
+    const clearBtn = document.getElementById('clear-event-btn');
+    
+    if (!saveBtn || !clearBtn) return;
+
+    // Load dữ liệu hiện tại nếu có
+    if (eventData) {
+        document.getElementById('event-title').value = eventData.title || '';
+        document.getElementById('event-date').value = eventData.date || '';
+        document.getElementById('event-time').value = eventData.time || '';
+        document.getElementById('event-location').value = eventData.location || '';
+        document.getElementById('event-description').value = eventData.description || '';
+    }
+
+    // Xử lý lưu sự kiện
+    saveBtn.addEventListener('click', async () => {
+        const eventData = {
+            title: document.getElementById('event-title').value.trim(),
+            date: document.getElementById('event-date').value,
+            time: document.getElementById('event-time').value,
+            location: document.getElementById('event-location').value.trim(),
+            description: document.getElementById('event-description').value.trim()
+        };
+
+        // Validation
+        if (!eventData.title) {
+            showWarning('Vui lòng nhập tên sự kiện!');
+            return;
+        }
+        if (!eventData.date) {
+            showWarning('Vui lòng chọn ngày diễn ra!');
+            return;
+        }
+        if (!eventData.time) {
+            showWarning('Vui lòng chọn giờ bắt đầu!');
+            return;
+        }
+        if (!eventData.location) {
+            showWarning('Vui lòng nhập địa điểm!');
+            return;
+        }
+
+        // Disable button
+        saveBtn.disabled = true;
+        saveBtn.textContent = 'Đang lưu...';
+
+        try {
+            if (typeof db === 'undefined') {
+                throw new Error('Firebase chưa được khởi tạo!');
+            }
+
+            const hisDataRef = db.collection('userInfo').doc('hisData');
+            await hisDataRef.update({ countdownEvent: eventData });
+            
+            showSuccess('Đã lưu sự kiện đếm ngược! ⏰');
+            
+            // Cập nhật her-dashboard nếu có
+            const herDataRef = db.collection('userInfo').doc('herData');
+            await herDataRef.update({ countdownEvent: eventData });
+            
+        } catch (error) {
+            console.error('Lỗi khi lưu sự kiện:', error);
+            showError('Có lỗi xảy ra khi lưu sự kiện!');
+        } finally {
+            saveBtn.disabled = false;
+            saveBtn.textContent = '💾 Lưu Sự Kiện';
+        }
+    });
+
+    // Xử lý xóa sự kiện
+    clearBtn.addEventListener('click', async () => {
+        if (!await showConfirmDialog('Xác nhận xóa', 'Bạn có chắc muốn xóa sự kiện đếm ngược này?')) {
+            return;
+        }
+
+        clearBtn.disabled = true;
+        clearBtn.textContent = 'Đang xóa...';
+
+        try {
+            if (typeof db === 'undefined') {
+                throw new Error('Firebase chưa được khởi tạo!');
+            }
+
+            const hisDataRef = db.collection('userInfo').doc('hisData');
+            await hisDataRef.update({ countdownEvent: null });
+            
+            // Xóa form
+            document.getElementById('event-title').value = '';
+            document.getElementById('event-date').value = '';
+            document.getElementById('event-time').value = '';
+            document.getElementById('event-location').value = '';
+            document.getElementById('event-description').value = '';
+            
+            showSuccess('Đã xóa sự kiện đếm ngược!');
+            
+            // Cập nhật her-dashboard nếu có
+            const herDataRef = db.collection('userInfo').doc('herData');
+            await herDataRef.update({ countdownEvent: null });
+            
+        } catch (error) {
+            console.error('Lỗi khi xóa sự kiện:', error);
+            showError('Có lỗi xảy ra khi xóa sự kiện!');
+        } finally {
+            clearBtn.disabled = false;
+            clearBtn.textContent = '🗑️ Xóa Sự Kiện';
+        }
     });
 }
