@@ -85,7 +85,7 @@ body {
     contain: layout style paint;
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
-    background-image: url('/images/xe.jpg');
+    background-image: url('../images/xe.jpg');
     background-size: 200px 200px;
     background-repeat: repeat;
     background-position: 0 0;
@@ -131,7 +131,7 @@ body {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    text-fill-color: transparent;
+    color: transparent;
     line-height: 1.2;
     animation: slideInUp 0.8s ease-out 0.2s both;
     position: relative;
@@ -740,7 +740,7 @@ input[type="color"] {
     left: 15px;
     width: 50px;
     height: 50px;
-    background-image: url('/images/corgi/corgi.png');
+    background-image: url('../images/corgi/corgi.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -760,7 +760,7 @@ input[type="color"] {
     right: 5px;
     width: 30px;
     height: 30px;
-    background-image: url('/images/cat/cat-sleep.png');
+    background-image: url('../images/cat/cat-sleep.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -776,7 +776,7 @@ input[type="color"] {
     right: 5px;
     width: 30px;
     height: 30px;
-    background-image: url('/images/stitch/girl1.png');
+    background-image: url('../images/stitch/girl1.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -792,7 +792,7 @@ input[type="color"] {
     right: 5px;
     width: 30px;
     height: 30px;
-    background-image: url('/images/corgi/corgi (2).png');
+    background-image: url('../images/corgi/corgi (2).png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -808,7 +808,7 @@ input[type="color"] {
     right: 5px;
     width: 30px;
     height: 30px;
-    background-image: url('/images/dragon/1.png');
+    background-image: url('../images/dragon/1.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -824,7 +824,7 @@ input[type="color"] {
     right: 5px;
     width: 30px;
     height: 30px;
-    background-image: url('/images/cat/cat (2).png');
+    background-image: url('../images/cat/cat (2).png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -840,7 +840,7 @@ input[type="color"] {
     right: 5px;
     width: 30px;
     height: 30px;
-    background-image: url('/images/corgi/corgi (5).png');
+    background-image: url('../images/corgi/corgi (5).png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -856,7 +856,7 @@ input[type="color"] {
     right: 5px;
     width: 30px;
     height: 30px;
-    background-image: url('/images/corgi/corgi (3).png');
+    background-image: url('../images/corgi/corgi (3).png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -871,7 +871,7 @@ input[type="color"] {
     right: 5px;
     width: 30px;
     height: 30px;
-    background-image: url('/images/stitch/boy1.png');
+    background-image: url('../images/stitch/boy1.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -888,7 +888,7 @@ input[type="color"] {
     right: 0px;
     width: 40px;
     height: 40px;
-    background-image: url('/images/dragon/3.png');
+    background-image: url('../images/dragon/3.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -904,7 +904,7 @@ input[type="color"] {
     right: 5px;
     width: 30px;
     height: 30px;
-    background-image: url('/images/cat/cat3.png');
+    background-image: url('../images/cat/cat3.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -930,7 +930,7 @@ input[type="color"] {
     right: 25px;
     width: 40px;
     height: 40px;
-    background-image: url('/images/cat/cat (1).png');
+    background-image: url('../images/cat/cat (1).png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -945,7 +945,7 @@ input[type="color"] {
     left: 15px;
     width: 45px;
     height: 45px;
-    background-image: url('/images/corgi/corgi (1).png');
+    background-image: url('../images/corgi/corgi (1).png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -960,7 +960,7 @@ input[type="color"] {
     right: 15px;
     width: 45px;
     height: 45px;
-    background-image: url('/images/dragon/2.png');
+    background-image: url('../images/dragon/2.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -1076,5 +1076,3 @@ input[type="color"] {
         right: 4px;
     }
 }
-/* aaa */
-/* aaa */
