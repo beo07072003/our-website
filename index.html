@@ -91,6 +91,10 @@
         // Kiểm tra nếu đã xác thực trước đó
         if (localStorage.getItem('authenticated') === 'true') {
             showMainContent();
+            // Hiển thị hộp quà nếu chưa xem hôm nay
+            setTimeout(() => {
+                showGiftBox();
+            }, 2000);
             return;
         }
         
@@ -115,6 +119,10 @@
                     
                     setTimeout(() => {
                         showMainContent();
+                        // Hiển thị hộp quà sau khi authentication thành công
+                        setTimeout(() => {
+                            showGiftBox();
+                        }, 2000);
                     }, 1500);
                 } else {
                     // Xác thực thất bại
@@ -171,6 +179,95 @@
             }, 100);
         }
     });
+    </script>
+    
+    <!-- Hộp quà ngày 20/10 -->
+    <div id="gift-box-modal" class="gift-box-modal" style="display: none;">
+        <div class="gift-box-container">
+            <div class="gift-box" onclick="openGift()">
+                <div class="gift-box-top">
+                    <div class="gift-bow">🎀</div>
+                </div>
+                <div class="gift-box-body">
+                    <div class="gift-pattern">💝</div>
+                </div>
+                <div class="gift-box-bottom"></div>
+                <div class="gift-sparkles">
+                    <span class="sparkle">✨</span>
+                    <span class="sparkle">✨</span>
+                    <span class="sparkle">✨</span>
+                </div>
+            </div>
+            <p class="gift-hint">Click để mở quà! 🎁</p>
+        </div>
+    </div>
+
+    <!-- Modal lời chúc mừng -->
+    <div id="congratulations-modal" class="congratulations-modal" style="display: none;">
+        <div class="congratulations-container">
+            <div class="congratulations-content">
+                <h2>🎉 Chúc mừng ngày 20/10! 🎉</h2>
+                <div class="congratulations-message">
+                    <p>Gửi em iu món quà nhỏ mà anh tự làm cho em!</p>
+                    <p>Vì là lần đầu anh làm nên có thể sẽ không đẹp lắm, nhưng anh đặt cả tấm lòng anh vào rùi</p>
+                    <p>Chúc em luôn xinh đẹp, hạnh phúc khi có anh bên em ạaaaa 💕</p>
+                </div>
+                <button onclick="closeCongratulations()" class="congratulations-btn">
+                    Xác nhận tình iu 💖
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // Hệ thống hộp quà - Functions
+    function isOctober20th() {
+        const today = new Date();
+        return today.getMonth() === 9 && today.getDate() === 20;
+    }
+
+    function hasShownGiftToday() {
+        const today = new Date().toDateString();
+        return localStorage.getItem('giftShown_' + today) === 'true';
+    }
+
+    function showGiftBox() {
+        const giftModal = document.getElementById('gift-box-modal');
+        if (giftModal) {
+            giftModal.style.display = 'flex';
+        }
+    }
+
+    // Hệ thống hộp quà - Main logic (chạy độc lập)
+    document.addEventListener('DOMContentLoaded', function() {
+        // Logic hiển thị hộp quà đã được chuyển vào phần authentication
+        
+    });
+
+    function openGift() {
+        // Ẩn hộp quà
+        const giftModal = document.getElementById('gift-box-modal');
+        if (giftModal) {
+            giftModal.style.display = 'none';
+        }
+        
+        // Hiện lời chúc mừng
+        const congratsModal = document.getElementById('congratulations-modal');
+        if (congratsModal) {
+            congratsModal.style.display = 'flex';
+        }
+        
+        // Đánh dấu đã hiển thị hôm nay
+        const today = new Date().toDateString();
+        localStorage.setItem('giftShown_' + today, 'true');
+    }
+
+    function closeCongratulations() {
+        const congratsModal = document.getElementById('congratulations-modal');
+        if (congratsModal) {
+            congratsModal.style.display = 'none';
+        }
+    }
     </script>
 </body>
 </html>
