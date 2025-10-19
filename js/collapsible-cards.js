@@ -222,7 +222,7 @@ function updateMailboxPreview(notes) {
 
     mailboxPreview.innerHTML = `
         <div class="preview-header">
-            <div class="preview-title">👨‍💻 Từ: Anh</div>
+            <div class="preview-title"> 💌 Từ: Anh</div>
             <div class="preview-time">${timeString}</div>
         </div>
         <div class="preview-text">

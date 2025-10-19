@@ -69,7 +69,7 @@ function createMailItem(note, index) {
     mailItem.innerHTML = `
         <div class="mail-header">
             <div class="mail-sender">
-                <div class="sender-icon">👨‍💻</div>
+                <div class="sender-icon"> 💌</div>
                 <span>Từ: Anh</span>
             </div>
             <div class="mail-time">${timeString}</div>
