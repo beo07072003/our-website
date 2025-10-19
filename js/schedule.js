@@ -90,6 +90,9 @@ function drawScheduleGrid(gridElement) {
             cell.className = 'grid-cell';
             cell.dataset.day = j;
             cell.dataset.time = `${parseInt(slot.split('-')[0])}:00`;
+            
+            // Icons are now handled by CSS nth-child selectors
+            
             gridElement.appendChild(cell);
         }
     });

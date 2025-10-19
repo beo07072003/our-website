@@ -95,7 +95,7 @@ body {
 .back-to-dashboard-btn {
     position: absolute;
     top: 25px;
-    left: 30px;
+    left: 80px; /* Dịch chuyển sang phải để tránh decorations */
     background: linear-gradient(135deg, #ef476f, #d90429);
     color: white;
     padding: 10px 20px;
@@ -319,6 +319,10 @@ body {
     color: white;
     font-size: 0.85em;
     font-weight: bold;
+    opacity: 0.75; /* Làm mờ event blocks để nhìn thấy icon decorations */
+    backdrop-filter: blur(5px); /* Thêm blur effect */
+    transition: all 0.3s ease;
+    z-index: 3; /* Thấp hơn icons để icons hiển thị trên event blocks */
     overflow: hidden;
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -365,6 +369,8 @@ body {
     z-index: 10;
     background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1));
     border-color: rgba(255, 255, 255, 0.6);
+    opacity: 0.9; /* Tăng opacity khi hover để dễ đọc hơn */
+    backdrop-filter: blur(8px); /* Tăng blur khi hover */
 }
 
 .event-block:active {
@@ -503,6 +509,10 @@ input[type="color"] {
         padding: 30px;
     }
 
+    .back-to-dashboard-btn {
+        left: 70px;
+    }
+
     .schedule-container h1 {
         font-size: 2.5em;
     }
@@ -522,7 +532,7 @@ input[type="color"] {
 
     .back-to-dashboard-btn {
         top: 15px;
-        left: 15px;
+        left: 60px; /* Dịch chuyển để tránh decorations */
         font-size: 0.9em;
     }
 
@@ -618,7 +628,7 @@ input[type="color"] {
 
     .back-to-dashboard-btn {
         top: 12px;
-        left: 12px;
+        left: 50px; /* Dịch chuyển để tránh decorations */
         font-size: 0.85em;
     }
 
@@ -719,5 +729,302 @@ input[type="color"] {
     .modal-btn {
         padding: 8px 16px;
         font-size: 0.85em;
+    }
+}
+
+/* === ICON DECORATIONS AROUND SCHEDULE CONTAINER === */
+.schedule-container::before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: 50px;
+    height: 50px;
+    background-image: url('/images/corgi/corgi.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: 10;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+}
+
+/* Additional decorations using pseudo-elements on different corners */
+/* con mèo ở trên bên phải */
+
+/* Icon decorations for specific schedule cells using CSS selectors */
+.schedule-container .grid-cell:nth-child(66)::after {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    width: 30px;
+    height: 30px;
+    background-image: url('/images/cat/cat-sleep.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.7;
+    z-index: 5;
+    transition: all 0.3s ease;
+}
+
+.schedule-container .grid-cell:nth-child(20)::after {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    width: 30px;
+    height: 30px;
+    background-image: url('/images/corgi/corgi (2).png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.7;
+    z-index: 5;
+    transition: all 0.3s ease;
+}
+
+.schedule-container .grid-cell:nth-child(15)::after {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    width: 30px;
+    height: 30px;
+    background-image: url('/images/dragon/1.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.7;
+    z-index: 5;
+    transition: all 0.3s ease;
+}
+
+.schedule-container .grid-cell:nth-child(32)::after {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    width: 30px;
+    height: 30px;
+    background-image: url('/images/cat/cat (2).png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.7;
+    z-index: 5;
+    transition: all 0.3s ease;
+}
+
+.schedule-container .grid-cell:nth-child(38)::after {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    width: 30px;
+    height: 30px;
+    background-image: url('/images/corgi/corgi (3).png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.7;
+    z-index: 5;
+    transition: all 0.3s ease;
+}
+
+.schedule-container .grid-cell:nth-child(61)::after {
+    content: '';
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    width: 40px;
+    height: 40px;
+    background-image: url('/images/dragon/2.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.7;
+    z-index: 5;
+    transition: all 0.3s ease;
+}
+
+.schedule-container .grid-cell:nth-child(51)::after {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    width: 30px;
+    height: 30px;
+    background-image: url('/images/cat/cat3.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.7;
+    z-index: 5;
+    transition: all 0.3s ease;
+}
+
+
+
+/* Hover effects for cell decorations */
+.grid-cell:hover::after {
+    opacity: 0.9;
+    transform: scale(1.1);
+}
+
+/* Special effect for cells with decorations when they have events */
+
+
+.schedule-container .decoration-top-right {
+    position: absolute;
+    top: 200px;
+    right: 25px;
+    width: 40px;
+    height: 40px;
+    background-image: url('/images/cat/cat (1).png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: 10;
+    opacity: 0.7;
+    transition: all 0.3s ease;
+}
+
+.schedule-container .decoration-bottom-left {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    width: 45px;
+    height: 45px;
+    background-image: url('/images/corgi/corgi (1).png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: 10;
+    opacity: 0.7;
+    transition: all 0.3s ease;
+}
+
+.schedule-container .decoration-bottom-right {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    width: 45px;
+    height: 45px;
+    background-image: url('/images/dragon/2.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: 10;
+    opacity: 0.7;
+    transition: all 0.3s ease;
+}
+
+/* Hover effects for all decorations */
+.schedule-container:hover::before,
+.schedule-container:hover::after,
+.schedule-container:hover .decoration-top-left,
+.schedule-container:hover .decoration-top-right,
+.schedule-container:hover .decoration-bottom-left,
+.schedule-container:hover .decoration-bottom-right {
+    opacity: 1;
+    transform: scale(1.1) rotate(5deg);
+}
+
+/* Mobile responsive for decorations */
+@media (max-width: 1024px) {
+    .schedule-container::before,
+    .schedule-container::after {
+        width: 40px;
+        height: 40px;
+        top: 12px;
+    }
+    
+    .schedule-container .decoration-top-left,
+    .schedule-container .decoration-top-right {
+        width: 30px;
+        height: 30px;
+        top: 60px;
+    }
+    
+    .schedule-container .decoration-bottom-left,
+    .schedule-container .decoration-bottom-right {
+        width: 35px;
+        height: 35px;
+    }
+}
+
+@media (max-width: 768px) {
+    .schedule-container::before,
+    .schedule-container::after {
+        width: 30px;
+        height: 30px;
+        top: 10px;
+    }
+    
+    .schedule-container .decoration-top-left,
+    .schedule-container .decoration-top-right {
+        width: 25px;
+        height: 25px;
+        top: 50px;
+    }
+    
+    .schedule-container .decoration-bottom-left,
+    .schedule-container .decoration-bottom-right {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    .schedule-container::before,
+    .schedule-container::after {
+        width: 25px;
+        height: 25px;
+        top: 8px;
+    }
+    
+    .schedule-container .decoration-top-left,
+    .schedule-container .decoration-top-right {
+        width: 20px;
+        height: 20px;
+        top: 40px;
+    }
+    
+    .schedule-container .decoration-bottom-left,
+    .schedule-container .decoration-bottom-right {
+        width: 25px;
+        height: 25px;
+    }
+    
+    /* Mobile responsive for cell decorations */
+    .schedule-container .grid-cell:nth-child(9)::after,
+    .schedule-container .grid-cell:nth-child(16)::after,
+    .schedule-container .grid-cell:nth-child(23)::after,
+    .schedule-container .grid-cell:nth-child(30)::after,
+    .schedule-container .grid-cell:nth-child(37)::after,
+    .schedule-container .grid-cell:nth-child(44)::after,
+    .schedule-container .grid-cell:nth-child(51)::after {
+        width: 20px;
+        height: 20px;
+        bottom: 3px;
+        right: 3px;
+    }
+}
+
+/* Tablet responsive for cell decorations */
+@media (max-width: 768px) {
+    .schedule-container .grid-cell:nth-child(9)::after,
+    .schedule-container .grid-cell:nth-child(16)::after,
+    .schedule-container .grid-cell:nth-child(23)::after,
+    .schedule-container .grid-cell:nth-child(30)::after,
+    .schedule-container .grid-cell:nth-child(37)::after,
+    .schedule-container .grid-cell:nth-child(44)::after,
+    .schedule-container .grid-cell:nth-child(51)::after {
+        width: 25px;
+        height: 25px;
+        bottom: 4px;
+        right: 4px;
     }
 }
