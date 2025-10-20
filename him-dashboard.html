@@ -84,22 +84,48 @@
                         <span class="card-icon">🗓️</span>
                         <div>
                             <div class="card-title">Lịch Trình & Kế Hoạch</div>
-                            <div class="card-subtitle">Quản lý lịch tuần của Em</div>
+                            <div class="card-subtitle">Quản lý lịch tuần của Em và lịch của Anh</div>
                         </div>
                     </div>
                     <span class="toggle-icon">▼</span>
                 </div>
                 <div class="card-body">
                     <div class="card-content">
-                        <h4>📅 Lịch Tuần Của Em</h4>
-                        <div id="next-event-preview" class="preview-content">
-                            <div class="loading-state">
-                                <div class="loading-spinner"></div>
-                                <p>Đang tải lịch trình...</p>
-                            </div>
+                        <!-- Tab Navigation -->
+                        <div class="tab-navigation">
+                            <button class="tab-btn active" data-tab="her-schedule">📅 Lịch Tuần Của Em</button>
+                            <button class="tab-btn" data-tab="his-schedule">👨‍💻 Lịch Của Anh</button>
                         </div>
-                        <div class="card-actions">
-                            <a href="schedule.html?from=him" class="card-button">🗓️ Quản Lý Lịch Tuần</a>
+
+                        <!-- Tab Content -->
+                        <div class="tab-content">
+                            <!-- Tab 1: Lịch Tuần Của Em -->
+                            <div id="her-schedule-tab" class="tab-panel active">
+                                <h4>📅 Lịch Tuần Của Em</h4>
+                                <div id="next-event-preview" class="preview-content">
+                                    <div class="loading-state">
+                                        <div class="loading-spinner"></div>
+                                        <p>Đang tải lịch trình...</p>
+                                    </div>
+                                </div>
+                                <div class="card-actions">
+                                    <a href="schedule.html?from=him" class="card-button">🗓️ Quản Lý Lịch Tuần</a>
+                                </div>
+                            </div>
+
+                            <!-- Tab 2: Lịch Của Anh -->
+                            <div id="his-schedule-tab" class="tab-panel">
+                                <h4>👨‍💻 Lịch Của Anh</h4>
+                                <div id="his-next-event-preview" class="preview-content">
+                                    <div class="loading-state">
+                                        <div class="loading-spinner"></div>
+                                        <p>Đang tải lịch trình...</p>
+                                    </div>
+                                </div>
+                                <div class="card-actions">
+                                    <a href="him-schedule.html" class="card-button">🗓️ Quản Lý Lịch Của Anh</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -195,6 +221,165 @@
     <script src="js/floating-hearts.js"></script>
 
     <script>
+        // Tab Control Logic
+        function initTabControl() {
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabPanels = document.querySelectorAll('.tab-panel');
+            
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const targetTab = btn.getAttribute('data-tab');
+                    
+                    // Remove active class from all buttons and panels
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    tabPanels.forEach(p => p.classList.remove('active'));
+                    
+                    // Add active class to clicked button and corresponding panel
+                    btn.classList.add('active');
+                    document.getElementById(targetTab + '-tab').classList.add('active');
+                });
+            });
+        }
+
+        // His Schedule Management
+        function initHisSchedule() {
+            // Load and display his next event
+            loadHisNextEvent();
+        }
+        
+        function getHisEvents() {
+            const events = localStorage.getItem('hisSchedule');
+            return events ? JSON.parse(events) : [];
+        }
+        
+        function loadHisNextEvent() {
+            const events = getHisEvents();
+            const previewEl = document.getElementById('his-next-event-preview');
+            
+            if (!previewEl) return;
+            
+            if (events.length === 0) {
+                previewEl.innerHTML = '<p>Chưa có sự kiện nào trong lịch của anh!</p>';
+                return;
+            }
+            
+            // Tìm sự kiện sắp tới dựa trên timeline thực tế
+            const now = new Date();
+            const currentDay = now.getDay(); // 0 = Chủ nhật, 1 = Thứ 2, ..., 6 = Thứ 7
+            const currentHour = now.getHours();
+            const currentMinute = now.getMinutes();
+            const currentTime = currentHour * 60 + currentMinute;
+            
+            // Convert currentDay to match schedule format (2 = Thứ 2, 3 = Thứ 3, ..., 8 = Chủ nhật)
+            const scheduleCurrentDay = currentDay === 0 ? 8 : currentDay + 1;
+            
+            // Sắp xếp events theo timeline
+            const sortedEvents = [...events].sort((a, b) => {
+                if (a.day !== b.day) return a.day - b.day;
+                return a.startTime.localeCompare(b.startTime);
+            });
+            
+            let nextEvent = null;
+            let todayEvents = [];
+            
+            // Thu thập tất cả sự kiện trong ngày hôm nay
+            for (const event of sortedEvents) {
+                const [eventHour, eventMinute] = event.startTime.split(':').map(Number);
+                const eventTime = eventHour * 60 + eventMinute;
+                
+                if (Number(event.day) === scheduleCurrentDay) {
+                    todayEvents.push(event);
+                    
+                    // Nếu event trong ngày hiện tại và thời gian chưa qua
+                    if (eventTime > currentTime) {
+                        nextEvent = event;
+                        break;
+                    }
+                }
+            }
+            
+            // Nếu không tìm thấy sự kiện chưa qua trong ngày hôm nay, chọn sự kiện gần nhất trong ngày hôm nay
+            if (!nextEvent && todayEvents.length > 0) {
+                // Sắp xếp sự kiện hôm nay theo thời gian (từ muộn nhất đến sớm nhất)
+                todayEvents.sort((a, b) => {
+                    const [aHour, aMinute] = a.startTime.split(':').map(Number);
+                    const [bHour, bMinute] = b.startTime.split(':').map(Number);
+                    const aTime = aHour * 60 + aMinute;
+                    const bTime = bHour * 60 + bMinute;
+                    return bTime - aTime; // Sắp xếp giảm dần (muộn nhất trước)
+                });
+                
+                nextEvent = todayEvents[0]; // Chọn sự kiện muộn nhất trong ngày hôm nay
+            }
+            
+            // Nếu không tìm thấy event trong ngày hôm nay, tìm event trong ngày tương lai
+            if (!nextEvent) {
+                for (const event of sortedEvents) {
+                    const [eventHour, eventMinute] = event.startTime.split(':').map(Number);
+                    const eventTime = eventHour * 60 + eventMinute;
+                    
+                    // Nếu event trong ngày tương lai
+                    if (Number(event.day) > scheduleCurrentDay) {
+                        nextEvent = event;
+                        break;
+                    }
+                }
+            }
+            
+            // Nếu không tìm thấy event sắp tới trong tuần này, tìm event sớm nhất trong tuần tiếp theo
+            if (!nextEvent) {
+                const nextWeekEvent = sortedEvents.find(event => {
+                    if (scheduleCurrentDay === 8) {
+                        // Nếu hôm nay là Chủ nhật, tìm event từ Thứ 2 trở đi
+                        return Number(event.day) >= 2;
+                    } else {
+                        // Nếu không phải Chủ nhật, tìm event từ ngày tiếp theo trở đi
+                        return Number(event.day) > scheduleCurrentDay;
+                    }
+                });
+                
+                if (nextWeekEvent) {
+                    nextEvent = nextWeekEvent;
+                } else if (sortedEvents.length > 0) {
+                    // Fallback cuối cùng: event sớm nhất trong tuần
+                    nextEvent = sortedEvents[0];
+                }
+            }
+            
+            // Format ngày hiển thị
+            const dayNames = ['', '', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ nhật'];
+            const dayName = dayNames[nextEvent.day] || `Ngày ${nextEvent.day}`;
+            
+            previewEl.innerHTML = `
+                <p>Sự kiện tiếp theo</p>
+                <div class="event-title">${nextEvent.title}</div>
+                <div class="event-time">${dayName} - ${nextEvent.startTime}</div>
+            `;
+        }
+        
+        function showNotification(message, type = 'info') {
+            // Simple notification - you can enhance this later
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#28a745' : '#17a2b8'};
+                color: white;
+                padding: 12px 20px;
+                border-radius: 5px;
+                z-index: 10000;
+                font-weight: 600;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
         // Inline initialization for him-dashboard with realtime sync
         window.addEventListener('DOMContentLoaded', async () => {
             if (typeof db === 'undefined') {
@@ -234,6 +419,10 @@
                 if (typeof initCollapsibleCards === 'function') {
                     initCollapsibleCards();
                 }
+
+                // Initialize tab control and his schedule
+                initTabControl();
+                initHisSchedule();
 
                 // Thiết lập đồng bộ thời gian thực
                 // console.log('🔄 Thiết lập đồng bộ thời gian thực...');

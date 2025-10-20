@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lịch Của Anh</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/schedule.css">
+    <link rel="stylesheet" href="css/sunset-theme.css">
+    <link rel="stylesheet" href="css/notifications.css">
+    <link rel="icon" type="image/png" href="./images/logo.svg">
+    <style>
+        .schedule-container::after {
+            content: '' !important;
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            background-image: url('./images/xe.jpg') !important;
+            background-size: 200px 200px !important;
+            background-repeat: repeat !important;
+            background-position: 0 0 !important;
+            opacity: 0.08 !important;
+            z-index: 1 !important;
+            pointer-events: none !important;
+        }
+        
+        .schedule-container:hover::after {
+            opacity: 0.08 !important;
+            transform: none !important;
+        }
+        
+        /* Debug modal styles */
+        #event-modal {
+            display: none !important;
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            background: rgba(0, 0, 0, 0.5) !important;
+            z-index: 999999 !important;
+            justify-content: center !important;
+            align-items: center !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            pointer-events: auto !important;
+        }
+        
+        #event-modal[style*="flex"] {
+            display: flex !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+        
+        /* Force modal content to be visible */
+        #event-modal .modal-content {
+            opacity: 1 !important;
+            visibility: visible !important;
+            transform: none !important;
+            position: relative !important;
+            z-index: 1000000 !important;
+            background: white !important;
+            padding: 20px !important;
+            border-radius: 10px !important;
+            max-width: 500px !important;
+            width: 90% !important;
+            margin: auto !important;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3) !important;
+            pointer-events: auto !important;
+        }
+        
+        /* Force all modal elements to be visible */
+        #event-modal * {
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Hearts Animation -->
+    <div class="floating-hearts" id="floating-hearts"></div>
+    
+    <div class="schedule-container">
+        <a href="him-dashboard.html" id="back-to-dashboard-btn" class="back-to-dashboard-btn">↩ Quay lại</a>
+        
+        <!-- Icon decorations around container -->
+        <div class="decoration-top-left"></div>
+        <div class="decoration-top-right"></div>
+        <div class="decoration-bottom-left"></div>
+        <div class="decoration-bottom-right"></div>
+        
+        <h1>Lịch Của Anh 👨‍💻</h1>
+        <div id="schedule-grid" class="schedule-grid">
+        </div>
+    </div>
+
+    <div id="event-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 id="modal-title">Thêm Sự Kiện Mới</h2>
+            <input type="text" id="event-title-input" placeholder="Tên sự kiện (VD: Họp team, Deadline dự án)">
+            
+            <div class="form-grid">
+                <select id="event-day-select">
+                    <option value="2">Thứ 2</option>
+                    <option value="3">Thứ 3</option>
+                    <option value="4">Thứ 4</option>
+                    <option value="5">Thứ 5</option>
+                    <option value="6">Thứ 6</option>
+                    <option value="7">Thứ 7</option>
+                    <option value="8">Chủ Nhật</option>
+                </select>
+                <input type="color" id="event-color-input" value="#2196F3">
+                
+                <input type="time" id="event-start-time-input" step="1800">
+                <input type="time" id="event-end-time-input" step="1800">
+            </div>
+
+            <div class="modal-actions">
+                <button id="save-event-button" class="modal-btn save">Lưu</button>
+                <button id="delete-event-button" class="modal-btn delete">Xóa</button>
+                <button id="cancel-event-button" class="modal-btn cancel">Hủy</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore-compat.js"></script>
+
+    <script src="js/firebase-init.js"></script>
+    <script src="js/notifications.js"></script>
+    <script src="js/realtime-sync.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/smooth-scroll.js"></script>
+    <script src="js/schedule.js"></script>
+    <script src="js/floating-hearts.js"></script>
+
+    <script>
+        // His Schedule Management (using Firebase like schedule.html)
+        let events = [];
+        let currentEditingEvent = null;
+
+        // Override runSchedulePage to use hisData instead of herData
+        const originalRunSchedulePage = window.runSchedulePage;
+        
+        window.runSchedulePage = function(data) {
+            console.log("🎯 runSchedulePage called with data:", data);
+            
+            // Use hisData instead of herData
+            const scheduleGrid = document.getElementById('schedule-grid');
+            if (!scheduleGrid) {
+                console.error("❌ schedule-grid element not found!");
+                return;
+            }
+            console.log("✅ schedule-grid found");
+
+            const scheduleData = data.schedule || [];
+            events = scheduleData;
+            console.log("📅 Schedule data:", scheduleData);
+
+            // Tự động kiểm tra kích thước màn hình để chọn giao diện phù hợp
+            if (window.innerWidth <= 768) {
+                console.log("📱 Mobile view - using renderMobileSchedule");
+                // Nếu là màn hình nhỏ (iPhone), vẽ giao diện di động
+                if (typeof renderMobileSchedule === 'function') {
+                    renderMobileSchedule(scheduleData, scheduleGrid);
+                } else {
+                    console.error("❌ renderMobileSchedule function not found!");
+                }
+            } else {
+                console.log("🖥️ Desktop view - using grid layout");
+                // Nếu là màn hình lớn, vẽ giao diện lưới như cũ
+                if (typeof drawScheduleGrid === 'function') {
+                    drawScheduleGrid(scheduleGrid);
+                    console.log("✅ Grid drawn");
+                } else {
+                    console.error("❌ drawScheduleGrid function not found!");
+                }
+                
+                if (typeof renderEvents === 'function') {
+                    renderEvents(scheduleData, scheduleGrid);
+                    console.log("✅ Events rendered");
+                    
+                    // Add data-id to all event blocks after rendering
+                    setTimeout(() => {
+                        const eventBlocks = scheduleGrid.querySelectorAll('.event-block');
+                        console.log("🔍 Found event blocks:", eventBlocks.length);
+                        
+                        eventBlocks.forEach((block, index) => {
+                            console.log("🔍 Processing event block", index, ":", block);
+                            console.log("🔍 Current dataset.id:", block.dataset.id);
+                            
+                            if (!block.dataset.id) {
+                                // Try to find the corresponding event
+                                const event = scheduleData[index];
+                                if (event && event.id) {
+                                    // Set both dataset.id and data-id attribute
+                                    block.dataset.id = event.id;
+                                    block.setAttribute('data-id', event.id);
+                                    console.log("🔧 Added data-id to event block:", event.id, "for event:", event.title);
+                                    console.log("🔧 Verification - dataset.id:", block.dataset.id);
+                                    console.log("🔧 Verification - getAttribute('data-id'):", block.getAttribute('data-id'));
+                                } else {
+                                    console.log("⚠️ No event found for block index:", index);
+                                }
+                            } else {
+                                console.log("✅ Event block already has data-id:", block.dataset.id);
+                            }
+                        });
+                    }, 100);
+                } else {
+                    console.error("❌ renderEvents function not found!");
+                }
+                
+                // Use our custom click listener instead of schedule.js
+                setupCustomGridClickListener(scheduleGrid);
+                console.log("✅ Custom click listeners setup");
+            }
+        };
+        
+        // Custom grid click listener for his schedule
+        function setupCustomGridClickListener(gridElement) {
+            if (!gridElement) return;
+            
+            // Remove existing listeners
+            gridElement.replaceWith(gridElement.cloneNode(true));
+            const newGrid = document.getElementById('schedule-grid');
+            
+            let clickDebounce = null;
+            
+            newGrid.addEventListener('click', (e) => {
+                // Prevent rapid clicks
+                if (clickDebounce) {
+                    console.log("⚠️ Click debounce active, ignoring");
+                    return;
+                }
+                
+                clickDebounce = setTimeout(() => {
+                    clickDebounce = null;
+                }, 300);
+                
+                console.log("🖱️ Grid clicked");
+                
+                // Check if clicked on event item
+                if (e.target.closest('.event-block')) {
+                    console.log("📅 Event item clicked");
+                    const eventBlock = e.target.closest('.event-block');
+                    console.log("🔍 Event block element:", eventBlock);
+                    console.log("🔍 Event block attributes:", eventBlock.attributes);
+                    
+                    // Try different ways to get event ID
+                    const eventId = eventBlock.dataset.id || 
+                                   eventBlock.getAttribute('data-id') || 
+                                   eventBlock.id ||
+                                   eventBlock.getAttribute('id');
+                    
+                    console.log("🔍 Event ID:", eventId);
+                    console.log("🔍 dataset.id:", eventBlock.dataset.id);
+                    console.log("🔍 getAttribute('data-id'):", eventBlock.getAttribute('data-id'));
+                    console.log("🔍 element.id:", eventBlock.id);
+                    console.log("🔍 getAttribute('id'):", eventBlock.getAttribute('id'));
+                    
+                    // Also check all data attributes
+                    console.log("🔍 All data attributes:", Object.keys(eventBlock.dataset));
+                    for (let key in eventBlock.dataset) {
+                        console.log("🔍 data-" + key + ":", eventBlock.dataset[key]);
+                    }
+                    
+                    if (eventId) {
+                        console.log("🔍 Available events:", events);
+                        const event = events.find(ev => ev.id === eventId);
+                        console.log("🔍 Found event:", event);
+                        if (event) {
+                            console.log("📝 Opening edit modal for event:", event.title);
+                            window.openEventModal(event);
+                        } else {
+                            console.error("❌ Event not found with ID:", eventId);
+                        }
+                    } else {
+                        console.error("❌ No event ID found");
+                        console.log("🔍 Trying to find event by position...");
+                        
+                        // Try to find event by position in grid
+                        const gridRect = newGrid.getBoundingClientRect();
+                        const x = e.clientX - gridRect.left;
+                        const y = e.clientY - gridRect.top;
+                        
+                        console.log("🔍 Click position:", { x, y });
+                        
+                        // Calculate which cell was clicked
+                        const cellWidth = gridRect.width / 7; // 7 days
+                        const cellHeight = gridRect.height / 8; // 8 time slots
+                        
+                        const day = Math.floor(x / cellWidth) + 1;
+                        const timeSlot = Math.floor(y / cellHeight);
+                        
+                        console.log("🔍 Calculated day:", day, "time slot:", timeSlot);
+                        
+                        // Find event at this position
+                        const eventAtPosition = events.find(ev => {
+                            const eventDay = parseInt(ev.day);
+                            const eventTime = parseInt(ev.startTime.split(':')[0]);
+                            
+                            console.log("🔍 Checking event:", ev.title, "Day:", eventDay, "Time:", eventTime);
+                            console.log("🔍 Against click: Day:", day, "Time slot:", timeSlot);
+                            
+                            // More flexible time matching
+                            const timeSlots = [
+                                { start: 7, end: 9 },   // 0
+                                { start: 9, end: 11 },  // 1
+                                { start: 11, end: 13 },  // 2
+                                { start: 13, end: 15 }, // 3
+                                { start: 15, end: 17 }, // 4
+                                { start: 17, end: 19 },  // 5
+                                { start: 19, end: 21 },  // 6
+                                { start: 21, end: 23 }  // 7
+                            ];
+                            
+                            const timeSlotRange = timeSlots[timeSlot];
+                            if (!timeSlotRange) return false;
+                            
+                            const isInTimeSlot = eventTime >= timeSlotRange.start && eventTime < timeSlotRange.end;
+                            const isCorrectDay = eventDay === day;
+                            
+                            console.log("🔍 Time slot range:", timeSlotRange);
+                            console.log("🔍 Is in time slot:", isInTimeSlot);
+                            console.log("🔍 Is correct day:", isCorrectDay);
+                            
+                            return isCorrectDay && isInTimeSlot;
+                        });
+                        
+                        if (eventAtPosition) {
+                            console.log("📝 Found event by position:", eventAtPosition);
+                            window.openEventModal(eventAtPosition);
+                        } else {
+                            console.error("❌ No event found at this position");
+                        }
+                    }
+                    return;
+                }
+                
+                // Check if clicked on empty grid cell
+                if (e.target.classList.contains('grid-cell')) {
+                    console.log("📅 Empty grid cell clicked");
+                    const day = e.target.getAttribute('data-day');
+                    const time = e.target.getAttribute('data-time');
+                    
+                    console.log("📅 Grid cell clicked: Day=" + day + ", Time=" + time);
+                    
+                    // Call our overridden openEventModal for new event
+                    window.openEventModal(null, day, time);
+                    return;
+                }
+                
+                // Check if clicked on empty grid cell
+                const gridRect = newGrid.getBoundingClientRect();
+                const x = e.clientX - gridRect.left;
+                const y = e.clientY - gridRect.top;
+                
+                const headerHeight = 50;
+                const timeColumnWidth = 80;
+                const rowHeight = 80;
+                
+                if (y > headerHeight && x > timeColumnWidth) {
+                    const dayColumnWidth = (newGrid.offsetWidth - timeColumnWidth) / 7;
+                    const dayIndex = Math.floor((x - timeColumnWidth) / dayColumnWidth);
+                    const timeIndex = Math.floor((y - headerHeight) / rowHeight);
+                    
+                    if (dayIndex >= 0 && dayIndex < 7 && timeIndex >= 0 && timeIndex < 8) {
+                        const day = dayIndex + 2; // Convert to schedule day format
+                        const startHour = 7 + (timeIndex * 2);
+                        const time = `${String(startHour).padStart(2, '0')}:00`;
+                        
+                        console.log(`📅 Grid cell clicked: Day=${day}, Time=${time}`);
+                        
+                        window.openEventModal();
+                        document.getElementById('event-day-select').value = day;
+                        document.getElementById('event-start-time-input').value = time;
+                    }
+                }
+            });
+        }
+
+        // Load events from Firebase
+        async function loadEvents() {
+            console.log("🔍 Loading events from Firebase...");
+            if (typeof db === 'undefined') {
+                console.error("❌ Firebase chưa được khởi tạo!");
+                return;
+            }
+
+            try {
+                const hisDataRef = db.collection('userInfo').doc('hisData');
+                console.log("📡 Fetching hisData from Firebase...");
+                const hisDoc = await hisDataRef.get();
+                const hisData = hisDoc.exists ? hisDoc.data() : {};
+                console.log("📄 HisData from Firebase:", hisData);
+                
+                events = hisData.schedule || [];
+                console.log("📅 Events loaded:", events);
+                
+                // Use the same rendering logic as schedule.js
+                console.log("🎨 Rendering schedule...");
+                window.runSchedulePage({ schedule: events });
+                console.log("✅ Schedule rendered");
+            } catch (error) {
+                console.error("❌ Lỗi khi tải dữ liệu:", error);
+                events = [];
+                window.runSchedulePage({ schedule: [] });
+            }
+        }
+
+        // Save events to Firebase
+        async function saveEvents() {
+            if (typeof db === 'undefined') {
+                console.error("Firebase chưa được khởi tạo!");
+                return;
+            }
+
+            try {
+                const hisDataRef = db.collection('userInfo').doc('hisData');
+                await hisDataRef.set({
+                    schedule: events
+                }, { merge: true });
+            } catch (error) {
+                console.error("Lỗi khi lưu dữ liệu:", error);
+                alert("Không thể lưu dữ liệu!");
+            }
+        }
+
+        // Override modal functions to use hisData
+        const originalOpenEventModal = window.openEventModal;
+        let modalDebounceTimer = null;
+        
+        window.openEventModal = function(event = null) {
+            console.log("🎯 openEventModal called with:", event);
+            console.log("🔍 Call stack:", new Error().stack);
+            
+            const modal = document.getElementById('event-modal');
+            if (!modal) {
+                console.error("❌ event-modal not found!");
+                return;
+            }
+            
+            // Prevent multiple rapid calls
+            if (modal.style.display === 'flex') {
+                console.log("⚠️ Modal already open, ignoring call");
+                return;
+            }
+            
+            // Add debounce to prevent rapid calls
+            if (modalDebounceTimer) {
+                console.log("⚠️ Debounce active, ignoring call");
+                return;
+            }
+            
+            modalDebounceTimer = setTimeout(() => {
+                modalDebounceTimer = null;
+            }, 200);
+            
+            const title = document.getElementById('modal-title');
+            const titleInput = document.getElementById('event-title-input');
+            const daySelect = document.getElementById('event-day-select');
+            const colorInput = document.getElementById('event-color-input');
+            const startTimeInput = document.getElementById('event-start-time-input');
+            const endTimeInput = document.getElementById('event-end-time-input');
+            const deleteButton = document.getElementById('delete-event-button');
+            
+            if (event) { // Chế độ Sửa
+                console.log("✏️ Edit mode");
+                title.innerText = 'Sửa Sự Kiện';
+                currentEditingEvent = event;
+                titleInput.value = event.title;
+                daySelect.value = event.day;
+                colorInput.value = event.color || '#2196F3';
+                startTimeInput.value = event.startTime;
+                endTimeInput.value = event.endTime;
+                deleteButton.style.display = 'inline-block';
+            } else { // Chế độ Thêm mới
+                console.log("➕ Add mode");
+                title.innerText = 'Thêm Sự Kiện Mới';
+                currentEditingEvent = null;
+                titleInput.value = '';
+                colorInput.value = '#2196F3';
+                startTimeInput.value = '';
+                endTimeInput.value = '';
+                daySelect.value = '';
+                deleteButton.style.display = 'none';
+            }
+            
+            // Move modal to body to avoid stacking context issues
+            document.body.appendChild(modal);
+            
+            modal.style.display = 'flex';
+            modal.style.zIndex = '99999';
+            modal.style.position = 'fixed';
+            modal.style.top = '0';
+            modal.style.left = '0';
+            modal.style.width = '100%';
+            modal.style.height = '100%';
+            modal.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // Lighter background
+            modal.style.pointerEvents = 'auto'; // Ensure modal can receive clicks
+            
+            console.log("✅ Modal opened");
+            console.log("🔍 Modal computed style:", window.getComputedStyle(modal).display);
+            console.log("🔍 Modal visibility:", window.getComputedStyle(modal).visibility);
+            console.log("🔍 Modal opacity:", window.getComputedStyle(modal).opacity);
+            console.log("🔍 Modal z-index:", window.getComputedStyle(modal).zIndex);
+            console.log("🔍 Modal position:", window.getComputedStyle(modal).position);
+            
+            // Check modal content
+            const modalContent = modal.querySelector('.modal-content');
+            if (modalContent) {
+                console.log("🔍 Modal content found");
+                console.log("🔍 Modal content opacity:", window.getComputedStyle(modalContent).opacity);
+                console.log("🔍 Modal content visibility:", window.getComputedStyle(modalContent).visibility);
+                console.log("🔍 Modal content z-index:", window.getComputedStyle(modalContent).zIndex);
+                console.log("🔍 Modal content position:", window.getComputedStyle(modalContent).position);
+                
+                // Force modal content to be visible
+                modalContent.style.position = 'relative';
+                modalContent.style.zIndex = '100000';
+                modalContent.style.backgroundColor = 'white';
+                modalContent.style.padding = '20px';
+                modalContent.style.borderRadius = '10px';
+                modalContent.style.maxWidth = '500px';
+                modalContent.style.width = '90%';
+                modalContent.style.margin = 'auto';
+                
+                console.log("✅ Modal content styles applied");
+            } else {
+                console.error("❌ Modal content not found!");
+            }
+            
+            // Test if modal is actually visible
+            setTimeout(() => {
+                const rect = modal.getBoundingClientRect();
+                console.log("🔍 Modal bounding rect:", rect);
+                console.log("🔍 Modal is visible:", rect.width > 0 && rect.height > 0);
+                
+                // Check if modal is actually visible on screen
+                const isVisible = window.getComputedStyle(modal).display !== 'none' && 
+                                 window.getComputedStyle(modal).visibility !== 'hidden' &&
+                                 window.getComputedStyle(modal).opacity !== '0';
+                console.log("🔍 Modal CSS visibility check:", isVisible);
+                
+                // Check stacking context
+                const zIndex = window.getComputedStyle(modal).zIndex;
+                console.log("🔍 Modal z-index:", zIndex);
+                
+                // Force modal to be visible with maximum priority
+                modal.style.cssText = `
+                    display: flex !important;
+                    position: fixed !important;
+                    top: 0 !important;
+                    left: 0 !important;
+                    width: 100vw !important;
+                    height: 100vh !important;
+                    background: rgba(0, 0, 0, 0.5) !important;
+                    z-index: 2147483647 !important;
+                    visibility: visible !important;
+                    opacity: 1 !important;
+                    margin: 0 !important;
+                    padding: 0 !important;
+                    pointer-events: auto !important;
+                `;
+                
+                // Also force modal content to be on top
+                const modalContent = modal.querySelector('.modal-content');
+                if (modalContent) {
+                    modalContent.style.cssText = `
+                        position: relative !important;
+                        z-index: 2147483648 !important;
+                        background: white !important;
+                        padding: 20px !important;
+                        border-radius: 10px !important;
+                        max-width: 500px !important;
+                        width: 90% !important;
+                        margin: auto !important;
+                        box-shadow: 0 4px 20px rgba(0,0,0,0.3) !important;
+                        pointer-events: auto !important;
+                    `;
+                }
+                
+                console.log("🔧 Applied maximum priority styles");
+                
+                // Also check if there are any parent elements hiding the modal
+                let parent = modal.parentElement;
+                while (parent && parent !== document.body) {
+                    const parentStyle = window.getComputedStyle(parent);
+                    if (parentStyle.display === 'none' || parentStyle.visibility === 'hidden') {
+                        console.error("❌ Parent element hiding modal:", parent);
+                    }
+                    parent = parent.parentElement;
+                }
+                
+                // Check if modal is actually on top
+                const elementsAtPoint = document.elementsFromPoint(window.innerWidth/2, window.innerHeight/2);
+                console.log("🔍 Elements at center of screen:", elementsAtPoint);
+                const modalIndex = elementsAtPoint.indexOf(modal);
+                console.log("🔍 Modal position in stack:", modalIndex);
+                
+                if (modalIndex === -1) {
+                    console.error("❌ Modal not found in element stack!");
+                } else if (modalIndex > 0) {
+                    console.warn("⚠️ Modal is not on top, element above:", elementsAtPoint[modalIndex - 1]);
+                } else {
+                    console.log("✅ Modal is on top of all elements");
+                }
+            }, 100);
+            
+            // Setup button listeners after modal is opened
+            setupModalButtonListeners();
+            
+            // Add click outside to close
+            const closeModal = (e) => {
+                console.log("🖱️ Modal clicked, target:", e.target);
+                if (e.target === modal) {
+                    console.log("🖱️ Click outside modal content, closing...");
+                    modal.style.display = 'none';
+                    currentEditingEvent = null;
+                    modalDebounceTimer = null; // Reset debounce timer
+                    modal.removeEventListener('click', closeModal);
+                    // Remove modal from DOM to avoid stacking issues
+                    if (modal.parentNode) {
+                        modal.parentNode.removeChild(modal);
+                    }
+                } else {
+                    console.log("🖱️ Click inside modal content, keeping open");
+                }
+            };
+            modal.addEventListener('click', closeModal);
+        };
+
+
+        // Setup modal button listeners
+        function setupModalButtonListeners() {
+            console.log("🔧 Setting up modal button listeners...");
+            
+            const saveButton = document.getElementById('save-event-button');
+            const deleteButton = document.getElementById('delete-event-button');
+            const cancelButton = document.getElementById('cancel-event-button');
+            
+            console.log("🔍 Save button found:", !!saveButton);
+            console.log("🔍 Delete button found:", !!deleteButton);
+            console.log("🔍 Cancel button found:", !!cancelButton);
+            
+            if (saveButton) {
+                // Remove existing listeners
+                saveButton.replaceWith(saveButton.cloneNode(true));
+                const newSaveButton = document.getElementById('save-event-button');
+                
+                newSaveButton.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log("💾 Save button clicked");
+                    
+                    const title = document.getElementById('event-title-input').value.trim();
+                    const day = document.getElementById('event-day-select').value;
+                    const color = document.getElementById('event-color-input').value;
+                    const startTime = document.getElementById('event-start-time-input').value;
+                    const endTime = document.getElementById('event-end-time-input').value;
+                    
+                    console.log("📝 Form data:", { title, day, color, startTime, endTime });
+                    
+                    if (!title || !day || !startTime || !endTime) {
+                        alert('Vui lòng điền đủ thông tin!');
+                        return;
+                    }
+
+                    const newEvent = {
+                        id: currentEditingEvent?.id || Date.now().toString(),
+                        title: title,
+                        day: parseInt(day),
+                        color: color,
+                        startTime: startTime,
+                        endTime: endTime,
+                    };
+
+                    console.log("📅 New event:", newEvent);
+
+                    try {
+                        const hisDataRef = db.collection('userInfo').doc('hisData');
+                        const doc = await hisDataRef.get();
+                        let schedule = doc.exists ? (doc.data().schedule || []) : [];
+
+                        if (currentEditingEvent) { // Nếu là sửa, thay thế sự kiện cũ
+                            schedule = schedule.map(event => event.id === currentEditingEvent.id ? newEvent : event);
+                        } else { // Nếu là thêm mới, đẩy vào mảng
+                            schedule.push(newEvent);
+                        }
+
+                        console.log("💾 Saving schedule:", schedule);
+                        await hisDataRef.set({ schedule: schedule }, { merge: true });
+                        
+                        alert('Đã lưu thành công!');
+                        location.reload();
+                    } catch (error) {
+                        console.error("❌ Error saving:", error);
+                        alert('Lỗi khi lưu: ' + error.message);
+                    }
+                });
+                console.log("✅ Save button listener added");
+            }
+            
+            if (deleteButton) {
+                deleteButton.replaceWith(deleteButton.cloneNode(true));
+                const newDeleteButton = document.getElementById('delete-event-button');
+                
+                newDeleteButton.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log("🗑️ Delete button clicked");
+                    
+                    if (!currentEditingEvent) return;
+                    
+                    if (confirm('Bạn có chắc chắn muốn xóa sự kiện này?')) {
+                        try {
+                            const hisDataRef = db.collection('userInfo').doc('hisData');
+                            const doc = await hisDataRef.get();
+                            let schedule = doc.exists ? (doc.data().schedule || []) : [];
+                            
+                            schedule = schedule.filter(event => event.id !== currentEditingEvent.id);
+                            await hisDataRef.set({ schedule: schedule }, { merge: true });
+                            
+                            alert('Đã xóa sự kiện!');
+                            location.reload();
+                        } catch (error) {
+                            console.error("❌ Error deleting:", error);
+                            alert('Lỗi khi xóa: ' + error.message);
+                        }
+                    }
+                });
+                console.log("✅ Delete button listener added");
+            }
+            
+            if (cancelButton) {
+                cancelButton.replaceWith(cancelButton.cloneNode(true));
+                const newCancelButton = document.getElementById('cancel-event-button');
+                
+                newCancelButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log("❌ Cancel button clicked");
+                    document.getElementById('event-modal').style.display = 'none';
+                    currentEditingEvent = null;
+                    modalDebounceTimer = null; // Reset debounce timer
+                    console.log("✅ Modal closed via Cancel button");
+                });
+                console.log("✅ Cancel button listener added");
+            }
+            
+            console.log("🎉 Modal button listeners setup complete!");
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#28a745' : '#17a2b8'};
+                color: white;
+                padding: 12px 20px;
+                border-radius: 5px;
+                z-index: 10000;
+                font-weight: 600;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Main initialization
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log("🚀 Him-schedule page loading...");
+            
+            // Wait for Firebase to initialize
+            if (typeof db === 'undefined') {
+                console.error("❌ Firebase chưa được khởi tạo!");
+                return;
+            }
+            console.log("✅ Firebase initialized");
+
+            // Đợi realtime sync khởi tạo
+            const waitForRealtimeSync = () => {
+                return new Promise((resolve) => {
+                    const check = () => {
+                        if (window.realtimeSync && window.realtimeSync.isInitialized) {
+                            console.log("✅ RealtimeSync initialized");
+                            resolve();
+                        } else {
+                            setTimeout(check, 100);
+                        }
+                    };
+                    check();
+                });
+            };
+
+            try {
+                await waitForRealtimeSync();
+                
+                // Load events
+                console.log("📥 Loading events...");
+                await loadEvents();
+                console.log("✅ Events loaded:", events);
+                
+                // Setup realtime sync for his schedule
+                window.realtimeSync.listenToHisSchedule((schedule) => {
+                    console.log("🔄 Realtime update:", schedule);
+                    events = schedule || [];
+                    window.runSchedulePage({ schedule: events });
+                });
+
+                console.log("🎉 Him-schedule page initialized successfully!");
+
+            } catch (error) {
+                console.error("❌ Lỗi khi khởi tạo:", error);
+                alert("Đã xảy ra lỗi khi kết nối: " + error.message);
+            }
+        });
+    </script>
+</body>
+</html>

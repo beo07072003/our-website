@@ -288,6 +288,264 @@
     font-size: 1.1em;
 }
 
+/* ===== TAB CONTROL STYLES ===== */
+.tab-navigation {
+    display: flex;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #f0f0f0;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: 10px 10px 0 0;
+    overflow: hidden;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 12px 16px;
+    border: none;
+    background: transparent;
+    color: #666;
+    font-size: 0.9em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-bottom: 3px solid transparent;
+    position: relative;
+}
+
+.tab-btn:hover {
+    background: rgba(239, 71, 111, 0.1);
+    color: #ef476f;
+}
+
+.tab-btn.active {
+    background: linear-gradient(135deg, #ef476f, #ff6b6b);
+    color: white;
+    border-bottom-color: #d90429;
+    box-shadow: 0 2px 8px rgba(239, 71, 111, 0.3);
+}
+
+.tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: #d90429;
+}
+
+.tab-content {
+    position: relative;
+    min-height: 300px;
+}
+
+.tab-panel {
+    display: none;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.tab-panel.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== HIS SCHEDULE FORM STYLES ===== */
+.schedule-form-container {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+}
+
+.schedule-form {
+    display: grid;
+    gap: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+    font-size: 0.9em;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 10px 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 0.9em;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #ef476f;
+    box-shadow: 0 0 0 3px rgba(239, 71, 111, 0.1);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.form-actions .card-button {
+    flex: 1;
+    margin: 0;
+}
+
+/* ===== HIS SCHEDULE LIST STYLES ===== */
+.his-schedule-list {
+    background: rgba(255, 255, 255, 0.6);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e0e0e0;
+}
+
+.his-schedule-list h5 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 1.1em;
+    border-bottom: 2px solid #ef476f;
+    padding-bottom: 8px;
+}
+
+.events-list {
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.event-item {
+    background: linear-gradient(135deg, #fff, #f8f9fa);
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    border-left: 4px solid #ef476f;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.event-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.event-item .event-title {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+    font-size: 1em;
+}
+
+.event-item .event-details {
+    color: #666;
+    font-size: 0.85em;
+    line-height: 1.4;
+}
+
+.event-item .event-time {
+    color: #ef476f;
+    font-weight: 600;
+}
+
+.event-item .event-location {
+    color: #666;
+    font-style: italic;
+}
+
+.event-item .delete-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    font-size: 0.7em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.event-item .delete-btn:hover {
+    background: #c82333;
+    transform: scale(1.1);
+}
+
+.no-events {
+    text-align: center;
+    color: #999;
+    font-style: italic;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.02);
+    border-radius: 10px;
+    border: 2px dashed #ddd;
+}
+
+/* ===== RESPONSIVE TAB STYLES ===== */
+@media (max-width: 768px) {
+    .tab-navigation {
+        flex-direction: column;
+    }
+    
+    .tab-btn {
+        border-radius: 0;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .tab-btn:last-child {
+        border-bottom: none;
+    }
+    
+    .schedule-form-container {
+        padding: 15px;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .form-actions .card-button {
+        margin-bottom: 10px;
+    }
+    
+    .his-schedule-list {
+        padding: 15px;
+    }
+    
+    .events-list {
+        max-height: 250px;
+    }
+}
+
 /* --- Style chung cho các nút trong Card --- */
 .card-button {
     background-color: #ef476f;

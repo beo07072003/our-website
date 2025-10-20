@@ -79,6 +79,16 @@ class RealtimeSync {
         });
     }
 
+    // Lắng nghe thay đổi lịch tuần của anh
+    listenToHisSchedule(callback) {
+        return this.listenToHisData((data) => {
+            if (data.schedule) {
+                // console.log('📅 Lịch tuần của anh đã được cập nhật:', data.schedule);
+                callback(data.schedule);
+            }
+        });
+    }
+
     // Lắng nghe thay đổi ý tưởng
     listenToIdeas(callback) {
         return this.listenToHisData((data) => {
