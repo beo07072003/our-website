@@ -13,8 +13,8 @@
     position: relative;
 }
 
-/* Icon rồng ở góc trái phía trên */
-.dashboard-container::before {
+/* Icon rồng ở góc trái phía trên - CHỈ CHO HIM-DASHBOARD */
+.dashboard-container.him-dashboard::before {
     content: '';
     position: absolute;
     top: 15px;
@@ -31,7 +31,7 @@
     pointer-events: none;
 }
 
-.dashboard-container:hover::before {
+.dashboard-container.him-dashboard:hover::before {
     opacity: 1;
     transform: scale(1.1) rotate(5deg);
 }
@@ -787,7 +787,7 @@
     }
     
     /* Responsive cho icon rồng */
-    .dashboard-container::before {
+    .dashboard-container.him-dashboard::before {
         width: 70px;
         height: 70px;
         top: 10px;
@@ -797,7 +797,7 @@
 
 /* Responsive cho tablet */
 @media (max-width: 768px) {
-    .dashboard-container::before {
+    .dashboard-container.him-dashboard::before {
         width: 80px;
         height: 80px;
         top: 12px;
@@ -807,7 +807,7 @@
 
 /* Responsive cho mobile nhỏ */
 @media (max-width: 480px) {
-    .dashboard-container::before {
+    .dashboard-container.him-dashboard::before {
         width: 60px;
         height: 60px;
         top: 8px;

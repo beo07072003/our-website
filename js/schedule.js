@@ -110,6 +110,12 @@ function renderEvents(events, gridElement) {
         const eventBlock = document.createElement('div');
         eventBlock.className = 'event-block';
         
+        // Set data-id attribute for event identification
+        if (event.id) {
+            eventBlock.dataset.id = event.id;
+            eventBlock.setAttribute('data-id', event.id);
+        }
+        
         // Tạo HTML structure với title và time
         eventBlock.innerHTML = `
             <div class="event-title">${event.title}</div>

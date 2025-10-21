@@ -183,34 +183,6 @@
                 if (typeof renderEvents === 'function') {
                     renderEvents(scheduleData, scheduleGrid);
                     console.log("✅ Events rendered");
-                    
-                    // Add data-id to all event blocks after rendering
-                    setTimeout(() => {
-                        const eventBlocks = scheduleGrid.querySelectorAll('.event-block');
-                        console.log("🔍 Found event blocks:", eventBlocks.length);
-                        
-                        eventBlocks.forEach((block, index) => {
-                            console.log("🔍 Processing event block", index, ":", block);
-                            console.log("🔍 Current dataset.id:", block.dataset.id);
-                            
-                            if (!block.dataset.id) {
-                                // Try to find the corresponding event
-                                const event = scheduleData[index];
-                                if (event && event.id) {
-                                    // Set both dataset.id and data-id attribute
-                                    block.dataset.id = event.id;
-                                    block.setAttribute('data-id', event.id);
-                                    console.log("🔧 Added data-id to event block:", event.id, "for event:", event.title);
-                                    console.log("🔧 Verification - dataset.id:", block.dataset.id);
-                                    console.log("🔧 Verification - getAttribute('data-id'):", block.getAttribute('data-id'));
-                                } else {
-                                    console.log("⚠️ No event found for block index:", index);
-                                }
-                            } else {
-                                console.log("✅ Event block already has data-id:", block.dataset.id);
-                            }
-                        });
-                    }, 100);
                 } else {
                     console.error("❌ renderEvents function not found!");
                 }

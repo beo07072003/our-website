@@ -267,106 +267,40 @@ function setupSchedulePreview(schedule) {
         // console.log('📅 Sunday events after current time:', todaySundayEvents.map(e => `${e.startTime}: ${e.title}`));
     }
     
-    // Tìm sự kiện sắp tới
+    // Lưu event đầu tiên trong tuần (để wrap around)
+    earliestEvent = sortedEvents[0];
+    
+    // Tìm sự kiện sắp tới hoặc đang diễn ra
     for (const event of sortedEvents) {
-        const [eventHour, eventMinute] = event.startTime.split(':').map(Number);
-        const eventTime = eventHour * 60 + eventMinute;
+        const [startHour, startMinute] = event.startTime.split(':').map(Number);
+        const [endHour, endMinute] = event.endTime.split(':').map(Number);
+        const eventStartTime = startHour * 60 + startMinute;
+        const eventEndTime = endHour * 60 + endMinute;
         
-        // Debug: Kiểm tra parsing thời gian
-        // console.log(`⏰ Time parsing for ${event.title}:`, {
-        //     startTime: event.startTime,
-        //     eventHour: eventHour,
-        //     eventMinute: eventMinute,
-        //     eventTime: eventTime,
-        //     isNaN: isNaN(eventTime)
-        // });
-        
-        // console.log(`🔍 Checking event: ${event.title} (Day: ${event.day}, Time: ${event.startTime}, EventTime: ${eventTime}, CurrentTime: ${currentTime})`);
-        // console.log(`   - Is today? ${Number(event.day) === scheduleCurrentDay} (event.day: ${event.day} (${typeof event.day}), scheduleCurrentDay: ${scheduleCurrentDay} (${typeof scheduleCurrentDay}))`);
-        // console.log(`   - Time not passed? ${eventTime > currentTime} (eventTime: ${eventTime}, currentTime: ${currentTime})`);
-        // console.log(`   - Comparison: Number(${event.day}) === ${scheduleCurrentDay} = ${Number(event.day) === scheduleCurrentDay}`);
-        
-        // Nếu event trong ngày hiện tại và thời gian chưa qua
-        if (Number(event.day) === scheduleCurrentDay && eventTime > currentTime) {
+        // Kiểm tra event đang diễn ra
+        if (Number(event.day) === scheduleCurrentDay && 
+            currentTime >= eventStartTime && 
+            currentTime < eventEndTime) {
             nextEvent = event;
-            // console.log(`✅ Found next event today: ${event.title}`);
             break;
         }
-        // Xử lý trường hợp Chủ nhật: nếu hôm nay là Chủ nhật và có sự kiện Chủ nhật
-        else if (scheduleCurrentDay === 8 && Number(event.day) === 8) {
-            // Nếu thời gian chưa qua, chọn sự kiện này
-            if (eventTime > currentTime) {
-                nextEvent = event;
-                // console.log(`✅ Found next event Sunday: ${event.title}`);
-                break;
-            }
+        
+        // Kiểm tra event sắp tới trong hôm nay
+        if (Number(event.day) === scheduleCurrentDay && eventStartTime > currentTime) {
+            nextEvent = event;
+            break;
         }
         
-        // Lưu event đầu tiên làm fallback (chỉ khi chưa có nextEvent)
-        if (!nextEvent && !earliestEvent) {
-            earliestEvent = event;
-            // console.log(`📌 Set as earliest event: ${event.title}`);
+        // Kiểm tra event của các ngày sau
+        if (Number(event.day) > scheduleCurrentDay) {
+            nextEvent = event;
+            break;
         }
     }
     
-    // Nếu không tìm thấy sự kiện chưa qua trong ngày hôm nay, chọn sự kiện gần nhất trong ngày hôm nay
-    if (!nextEvent) {
-        // Tìm tất cả sự kiện trong ngày hôm nay
-        const todayEvents = sortedEvents.filter(event => Number(event.day) === scheduleCurrentDay);
-        
-        if (todayEvents.length > 0) {
-            // Sắp xếp sự kiện hôm nay theo thời gian (từ muộn nhất đến sớm nhất)
-            todayEvents.sort((a, b) => {
-                const [aHour, aMinute] = a.startTime.split(':').map(Number);
-                const [bHour, bMinute] = b.startTime.split(':').map(Number);
-                const aTime = aHour * 60 + aMinute;
-                const bTime = bHour * 60 + bMinute;
-                return bTime - aTime; // Sắp xếp giảm dần (muộn nhất trước)
-            });
-            
-            nextEvent = todayEvents[0]; // Chọn sự kiện muộn nhất trong ngày hôm nay
-            // console.log(`✅ Found latest event today: ${nextEvent.title}`);
-        }
-    }
-    
-    // Nếu không tìm thấy event trong ngày hôm nay, tìm event trong ngày tương lai
-    if (!nextEvent) {
-        for (const event of sortedEvents) {
-            const [eventHour, eventMinute] = event.startTime.split(':').map(Number);
-            const eventTime = eventHour * 60 + eventMinute;
-            
-            // Nếu event trong ngày tương lai
-            if (Number(event.day) > scheduleCurrentDay) {
-                nextEvent = event;
-                // console.log(`✅ Found next event future: ${event.title}`);
-                break;
-            }
-        }
-    }
-    
-    // Nếu không tìm thấy event sắp tới trong tuần này, tìm event sớm nhất trong tuần tiếp theo
-    if (!nextEvent) {
-        // Tìm event sớm nhất trong tuần tiếp theo
-        // Nếu hôm nay là Chủ nhật (8), tìm event từ Thứ 2 (2) trở đi
-        // Nếu không phải Chủ nhật, tìm event từ ngày tiếp theo trở đi
-        const nextWeekEvent = sortedEvents.find(event => {
-            if (scheduleCurrentDay === 8) {
-                // Nếu hôm nay là Chủ nhật, tìm event từ Thứ 2 trở đi
-                return Number(event.day) >= 2;
-            } else {
-                // Nếu không phải Chủ nhật, tìm event từ ngày tiếp theo trở đi
-                return Number(event.day) > scheduleCurrentDay;
-            }
-        });
-        
-        if (nextWeekEvent) {
-            nextEvent = nextWeekEvent;
-            // console.log(`🔄 Using next week event: ${nextWeekEvent.title}`);
-        } else if (earliestEvent) {
-            // Fallback cuối cùng: event sớm nhất trong tuần
-            nextEvent = earliestEvent;
-            // console.log(`🔄 Using earliest event as fallback: ${earliestEvent?.title}`);
-        }
+    // Nếu không có event nào trong tuần này nữa, lấy event đầu tiên của tuần
+    if (!nextEvent && earliestEvent) {
+        nextEvent = earliestEvent;
     }
     
     // console.log(`🎯 Final selected event: ${nextEvent?.title} (Day: ${nextEvent?.day}, Time: ${nextEvent?.startTime})`);

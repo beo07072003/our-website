@@ -15,7 +15,7 @@
     <!-- Floating Hearts Animation -->
     <div class="floating-hearts" id="floating-hearts"></div>
     
-    <div class="dashboard-container">
+    <div class="dashboard-container her-dashboard">
         <a href="index.html" class="back-to-home-btn">↩ Quay lại Trang chủ</a>
         
         <h1 class="dashboard-greeting">Chào mừng Em Yêu ❤️ </h1>
@@ -116,36 +116,82 @@
                         <span class="card-icon">🗓️</span>
                         <div>
                             <div class="card-title">Lịch Trình & Kế Hoạch</div>
-                            <div class="card-subtitle">Lịch tuần và sự kiện sắp tới</div>
+                            <div class="card-subtitle">Lịch tuần của Em và lịch của Anh</div>
                         </div>
                     </div>
                     <span class="toggle-icon">▼</span>
                 </div>
                 <div class="card-body">
                     <div class="card-content">
-                        <h4>📅 Lịch tuần của Em</h4>
-                        <div class="preview-content">
-                            <div class="event-item">
-                                <span class="event-time">T2: 19:00</span>
-                                <span class="event-title">Nói iu anh ❤️</span>
-                            </div>
-                            <div class="event-item">
-                                <span class="event-time">T4: 14:00</span>
-                                <span class="event-title">Hẹn hò với Anh ❤️</span>
-                            </div>
-                            <div class="event-item">
-                                <span class="event-time">T6: 20:00</span>
-                                <span class="event-title">Gọi cho anh để nói chuyện ❤️</span>
-                            </div>
+                        <!-- Tab Navigation -->
+                        <div class="tab-navigation">
+                            <button class="tab-btn active" data-tab="her-schedule">📅 Lịch Tuần Của Em</button>
+                            <button class="tab-btn" data-tab="his-schedule">👨‍💻 Lịch Của Anh</button>
                         </div>
-                        <div class="card-actions">
-                            <a href="schedule.html?from=her" class="card-button">📅 Xem Chi Tiết Lịch Tuần</a>
+
+                        <!-- Tab Content -->
+                        <div class="tab-content">
+                            <!-- Tab 1: Lịch Tuần Của Em -->
+                            <div id="her-schedule-tab" class="tab-panel active">
+                                <h4>📅 Lịch Tuần Của Em</h4>
+                                <div id="her-next-event-preview" class="preview-content">
+                                    <div class="loading-state">
+                                        <div class="loading-spinner"></div>
+                                        <p>Đang tải lịch trình...</p>
+                                    </div>
+                                </div>
+                                <div class="card-actions">
+                                    <a href="schedule.html?from=her" class="card-button">📅 Quản Lý Lịch Tuần</a>
+                                </div>
+                            </div>
+
+                            <!-- Tab 2: Lịch Của Anh -->
+                            <div id="his-schedule-tab" class="tab-panel">
+                                <h4>👨‍💻 Lịch Của Anh</h4>
+                                <div id="his-next-event-preview" class="preview-content">
+                                    <div class="loading-state">
+                                        <div class="loading-spinner"></div>
+                                        <p>Đang tải lịch trình...</p>
+                                    </div>
+                                </div>
+                                <div class="card-actions">
+                                    <a href="him-schedule.html" class="card-button">🗓️ Xem Lịch Của Anh</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Card 4: Giao Tiếp -->
+            <!-- Card 4: Ý Tưởng Hẹn Hò -->
+            <div class="collapsible-card ideas">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <div class="card-header-left">
+                        <span class="card-icon">💡</span>
+                        <div>
+                            <div class="card-title">Ý Tưởng Hẹn Hò</div>
+                            <div class="card-subtitle">Ý tưởng và kế hoạch từ Anh</div>
+                        </div>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-content">
+                        <h4>💡 Ý Tưởng Hẹn Hò</h4>
+                        <div id="idea-preview-list" class="preview-content">
+                            <div class="loading-state">
+                                <div class="loading-spinner"></div>
+                                <p>Đang tải ý tưởng...</p>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <a href="ideas.html" class="card-button">💡 Xem Tất Cả Ý Tưởng</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 5: Giao Tiếp -->
             <div class="collapsible-card communication">
                 <div class="card-header" onclick="toggleCard(this)">
                     <div class="card-header-left">
@@ -173,7 +219,7 @@
                 </div>
             </div>
 
-            <!-- Card 5: Sức Khỏe -->
+            <!-- Card 6: Sức Khỏe -->
             <div class="collapsible-card health">
                 <div class="card-header" onclick="toggleCard(this)">
                     <div class="card-header-left">
@@ -273,6 +319,15 @@
                 // Run her dashboard functions
                 runHerDashboard(herData);
                 
+                // Initialize schedule previews
+                console.log('📅 Khởi tạo preview lịch trình...');
+                setupHerSchedulePreview(herData.schedule || []);
+                setupHisSchedulePreview(hisData.schedule || []);
+                
+                // Initialize ideas preview
+                console.log('💡 Khởi tạo preview ý tưởng...');
+                setupIdeasPreview(hisData.ideaBank || []);
+                
                 // Initialize mailbox preview
                 console.log('📨 Khởi tạo preview hộp thư...');
                 updateMailboxPreview(hisData.notesForHer || []);
@@ -281,6 +336,9 @@
                 if (typeof initCollapsibleCards === 'function') {
                     initCollapsibleCards();
                 }
+                
+                // Initialize tab functionality
+                initTabControl();
 
                 // Thiết lập đồng bộ thời gian thực cho hộp thư
                 // console.log('🔄 Thiết lập đồng bộ thời gian thực cho hộp thư...');
@@ -342,6 +400,267 @@
                     </div>
                 </div>
             `;
+        }
+
+        // Hàm khởi tạo tab control
+        function initTabControl() {
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabPanels = document.querySelectorAll('.tab-panel');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetTab = button.getAttribute('data-tab');
+                    
+                    // Remove active class from all buttons and panels
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabPanels.forEach(panel => panel.classList.remove('active'));
+                    
+                    // Add active class to clicked button and corresponding panel
+                    button.classList.add('active');
+                    const targetPanel = document.getElementById(targetTab + '-tab');
+                    if (targetPanel) {
+                        targetPanel.classList.add('active');
+                    }
+                });
+            });
+        }
+
+        // Hàm setup preview lịch trình của em
+        function setupHerSchedulePreview(schedule) {
+            const previewEl = document.getElementById('her-next-event-preview');
+            if (!previewEl) return;
+
+            if (!schedule || schedule.length === 0) {
+                previewEl.innerHTML = '<p>Tuần này em rảnh!</p>';
+                return;
+            }
+            
+            // Tìm sự kiện sắp tới hoặc đang diễn ra
+            const now = new Date();
+            const currentDay = now.getDay();
+            const currentHour = now.getHours();
+            const currentMinute = now.getMinutes();
+            const currentTime = currentHour * 60 + currentMinute;
+            
+            const scheduleCurrentDay = currentDay === 0 ? 8 : currentDay + 1;
+            
+            console.log('📅 [HER] Debug current time:', {
+                currentDay,
+                scheduleCurrentDay,
+                currentHour,
+                currentMinute,
+                currentTime,
+                dayName: ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'][currentDay]
+            });
+            
+            let nextEvent = null;
+            let earliestEvent = null;
+            
+            const sortedEvents = [...schedule].sort((a, b) => {
+                if (a.day !== b.day) return a.day - b.day;
+                return a.startTime.localeCompare(b.startTime);
+            });
+            
+            console.log('📅 [HER] All events:', sortedEvents.map(e => ({
+                title: e.title,
+                day: e.day,
+                dayType: typeof e.day,
+                startTime: e.startTime,
+                endTime: e.endTime
+            })));
+            
+            // Lưu event đầu tiên trong tuần (để wrap around)
+            earliestEvent = sortedEvents[0];
+            
+            for (const event of sortedEvents) {
+                const [startHour, startMinute] = event.startTime.split(':').map(Number);
+                const [endHour, endMinute] = event.endTime.split(':').map(Number);
+                const eventStartTime = startHour * 60 + startMinute;
+                const eventEndTime = endHour * 60 + endMinute;
+                
+                const eventDay = Number(event.day); // Convert to number for comparison
+                
+                console.log(`📅 [HER] Checking event: ${event.title}`, {
+                    eventDay,
+                    scheduleCurrentDay,
+                    isSameDay: eventDay === scheduleCurrentDay,
+                    eventStartTime,
+                    currentTime,
+                    isAfterCurrent: eventStartTime > currentTime,
+                    isDuringEvent: currentTime >= eventStartTime && currentTime < eventEndTime,
+                    isFutureDay: eventDay > scheduleCurrentDay
+                });
+                
+                // Kiểm tra event đang diễn ra
+                if (eventDay === scheduleCurrentDay && 
+                    currentTime >= eventStartTime && 
+                    currentTime < eventEndTime) {
+                    console.log('✅ [HER] Found ongoing event:', event.title);
+                    nextEvent = event;
+                    break;
+                }
+                
+                // Kiểm tra event sắp tới trong hôm nay
+                if (eventDay === scheduleCurrentDay && eventStartTime > currentTime) {
+                    console.log('✅ [HER] Found upcoming event today:', event.title);
+                    nextEvent = event;
+                    break;
+                }
+                
+                // Kiểm tra event của các ngày sau
+                if (eventDay > scheduleCurrentDay) {
+                    console.log('✅ [HER] Found event in future day:', event.title);
+                    nextEvent = event;
+                    break;
+                }
+            }
+            
+            // Nếu không có event nào trong tuần này nữa, lấy event đầu tiên của tuần
+            if (!nextEvent && earliestEvent) {
+                console.log('🔄 [HER] Wrapping around to earliest event:', earliestEvent.title);
+                nextEvent = earliestEvent;
+            }
+            
+            if (nextEvent) {
+                console.log('🎯 [HER] Final selected event:', nextEvent.title, 'Day:', nextEvent.day);
+                const dayNames = ['', '', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ nhật'];
+                const dayName = dayNames[Number(nextEvent.day)] || `Ngày ${nextEvent.day}`;
+                
+                previewEl.innerHTML = `
+                    <div class="next-event-preview">
+                        <div class="event-time">${dayName} - ${nextEvent.startTime}</div>
+                        <div class="event-title">${nextEvent.title}</div>
+                        <div class="event-description">${nextEvent.description || ''}</div>
+                    </div>
+                `;
+            } else {
+                previewEl.innerHTML = '<p>Tuần này em rảnh!</p>';
+            }
+        }
+
+        // Hàm setup preview lịch trình của anh
+        function setupHisSchedulePreview(schedule) {
+            const previewEl = document.getElementById('his-next-event-preview');
+            if (!previewEl) return;
+
+            if (!schedule || schedule.length === 0) {
+                previewEl.innerHTML = '<p>Anh chưa có lịch trình nào...</p>';
+                return;
+            }
+            
+            // Tìm sự kiện sắp tới hoặc đang diễn ra
+            const now = new Date();
+            const currentDay = now.getDay();
+            const currentHour = now.getHours();
+            const currentMinute = now.getMinutes();
+            const currentTime = currentHour * 60 + currentMinute;
+            
+            const scheduleCurrentDay = currentDay === 0 ? 8 : currentDay + 1;
+            
+            console.log('📅 [HIS] Debug current time:', {
+                currentDay,
+                scheduleCurrentDay,
+                currentHour,
+                currentMinute,
+                currentTime
+            });
+            
+            let nextEvent = null;
+            let earliestEvent = null;
+            
+            const sortedEvents = [...schedule].sort((a, b) => {
+                if (a.day !== b.day) return a.day - b.day;
+                return a.startTime.localeCompare(b.startTime);
+            });
+            
+            console.log('📅 [HIS] All events:', sortedEvents.map(e => ({
+                title: e.title,
+                day: e.day,
+                dayType: typeof e.day,
+                startTime: e.startTime
+            })));
+            
+            // Lưu event đầu tiên trong tuần (để wrap around)
+            earliestEvent = sortedEvents[0];
+            
+            for (const event of sortedEvents) {
+                const [startHour, startMinute] = event.startTime.split(':').map(Number);
+                const [endHour, endMinute] = event.endTime.split(':').map(Number);
+                const eventStartTime = startHour * 60 + startMinute;
+                const eventEndTime = endHour * 60 + endMinute;
+                
+                const eventDay = Number(event.day); // Convert to number for comparison
+                
+                console.log(`📅 [HIS] Checking event: ${event.title}`, {
+                    eventDay,
+                    scheduleCurrentDay,
+                    isSameDay: eventDay === scheduleCurrentDay,
+                    eventStartTime,
+                    currentTime,
+                    isAfterCurrent: eventStartTime > currentTime
+                });
+                
+                // Kiểm tra event đang diễn ra
+                if (eventDay === scheduleCurrentDay && 
+                    currentTime >= eventStartTime && 
+                    currentTime < eventEndTime) {
+                    console.log('✅ [HIS] Found ongoing event:', event.title);
+                    nextEvent = event;
+                    break;
+                }
+                
+                // Kiểm tra event sắp tới trong hôm nay
+                if (eventDay === scheduleCurrentDay && eventStartTime > currentTime) {
+                    console.log('✅ [HIS] Found upcoming event today:', event.title);
+                    nextEvent = event;
+                    break;
+                }
+                
+                // Kiểm tra event của các ngày sau
+                if (eventDay > scheduleCurrentDay) {
+                    console.log('✅ [HIS] Found event in future day:', event.title);
+                    nextEvent = event;
+                    break;
+                }
+            }
+            
+            // Nếu không có event nào trong tuần này nữa, lấy event đầu tiên của tuần
+            if (!nextEvent && earliestEvent) {
+                console.log('🔄 [HIS] Wrapping around to earliest event:', earliestEvent.title);
+                nextEvent = earliestEvent;
+            }
+            
+            if (nextEvent) {
+                console.log('🎯 [HIS] Final selected event:', nextEvent.title, 'Day:', nextEvent.day);
+                const dayNames = ['', '', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ nhật'];
+                const dayName = dayNames[Number(nextEvent.day)] || `Ngày ${nextEvent.day}`;
+                
+                previewEl.innerHTML = `
+                    <div class="next-event-preview">
+                        <div class="event-time">${dayName} - ${nextEvent.startTime}</div>
+                        <div class="event-title">${nextEvent.title}</div>
+                        <div class="event-description">${nextEvent.description || ''}</div>
+                    </div>
+                `;
+            } else {
+                previewEl.innerHTML = '<p>Anh chưa có lịch trình nào...</p>';
+            }
+        }
+
+        // Hàm setup preview ý tưởng
+        function setupIdeasPreview(ideas) {
+            const previewEl = document.getElementById('idea-preview-list');
+            if (!previewEl) return;
+
+            if (!ideas || ideas.length === 0) {
+                previewEl.innerHTML = '<p>Anh chưa có ý tưởng nào...</p>';
+                return;
+            }
+
+            const ideasToShow = ideas.slice(-3).reverse(); // Lấy 3 ý tưởng gần nhất
+            previewEl.innerHTML = ideasToShow.map(idea => 
+                `<div class="idea-item">💡 ${idea}</div>`
+            ).join('');
         }
     </script>
 </body>
