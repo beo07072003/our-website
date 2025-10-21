@@ -23,7 +23,100 @@
 
         <div class="collapsible-cards-container">
 
-            <!-- Card 1: Thông Tin Yêu Thương -->
+            <!-- Card 1: Lịch Trình -->
+            <div class="collapsible-card schedule expanded">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <div class="card-header-left">
+                        <span class="card-icon">🗓️</span>
+                        <div>
+                            <div class="card-title">Lịch Trình & Kế Hoạch</div>
+                            <div class="card-subtitle">Lịch tuần của Em và lịch của Anh</div>
+                        </div>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-content">
+                        <!-- Tab Navigation -->
+                        <div class="tab-navigation">
+                            <button class="tab-btn active" data-tab="her-schedule">📅 Lịch Tuần Của Em</button>
+                            <button class="tab-btn" data-tab="his-schedule">👨‍💻 Lịch Của Anh</button>
+                        </div>
+
+                        <!-- Tab Content -->
+                        <div class="tab-content">
+                            <!-- Tab 1: Lịch Tuần Của Em -->
+                            <div id="her-schedule-tab" class="tab-panel active">
+                                <h4>📅 Lịch Tuần Của Em</h4>
+                                <div id="her-next-event-preview" class="preview-content">
+                                    <div class="loading-state">
+                                        <div class="loading-spinner"></div>
+                                        <p>Đang tải lịch trình...</p>
+                                    </div>
+                                </div>
+                                <div class="card-actions">
+                                    <a href="schedule.html?from=her" class="card-button">📅 Quản Lý Lịch Tuần</a>
+                                </div>
+                            </div>
+
+                            <!-- Tab 2: Lịch Của Anh -->
+                            <div id="his-schedule-tab" class="tab-panel">
+                                <h4>👨‍💻 Lịch Của Anh</h4>
+                                <div id="his-next-event-preview" class="preview-content">
+                                    <div class="loading-state">
+                                        <div class="loading-spinner"></div>
+                                        <p>Đang tải lịch trình...</p>
+                                    </div>
+                                </div>
+                                <div class="card-actions">
+                                    <a href="him-schedule.html" class="card-button">🗓️ Xem Lịch Của Anh</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: Giao Tiếp -->
+            <div class="collapsible-card communication">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <div class="card-header-left">
+                        <span class="card-icon">💌</span>
+                        <div>
+                            <div class="card-title">Hộp thư yêu thương</div>
+                            <div class="card-subtitle">Gửi và nhận tin nhắn với Anh</div>
+                        </div>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-content">
+                        <!-- Gửi tin nhắn cho anh -->
+                        <h4>💌 Gửi Tin Nhắn Cho Anh</h4>
+                        <div class="preview-content">
+                            <textarea id="her-note-input" placeholder="Viết tin nhắn yêu thương cho anh..." 
+                                style="width: 100%; min-height: 80px; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-family: inherit; font-size: 1em; resize: vertical; outline: none; transition: border-color 0.3s ease; margin-bottom: 10px;"></textarea>
+                        </div>
+                        <div class="card-actions" style="margin-bottom: 20px;">
+                            <button id="her-send-note-btn" class="card-button">💌 Gửi Cho Anh</button>
+                        </div>
+
+                        <!-- Xem tin nhắn từ anh -->
+                        <h4>📨 Tin Nhắn Từ Anh</h4>
+                        <div id="mailbox-preview" class="preview-content">
+                            <div class="loading-state">
+                                <div class="loading-spinner"></div>
+                                <p>Đang tải thư...</p>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <a href="mailbox.html?from=her" class="card-button">📨 Xem Tất Cả Thư</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: Thông Tin Yêu Thương -->
             <div class="collapsible-card love-info expanded">
                 <div class="card-header" onclick="toggleCard(this)">
                     <div class="card-header-left">
@@ -54,7 +147,7 @@
                 </div>
             </div>
 
-            <!-- Card 2: Đếm Ngược -->
+            <!-- Card 4: Đếm Ngược -->
             <div class="collapsible-card countdown">
                 <div class="card-header" onclick="toggleCard(this)">
                     <div class="card-header-left">
@@ -109,61 +202,7 @@
                 </div>
             </div>
 
-            <!-- Card 3: Lịch Trình -->
-            <div class="collapsible-card schedule">
-                <div class="card-header" onclick="toggleCard(this)">
-                    <div class="card-header-left">
-                        <span class="card-icon">🗓️</span>
-                        <div>
-                            <div class="card-title">Lịch Trình & Kế Hoạch</div>
-                            <div class="card-subtitle">Lịch tuần của Em và lịch của Anh</div>
-                        </div>
-                    </div>
-                    <span class="toggle-icon">▼</span>
-                </div>
-                <div class="card-body">
-                    <div class="card-content">
-                        <!-- Tab Navigation -->
-                        <div class="tab-navigation">
-                            <button class="tab-btn active" data-tab="her-schedule">📅 Lịch Tuần Của Em</button>
-                            <button class="tab-btn" data-tab="his-schedule">👨‍💻 Lịch Của Anh</button>
-                        </div>
-
-                        <!-- Tab Content -->
-                        <div class="tab-content">
-                            <!-- Tab 1: Lịch Tuần Của Em -->
-                            <div id="her-schedule-tab" class="tab-panel active">
-                                <h4>📅 Lịch Tuần Của Em</h4>
-                                <div id="her-next-event-preview" class="preview-content">
-                                    <div class="loading-state">
-                                        <div class="loading-spinner"></div>
-                                        <p>Đang tải lịch trình...</p>
-                                    </div>
-                                </div>
-                                <div class="card-actions">
-                                    <a href="schedule.html?from=her" class="card-button">📅 Quản Lý Lịch Tuần</a>
-                                </div>
-                            </div>
-
-                            <!-- Tab 2: Lịch Của Anh -->
-                            <div id="his-schedule-tab" class="tab-panel">
-                                <h4>👨‍💻 Lịch Của Anh</h4>
-                                <div id="his-next-event-preview" class="preview-content">
-                                    <div class="loading-state">
-                                        <div class="loading-spinner"></div>
-                                        <p>Đang tải lịch trình...</p>
-                                    </div>
-                                </div>
-                                <div class="card-actions">
-                                    <a href="him-schedule.html" class="card-button">🗓️ Xem Lịch Của Anh</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 4: Ý Tưởng Hẹn Hò -->
+            <!-- Card 5: Ý Tưởng Hẹn Hò -->
             <div class="collapsible-card ideas">
                 <div class="card-header" onclick="toggleCard(this)">
                     <div class="card-header-left">
@@ -185,46 +224,7 @@
                             </div>
                         </div>
                         <div class="card-actions">
-                            <a href="ideas.html" class="card-button">💡 Xem Tất Cả Ý Tưởng</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 5: Giao Tiếp -->
-            <div class="collapsible-card communication">
-                <div class="card-header" onclick="toggleCard(this)">
-                    <div class="card-header-left">
-                        <span class="card-icon">💌</span>
-                        <div>
-                            <div class="card-title">Hộp thư yêu thương</div>
-                            <div class="card-subtitle">Gửi và nhận tin nhắn với Anh</div>
-                        </div>
-                    </div>
-                    <span class="toggle-icon">▼</span>
-                </div>
-                <div class="card-body">
-                    <div class="card-content">
-                        <!-- Gửi tin nhắn cho anh -->
-                        <h4>💌 Gửi Tin Nhắn Cho Anh</h4>
-                        <div class="preview-content">
-                            <textarea id="her-note-input" placeholder="Viết tin nhắn yêu thương cho anh..." 
-                                style="width: 100%; min-height: 80px; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-family: inherit; font-size: 1em; resize: vertical; outline: none; transition: border-color 0.3s ease; margin-bottom: 10px;"></textarea>
-                        </div>
-                        <div class="card-actions" style="margin-bottom: 20px;">
-                            <button id="her-send-note-btn" class="card-button">💌 Gửi Cho Anh</button>
-                        </div>
-
-                        <!-- Xem tin nhắn từ anh -->
-                        <h4>📨 Tin Nhắn Từ Anh</h4>
-                        <div id="mailbox-preview" class="preview-content">
-                            <div class="loading-state">
-                                <div class="loading-spinner"></div>
-                                <p>Đang tải thư...</p>
-                            </div>
-                        </div>
-                        <div class="card-actions">
-                            <a href="mailbox.html" class="card-button">📨 Xem Tất Cả Thư</a>
+                            <a href="ideas.html?from=her" class="card-button">💡 Xem Tất Cả Ý Tưởng</a>
                         </div>
                     </div>
                 </div>
@@ -436,7 +436,7 @@
             });
         }
 
-        // Hàm setup preview lịch trình của em
+        // Hàm setup preview lịch trình của e m
         function setupHerSchedulePreview(schedule) {
             const previewEl = document.getElementById('her-next-event-preview');
             if (!previewEl) return;

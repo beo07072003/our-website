@@ -23,75 +23,8 @@
 
         <div class="collapsible-cards-container">
 
-            <!-- Card 1: Giao Tiếp -->
-            <div class="collapsible-card communication expanded">
-                <div class="card-header" onclick="toggleCard(this)">
-                    <div class="card-header-left">
-                        <span class="card-icon">💌</span>
-                        <div>
-                            <div class="card-title">Giao Tiếp & Tin Nhắn</div>
-                            <div class="card-subtitle">Gửi và nhận tin nhắn với Em</div>
-                        </div>
-                    </div>
-                    <span class="toggle-icon">▼</span>
-                </div>
-                <div class="card-body">
-                    <div class="card-content">
-                        <!-- Gửi tin nhắn cho em -->
-                        <h4>💌 Gửi Tin Nhắn Cho Em</h4>
-                        <div class="preview-content">
-                            <textarea id="note-input" placeholder="Viết một lời nhắn yêu thương..." 
-                                style="width: 100%; min-height: 80px; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-family: inherit; font-size: 1em; resize: vertical; outline: none; transition: border-color 0.3s ease; margin-bottom: 10px;"></textarea>
-                        </div>
-                        <div class="card-actions" style="margin-bottom: 20px;">
-                            <button id="save-note-btn" class="card-button">💌 Gửi Cho Em</button>
-                        </div>
-
-                        <!-- Tin nhắn từ em -->
-                        <h4>📨 Tin Nhắn Từ Em</h4>
-                        <div id="her-mailbox-preview" class="preview-content">
-                            <div class="loading-state">
-                                <div class="loading-spinner"></div>
-                                <p>Đang tải tin nhắn...</p>
-                            </div>
-                        </div>
-                        <div class="card-actions">
-                            <a href="mailbox.html" class="card-button">📨 Xem Tất Cả Thư</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 2: Ý Tưởng -->
-            <div class="collapsible-card ideas">
-                <div class="card-header" onclick="toggleCard(this)">
-                    <div class="card-header-left">
-                        <span class="card-icon">💡</span>
-                        <div>
-                            <div class="card-title">Ngân Hàng Ý Tưởng</div>
-                            <div class="card-subtitle">Lưu trữ và quản lý ý tưởng hẹn hò</div>
-                        </div>
-                    </div>
-                    <span class="toggle-icon">▼</span>
-                </div>
-                <div class="card-body">
-                    <div class="card-content">
-                        <h4>💡 Ý Tưởng Hẹn Hò</h4>
-                        <div id="idea-preview-list" class="preview-content">
-                            <div class="loading-state">
-                                <div class="loading-spinner"></div>
-                                <p>Đang tải ý tưởng...</p>
-                            </div>
-                        </div>
-                        <div class="card-actions">
-                            <a href="ideas.html" class="card-button">💡 Quản Lý Ý Tưởng</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 3: Lịch Trình -->
-            <div class="collapsible-card schedule">
+            <!-- Card 1: Lịch Trình -->
+            <div class="collapsible-card schedule expanded">
                 <div class="card-header" onclick="toggleCard(this)">
                     <div class="card-header-left">
                         <span class="card-icon">🗓️</span>
@@ -139,6 +72,73 @@
                                     <a href="him-schedule.html" class="card-button">🗓️ Quản Lý Lịch Của Anh</a>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: Giao Tiếp -->
+            <div class="collapsible-card communication expanded">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <div class="card-header-left">
+                        <span class="card-icon">💌</span>
+                        <div>
+                            <div class="card-title">Giao Tiếp & Tin Nhắn</div>
+                            <div class="card-subtitle">Gửi và nhận tin nhắn với Em</div>
+                        </div>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-content">
+                        <!-- Gửi tin nhắn cho em -->
+                        <h4>💌 Gửi Tin Nhắn Cho Em</h4>
+                        <div class="preview-content">
+                            <textarea id="note-input" placeholder="Viết một lời nhắn yêu thương..." 
+                                style="width: 100%; min-height: 80px; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-family: inherit; font-size: 1em; resize: vertical; outline: none; transition: border-color 0.3s ease; margin-bottom: 10px;"></textarea>
+                        </div>
+                        <div class="card-actions" style="margin-bottom: 20px;">
+                            <button id="save-note-btn" class="card-button">💌 Gửi Cho Em</button>
+                        </div>
+
+                        <!-- Tin nhắn từ em -->
+                        <h4>📨 Tin Nhắn Từ Em</h4>
+                        <div id="her-mailbox-preview" class="preview-content">
+                            <div class="loading-state">
+                                <div class="loading-spinner"></div>
+                                <p>Đang tải tin nhắn...</p>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <a href="mailbox.html?from=him" class="card-button">📨 Xem Tất Cả Thư</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: Ý Tưởng -->
+            <div class="collapsible-card ideas">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <div class="card-header-left">
+                        <span class="card-icon">💡</span>
+                        <div>
+                            <div class="card-title">Ngân Hàng Ý Tưởng</div>
+                            <div class="card-subtitle">Lưu trữ và quản lý ý tưởng hẹn hò</div>
+                        </div>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-content">
+                        <h4>💡 Ý Tưởng Hẹn Hò</h4>
+                        <div id="idea-preview-list" class="preview-content">
+                            <div class="loading-state">
+                                <div class="loading-spinner"></div>
+                                <p>Đang tải ý tưởng...</p>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <a href="ideas.html?from=him" class="card-button">💡 Quản Lý Ý Tưởng</a>
                         </div>
                     </div>
                 </div>
