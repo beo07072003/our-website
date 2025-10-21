@@ -1,4 +1,4 @@
-// JavaScript cho hộp thư của em
+// JavaScript cho hộp thư (2 chiều)
 let mailboxData = [];
 
 // Khởi tạo hộp thư
@@ -6,12 +6,18 @@ async function initializeMailbox() {
     // console.log('📨 Khởi tạo hộp thư...');
     
     try {
-        // Load dữ liệu ban đầu
+        // Load dữ liệu từ cả hai người
         const hisDataRef = db.collection('userInfo').doc('hisData');
-        const hisDoc = await hisDataRef.get();
+        const herDataRef = db.collection('userInfo').doc('herData');
+        const [hisDoc, herDoc] = await Promise.all([hisDataRef.get(), herDataRef.get()]);
         
-        if (hisDoc.exists && hisDoc.data().notesForHer) {
-            mailboxData = hisDoc.data().notesForHer;
+        const notesFromHim = hisDoc.exists && hisDoc.data().notesForHer ? hisDoc.data().notesForHer : [];
+        const notesFromHer = herDoc.exists && herDoc.data().notesForHim ? herDoc.data().notesForHim : [];
+        
+        // Gộp tất cả tin nhắn lại
+        mailboxData = [...notesFromHim, ...notesFromHer];
+        
+        if (mailboxData.length > 0) {
             updateMailbox(mailboxData);
         } else {
             showEmptyMailbox();
@@ -54,7 +60,10 @@ function updateMailbox(notes) {
 // Tạo một item thư
 function createMailItem(note, index) {
     const mailItem = document.createElement('div');
-    mailItem.className = 'mail-item';
+    const sender = note.sender || 'him'; // Default là "him" nếu không có field sender
+    
+    // Thêm class để phân biệt người gửi
+    mailItem.className = sender === 'her' ? 'mail-item mail-from-her' : 'mail-item mail-from-him';
     
     // Format thời gian
     const date = new Date(note.timestamp);
@@ -66,11 +75,15 @@ function createMailItem(note, index) {
         minute: '2-digit'
     });
     
+    // Icon và label dựa trên người gửi
+    const senderIcon = sender === 'her' ? '💕' : '💌';
+    const senderLabel = sender === 'her' ? 'Từ: Em' : 'Từ: Anh';
+    
     mailItem.innerHTML = `
         <div class="mail-header">
             <div class="mail-sender">
-                <div class="sender-icon"> 💌</div>
-                <span>Từ: Anh</span>
+                <div class="sender-icon">${senderIcon}</div>
+                <span>${senderLabel}</span>
             </div>
             <div class="mail-time">${timeString}</div>
         </div>
@@ -126,10 +139,15 @@ async function refreshMailbox() {
     
     try {
         const hisDataRef = db.collection('userInfo').doc('hisData');
-        const hisDoc = await hisDataRef.get();
+        const herDataRef = db.collection('userInfo').doc('herData');
+        const [hisDoc, herDoc] = await Promise.all([hisDataRef.get(), herDataRef.get()]);
         
-        if (hisDoc.exists && hisDoc.data().notesForHer) {
-            mailboxData = hisDoc.data().notesForHer;
+        const notesFromHim = hisDoc.exists && hisDoc.data().notesForHer ? hisDoc.data().notesForHer : [];
+        const notesFromHer = herDoc.exists && herDoc.data().notesForHim ? herDoc.data().notesForHim : [];
+        
+        mailboxData = [...notesFromHim, ...notesFromHer];
+        
+        if (mailboxData.length > 0) {
             updateMailbox(mailboxData);
             // console.log('✅ Đã làm mới hộp thư');
         } else {

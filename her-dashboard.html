@@ -198,14 +198,25 @@
                         <span class="card-icon">💌</span>
                         <div>
                             <div class="card-title">Hộp thư yêu thương</div>
-                            <div class="card-subtitle">Hộp thư và kết nối với Anh</div>
+                            <div class="card-subtitle">Gửi và nhận tin nhắn với Anh</div>
                         </div>
                     </div>
                     <span class="toggle-icon">▼</span>
                 </div>
                 <div class="card-body">
                     <div class="card-content">
-                        <h4>📨 Hộp Thư Từ Anh</h4>
+                        <!-- Gửi tin nhắn cho anh -->
+                        <h4>💌 Gửi Tin Nhắn Cho Anh</h4>
+                        <div class="preview-content">
+                            <textarea id="her-note-input" placeholder="Viết tin nhắn yêu thương cho anh..." 
+                                style="width: 100%; min-height: 80px; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-family: inherit; font-size: 1em; resize: vertical; outline: none; transition: border-color 0.3s ease; margin-bottom: 10px;"></textarea>
+                        </div>
+                        <div class="card-actions" style="margin-bottom: 20px;">
+                            <button id="her-send-note-btn" class="card-button">💌 Gửi Cho Anh</button>
+                        </div>
+
+                        <!-- Xem tin nhắn từ anh -->
+                        <h4>📨 Tin Nhắn Từ Anh</h4>
                         <div id="mailbox-preview" class="preview-content">
                             <div class="loading-state">
                                 <div class="loading-spinner"></div>
@@ -662,6 +673,75 @@
                 `<div class="idea-item">💡 ${idea}</div>`
             ).join('');
         }
+
+        // Hàm gửi tin nhắn từ em cho anh
+        async function sendNoteToHim() {
+            const noteInput = document.getElementById('her-note-input');
+            const sendBtn = document.getElementById('her-send-note-btn');
+            
+            if (!noteInput || !sendBtn) return;
+            
+            const message = noteInput.value.trim();
+            
+            if (!message) {
+                alert('Vui lòng nhập tin nhắn!');
+                return;
+            }
+            
+            try {
+                sendBtn.disabled = true;
+                sendBtn.textContent = '⏳ Đang gửi...';
+                
+                // Tạo object tin nhắn
+                const newNote = {
+                    message: message,
+                    timestamp: new Date().toISOString(),
+                    sender: 'her'
+                };
+                
+                // Lấy dữ liệu hiện tại
+                const herDataRef = db.collection('userInfo').doc('herData');
+                const herDoc = await herDataRef.get();
+                const herData = herDoc.exists ? herDoc.data() : {};
+                
+                // Thêm tin nhắn mới vào mảng
+                const currentNotes = herData.notesForHim || [];
+                currentNotes.unshift(newNote); // Thêm vào đầu mảng
+                
+                // Cập nhật Firebase
+                await herDataRef.set({
+                    ...herData,
+                    notesForHim: currentNotes,
+                    lastUpdated: new Date().toISOString()
+                }, { merge: true });
+                
+                console.log('✅ Đã gửi tin nhắn cho anh');
+                
+                // Xóa nội dung textarea
+                noteInput.value = '';
+                
+                // Hiển thị thông báo thành công
+                sendBtn.textContent = '✅ Đã gửi!';
+                setTimeout(() => {
+                    sendBtn.textContent = '💌 Gửi Cho Anh';
+                    sendBtn.disabled = false;
+                }, 2000);
+                
+            } catch (error) {
+                console.error('❌ Lỗi khi gửi tin nhắn:', error);
+                alert('Có lỗi xảy ra khi gửi tin nhắn. Vui lòng thử lại!');
+                sendBtn.textContent = '💌 Gửi Cho Anh';
+                sendBtn.disabled = false;
+            }
+        }
+
+        // Gắn event listener cho nút gửi tin nhắn
+        document.addEventListener('DOMContentLoaded', () => {
+            const sendBtn = document.getElementById('her-send-note-btn');
+            if (sendBtn) {
+                sendBtn.addEventListener('click', sendNoteToHim);
+            }
+        });
     </script>
 </body>
 </html>

@@ -30,20 +30,33 @@
                         <span class="card-icon">💌</span>
                         <div>
                             <div class="card-title">Giao Tiếp & Tin Nhắn</div>
-                            <div class="card-subtitle">Gửi thư và kết nối với Em</div>
+                            <div class="card-subtitle">Gửi và nhận tin nhắn với Em</div>
                         </div>
                     </div>
                     <span class="toggle-icon">▼</span>
                 </div>
                 <div class="card-body">
                     <div class="card-content">
-                        <h4>📨 Hộp Thư Gửi Em</h4>
+                        <!-- Gửi tin nhắn cho em -->
+                        <h4>💌 Gửi Tin Nhắn Cho Em</h4>
                         <div class="preview-content">
                             <textarea id="note-input" placeholder="Viết một lời nhắn yêu thương..." 
-                                style="width: 100%; min-height: 100px; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-family: inherit; font-size: 1em; resize: vertical; outline: none; transition: border-color 0.3s ease;"></textarea>
+                                style="width: 100%; min-height: 80px; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-family: inherit; font-size: 1em; resize: vertical; outline: none; transition: border-color 0.3s ease; margin-bottom: 10px;"></textarea>
+                        </div>
+                        <div class="card-actions" style="margin-bottom: 20px;">
+                            <button id="save-note-btn" class="card-button">💌 Gửi Cho Em</button>
+                        </div>
+
+                        <!-- Tin nhắn từ em -->
+                        <h4>📨 Tin Nhắn Từ Em</h4>
+                        <div id="her-mailbox-preview" class="preview-content">
+                            <div class="loading-state">
+                                <div class="loading-spinner"></div>
+                                <p>Đang tải tin nhắn...</p>
+                            </div>
                         </div>
                         <div class="card-actions">
-                            <button id="save-note-btn" class="card-button">💌 Gửi Vào Hộp Thư</button>
+                            <a href="mailbox.html" class="card-button">📨 Xem Tất Cả Thư</a>
                         </div>
                     </div>
                 </div>
@@ -380,6 +393,49 @@
             }, 3000);
         }
 
+        // Hàm cập nhật preview tin nhắn từ em
+        function updateHerMailboxPreview(notes) {
+            const previewEl = document.getElementById('her-mailbox-preview');
+            if (!previewEl) return;
+
+            if (!notes || notes.length === 0) {
+                previewEl.innerHTML = `
+                    <div class="empty-mailbox-preview">
+                        <div class="empty-icon">📭</div>
+                        <p>Chưa có tin nhắn nào từ em...</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Hiển thị tin nhắn mới nhất
+            const latestNote = notes[0];
+            const date = new Date(latestNote.timestamp);
+            const timeString = date.toLocaleDateString('vi-VN', {
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
+            previewEl.innerHTML = `
+                <div class="latest-mail-preview">
+                    <div class="mail-preview-header">
+                        <span class="sender">💌 Từ: Em</span>
+                        <span class="time">${timeString}</span>
+                    </div>
+                    <div class="mail-preview-content">
+                        ${latestNote.message.length > 80 ? 
+                            latestNote.message.substring(0, 80) + '...' : 
+                            latestNote.message}
+                    </div>
+                    <div class="mail-count">
+                        ${notes.length > 1 ? `+${notes.length - 1} tin nhắn khác` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
         // Inline initialization for him-dashboard with realtime sync
         window.addEventListener('DOMContentLoaded', async () => {
             if (typeof db === 'undefined') {
@@ -415,6 +471,9 @@
                 // Khởi tạo dashboard
                 runHimPages(herData, hisData);
                 
+                // Initialize mailbox preview from her
+                updateHerMailboxPreview(herData.notesForHim || []);
+                
                 // Initialize collapsible cards after data is loaded
                 if (typeof initCollapsibleCards === 'function') {
                     initCollapsibleCards();
@@ -427,13 +486,15 @@
                 // Thiết lập đồng bộ thời gian thực
                 // console.log('🔄 Thiết lập đồng bộ thời gian thực...');
                 
-                // Lắng nghe thay đổi dữ liệu "em" (lịch tuần)
+                // Lắng nghe thay đổi dữ liệu "em" (lịch tuần và tin nhắn)
                 window.realtimeSync.listenToHerData((herData) => {
                     // console.log('📱 Cập nhật dữ liệu "em" theo thời gian thực');
                     // Cập nhật lịch tuần preview
                     if (typeof setupSchedulePreview === 'function') {
                         setupSchedulePreview(herData.schedule || []);
                     }
+                    // Cập nhật tin nhắn từ em
+                    updateHerMailboxPreview(herData.notesForHim || []);
                 });
 
                 // Lắng nghe thay đổi dữ liệu "anh" (ý tưởng, ghi chú)

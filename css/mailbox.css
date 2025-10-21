@@ -256,15 +256,19 @@ body {
 .mail-item {
     background: rgba(255, 255, 255, 0.5);
     border-radius: 15px;
-    padding: 20px;
+    padding: 15px 20px;
     margin-bottom: 15px;
-    border-left: 4px solid var(--primary-color);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
     animation: fadeInScale 0.6s ease-out both;
     backdrop-filter: blur(8px);
+    max-width: 70%;
+    margin-left: 0;
+    margin-right: auto;
+    border-radius: 18px 18px 18px 4px;
+    border-left: 4px solid var(--primary-color);
 }
 
 .mail-item:nth-child(1) { animation-delay: 0.1s; }
@@ -287,6 +291,36 @@ body {
     transform: translateY(-3px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
     border-left-color: var(--secondary-color);
+}
+
+/* Phân biệt tin nhắn từ em - Hiển thị bên phải như chat */
+.mail-item.mail-from-her {
+    background: rgba(240, 230, 255, 0.6);
+    margin-left: auto;
+    margin-right: 0;
+    border-left: none;
+    border-right: 4px solid #9b59b6;
+    border-radius: 18px 18px 4px 18px; /* Bo góc ngược lại */
+}
+
+.mail-item.mail-from-her::before {
+    background: linear-gradient(90deg, #9b59b6, #e91e63, #f8b4d9);
+}
+
+.mail-item.mail-from-her .mail-sender {
+    color: #9b59b6;
+}
+
+.mail-item.mail-from-her .sender-icon {
+    background: linear-gradient(135deg, #9b59b6, #e91e63);
+}
+
+.mail-item.mail-from-her:hover {
+    border-right-color: #8e44ad;
+}
+
+.mail-item.mail-from-her .mail-header {
+    flex-direction: row-reverse; /* Đảo ngược vị trí sender và time */
 }
 
 .mail-header {
@@ -418,12 +452,17 @@ body {
     
     .mail-item {
         padding: 15px;
+        max-width: 85%; /* Tăng chiều rộng trên mobile */
     }
     
     .mail-header {
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;
+    }
+    
+    .mail-item.mail-from-her .mail-header {
+        align-items: flex-end; /* Căn phải cho tin nhắn từ em */
     }
     
     .mail-time {
