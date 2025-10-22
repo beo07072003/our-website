@@ -39,8 +39,8 @@
                     <div class="card-content">
                         <!-- Tab Navigation -->
                         <div class="tab-navigation">
-                            <button class="tab-btn active" data-tab="her-schedule">📅 Lịch Tuần Của Em</button>
-                            <button class="tab-btn" data-tab="his-schedule">👨‍💻 Lịch Của Anh</button>
+                            <button class="tab-btn active" data-tab="her-schedule">📅 Lịch tuần Của Em</button>
+                            <button class="tab-btn" data-tab="his-schedule">📅 Lịch tuần Của Anh</button>
                         </div>
 
                         <!-- Tab Content -->
@@ -254,120 +254,158 @@
             });
         }
 
-        // His Schedule Management
-        function initHisSchedule() {
-            // Load and display his next event
-            loadHisNextEvent();
-        }
-        
-        function getHisEvents() {
-            const events = localStorage.getItem('hisSchedule');
-            return events ? JSON.parse(events) : [];
-        }
-        
-        function loadHisNextEvent() {
-            const events = getHisEvents();
-            const previewEl = document.getElementById('his-next-event-preview');
-            
+        // Hàm setup preview lịch trình của em
+        function setupHerSchedulePreview(schedule) {
+            const previewEl = document.getElementById('next-event-preview');
             if (!previewEl) return;
-            
-            if (events.length === 0) {
-                previewEl.innerHTML = '<p>Chưa có sự kiện nào trong lịch của anh!</p>';
+
+            if (!schedule || schedule.length === 0) {
+                previewEl.innerHTML = '<p>Em chưa có lịch trình nào...</p>';
                 return;
             }
             
-            // Tìm sự kiện sắp tới dựa trên timeline thực tế
+            // Tìm sự kiện sắp tới hoặc đang diễn ra
             const now = new Date();
-            const currentDay = now.getDay(); // 0 = Chủ nhật, 1 = Thứ 2, ..., 6 = Thứ 7
+            const currentDay = now.getDay();
             const currentHour = now.getHours();
             const currentMinute = now.getMinutes();
             const currentTime = currentHour * 60 + currentMinute;
             
-            // Convert currentDay to match schedule format (2 = Thứ 2, 3 = Thứ 3, ..., 8 = Chủ nhật)
             const scheduleCurrentDay = currentDay === 0 ? 8 : currentDay + 1;
             
-            // Sắp xếp events theo timeline
-            const sortedEvents = [...events].sort((a, b) => {
+            let nextEvent = null;
+            let earliestEvent = null;
+            
+            const sortedEvents = [...schedule].sort((a, b) => {
                 if (a.day !== b.day) return a.day - b.day;
                 return a.startTime.localeCompare(b.startTime);
             });
             
-            let nextEvent = null;
-            let todayEvents = [];
+            earliestEvent = sortedEvents[0];
             
-            // Thu thập tất cả sự kiện trong ngày hôm nay
             for (const event of sortedEvents) {
-                const [eventHour, eventMinute] = event.startTime.split(':').map(Number);
-                const eventTime = eventHour * 60 + eventMinute;
+                const [startHour, startMinute] = event.startTime.split(':').map(Number);
+                const [endHour, endMinute] = event.endTime.split(':').map(Number);
+                const eventStartTime = startHour * 60 + startMinute;
+                const eventEndTime = endHour * 60 + endMinute;
                 
-                if (Number(event.day) === scheduleCurrentDay) {
-                    todayEvents.push(event);
-                    
-                    // Nếu event trong ngày hiện tại và thời gian chưa qua
-                    if (eventTime > currentTime) {
-                        nextEvent = event;
-                        break;
-                    }
+                const eventDay = Number(event.day);
+                
+                // Kiểm tra event đang diễn ra
+                if (eventDay === scheduleCurrentDay && 
+                    currentTime >= eventStartTime && 
+                    currentTime < eventEndTime) {
+                    nextEvent = event;
+                    break;
+                }
+                
+                // Kiểm tra event sắp tới trong hôm nay
+                if (eventDay === scheduleCurrentDay && eventStartTime > currentTime) {
+                    nextEvent = event;
+                    break;
+                }
+                
+                // Kiểm tra event của các ngày sau
+                if (eventDay > scheduleCurrentDay) {
+                    nextEvent = event;
+                    break;
                 }
             }
             
-            // Nếu không tìm thấy sự kiện chưa qua trong ngày hôm nay, chọn sự kiện gần nhất trong ngày hôm nay
-            if (!nextEvent && todayEvents.length > 0) {
-                // Sắp xếp sự kiện hôm nay theo thời gian (từ muộn nhất đến sớm nhất)
-                todayEvents.sort((a, b) => {
-                    const [aHour, aMinute] = a.startTime.split(':').map(Number);
-                    const [bHour, bMinute] = b.startTime.split(':').map(Number);
-                    const aTime = aHour * 60 + aMinute;
-                    const bTime = bHour * 60 + bMinute;
-                    return bTime - aTime; // Sắp xếp giảm dần (muộn nhất trước)
-                });
-                
-                nextEvent = todayEvents[0]; // Chọn sự kiện muộn nhất trong ngày hôm nay
+            // Nếu không có event nào trong tuần này nữa, lấy event đầu tiên của tuần
+            if (!nextEvent && earliestEvent) {
+                nextEvent = earliestEvent;
             }
             
-            // Nếu không tìm thấy event trong ngày hôm nay, tìm event trong ngày tương lai
-            if (!nextEvent) {
-                for (const event of sortedEvents) {
-                    const [eventHour, eventMinute] = event.startTime.split(':').map(Number);
-                    const eventTime = eventHour * 60 + eventMinute;
-                    
-                    // Nếu event trong ngày tương lai
-                    if (Number(event.day) > scheduleCurrentDay) {
-                        nextEvent = event;
-                        break;
-                    }
+            if (nextEvent) {
+                const dayNames = ['', '', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ nhật'];
+                const dayName = dayNames[Number(nextEvent.day)] || `Ngày ${nextEvent.day}`;
+                
+                previewEl.innerHTML = `
+                    <p>Sự kiện tiếp theo</p>
+                    <div class="event-title">${nextEvent.title}</div>
+                    <div class="event-time">${dayName} | ${nextEvent.startTime} - ${nextEvent.endTime}</div>
+                `;
+            } else {
+                previewEl.innerHTML = '<p>Em chưa có lịch trình nào...</p>';
+            }
+        }
+
+        // Hàm setup preview lịch trình của anh
+        function setupHisSchedulePreview(schedule) {
+            const previewEl = document.getElementById('his-next-event-preview');
+            if (!previewEl) return;
+
+            if (!schedule || schedule.length === 0) {
+                previewEl.innerHTML = '<p>Chưa có sự kiện nào trong lịch của anh!</p>';
+                return;
+            }
+            
+            // Tìm sự kiện sắp tới hoặc đang diễn ra
+            const now = new Date();
+            const currentDay = now.getDay();
+            const currentHour = now.getHours();
+            const currentMinute = now.getMinutes();
+            const currentTime = currentHour * 60 + currentMinute;
+            
+            const scheduleCurrentDay = currentDay === 0 ? 8 : currentDay + 1;
+            
+            let nextEvent = null;
+            let earliestEvent = null;
+            
+            const sortedEvents = [...schedule].sort((a, b) => {
+                if (a.day !== b.day) return a.day - b.day;
+                return a.startTime.localeCompare(b.startTime);
+            });
+            
+            earliestEvent = sortedEvents[0];
+            
+            for (const event of sortedEvents) {
+                const [startHour, startMinute] = event.startTime.split(':').map(Number);
+                const [endHour, endMinute] = event.endTime.split(':').map(Number);
+                const eventStartTime = startHour * 60 + startMinute;
+                const eventEndTime = endHour * 60 + endMinute;
+                
+                const eventDay = Number(event.day);
+                
+                // Kiểm tra event đang diễn ra
+                if (eventDay === scheduleCurrentDay && 
+                    currentTime >= eventStartTime && 
+                    currentTime < eventEndTime) {
+                    nextEvent = event;
+                    break;
+                }
+                
+                // Kiểm tra event sắp tới trong hôm nay
+                if (eventDay === scheduleCurrentDay && eventStartTime > currentTime) {
+                    nextEvent = event;
+                    break;
+                }
+                
+                // Kiểm tra event của các ngày sau
+                if (eventDay > scheduleCurrentDay) {
+                    nextEvent = event;
+                    break;
                 }
             }
             
-            // Nếu không tìm thấy event sắp tới trong tuần này, tìm event sớm nhất trong tuần tiếp theo
-            if (!nextEvent) {
-                const nextWeekEvent = sortedEvents.find(event => {
-                    if (scheduleCurrentDay === 8) {
-                        // Nếu hôm nay là Chủ nhật, tìm event từ Thứ 2 trở đi
-                        return Number(event.day) >= 2;
-                    } else {
-                        // Nếu không phải Chủ nhật, tìm event từ ngày tiếp theo trở đi
-                        return Number(event.day) > scheduleCurrentDay;
-                    }
-                });
-                
-                if (nextWeekEvent) {
-                    nextEvent = nextWeekEvent;
-                } else if (sortedEvents.length > 0) {
-                    // Fallback cuối cùng: event sớm nhất trong tuần
-                    nextEvent = sortedEvents[0];
-                }
+            // Nếu không có event nào trong tuần này nữa, lấy event đầu tiên của tuần
+            if (!nextEvent && earliestEvent) {
+                nextEvent = earliestEvent;
             }
             
-            // Format ngày hiển thị
-            const dayNames = ['', '', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ nhật'];
-            const dayName = dayNames[nextEvent.day] || `Ngày ${nextEvent.day}`;
-            
-            previewEl.innerHTML = `
-                <p>Sự kiện tiếp theo</p>
-                <div class="event-title">${nextEvent.title}</div>
-                <div class="event-time">${dayName} - ${nextEvent.startTime}</div>
-            `;
+            if (nextEvent) {
+                const dayNames = ['', '', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ nhật'];
+                const dayName = dayNames[Number(nextEvent.day)] || `Ngày ${nextEvent.day}`;
+                
+                previewEl.innerHTML = `
+                    <p>Sự kiện tiếp theo</p>
+                    <div class="event-title">${nextEvent.title}</div>
+                    <div class="event-time">${dayName} | ${nextEvent.startTime} - ${nextEvent.endTime}</div>
+                `;
+            } else {
+                previewEl.innerHTML = '<p>Chưa có sự kiện nào trong lịch của anh!</p>';
+            }
         }
         
         function showNotification(message, type = 'info') {
@@ -471,6 +509,11 @@
                 // Khởi tạo dashboard
                 runHimPages(herData, hisData);
                 
+                // Initialize schedule previews
+                console.log('📅 Khởi tạo preview lịch trình...');
+                setupHerSchedulePreview(herData.schedule || []);
+                setupHisSchedulePreview(hisData.schedule || []);
+                
                 // Initialize mailbox preview from her
                 updateHerMailboxPreview(herData.notesForHim || []);
                 
@@ -479,27 +522,26 @@
                     initCollapsibleCards();
                 }
 
-                // Initialize tab control and his schedule
+                // Initialize tab control
                 initTabControl();
-                initHisSchedule();
 
                 // Thiết lập đồng bộ thời gian thực
                 // console.log('🔄 Thiết lập đồng bộ thời gian thực...');
                 
                 // Lắng nghe thay đổi dữ liệu "em" (lịch tuần và tin nhắn)
                 window.realtimeSync.listenToHerData((herData) => {
-                    // console.log('📱 Cập nhật dữ liệu "em" theo thời gian thực');
+                    console.log('📱 Cập nhật dữ liệu "em" theo thời gian thực');
                     // Cập nhật lịch tuần preview
-                    if (typeof setupSchedulePreview === 'function') {
-                        setupSchedulePreview(herData.schedule || []);
-                    }
+                    setupHerSchedulePreview(herData.schedule || []);
                     // Cập nhật tin nhắn từ em
                     updateHerMailboxPreview(herData.notesForHim || []);
                 });
 
-                // Lắng nghe thay đổi dữ liệu "anh" (ý tưởng, ghi chú)
+                // Lắng nghe thay đổi dữ liệu "anh" (ý tưởng, lịch trình)
                 window.realtimeSync.listenToHisData((hisData) => {
-                    // console.log('👨‍💻 Cập nhật dữ liệu "anh" theo thời gian thực');
+                    console.log('👨‍💻 Cập nhật dữ liệu "anh" theo thời gian thực');
+                    // Cập nhật lịch của anh preview
+                    setupHisSchedulePreview(hisData.schedule || []);
                     // Cập nhật ý tưởng preview
                     if (typeof setupIdeaWidget === 'function') {
                         setupIdeaWidget(hisData.ideaBank || []);
@@ -517,4 +559,5 @@
         });
     </script>
 </body>
+</html>
 </html>

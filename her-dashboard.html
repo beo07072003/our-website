@@ -538,11 +538,9 @@
                 const dayName = dayNames[Number(nextEvent.day)] || `Ngày ${nextEvent.day}`;
                 
                 previewEl.innerHTML = `
-                    <div class="next-event-preview">
-                        <div class="event-time">${dayName} - ${nextEvent.startTime}</div>
-                        <div class="event-title">${nextEvent.title}</div>
-                        <div class="event-description">${nextEvent.description || ''}</div>
-                    </div>
+                    <p>Sự kiện tiếp theo</p>
+                    <div class="event-title">${nextEvent.title}</div>
+                    <div class="event-time">${dayName} | ${nextEvent.startTime} - ${nextEvent.endTime}</div>
                 `;
             } else {
                 previewEl.innerHTML = '<p>Tuần này em rảnh!</p>';
@@ -647,11 +645,9 @@
                 const dayName = dayNames[Number(nextEvent.day)] || `Ngày ${nextEvent.day}`;
                 
                 previewEl.innerHTML = `
-                    <div class="next-event-preview">
-                        <div class="event-time">${dayName} - ${nextEvent.startTime}</div>
-                        <div class="event-title">${nextEvent.title}</div>
-                        <div class="event-description">${nextEvent.description || ''}</div>
-                    </div>
+                    <p>Sự kiện tiếp theo</p>
+                    <div class="event-title">${nextEvent.title}</div>
+                    <div class="event-time">${dayName} | ${nextEvent.startTime} - ${nextEvent.endTime}</div>
                 `;
             } else {
                 previewEl.innerHTML = '<p>Anh chưa có lịch trình nào...</p>';

@@ -27,6 +27,27 @@
             </div>
     </div>
 
+    <!-- Custom Alert Modal -->
+    <div id="custom-alert" class="custom-alert-overlay">
+        <div class="custom-alert-box">
+            <div class="alert-icon">💡</div>
+            <div class="alert-message" id="alert-message"></div>
+            <button class="alert-btn" id="alert-ok-btn">OK</button>
+        </div>
+    </div>
+
+    <!-- Custom Confirm Modal -->
+    <div id="custom-confirm" class="custom-confirm-overlay">
+        <div class="custom-confirm-box">
+            <div class="confirm-icon">❓</div>
+            <div class="confirm-message" id="confirm-message"></div>
+            <div class="confirm-buttons">
+                <button class="confirm-btn confirm-yes" id="confirm-yes-btn">Xóa</button>
+                <button class="confirm-btn confirm-no" id="confirm-no-btn">Hủy</button>
+            </div>
+        </div>
+    </div>
+
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore-compat.js"></script>
     <script src="js/firebase-init.js"></script>
